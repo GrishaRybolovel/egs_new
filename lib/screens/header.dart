@@ -108,8 +108,11 @@ class SearchField extends StatelessWidget {
           borderSide: BorderSide.none,
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
-        suffixIcon: InkWell(
-          onTap: () {
+        suffixIcon: ElevatedButton(
+          style: TextButton.styleFrom(
+            minimumSize: Size.square(defaultPadding),
+          ),
+          onPressed: () {
             String searchText =
                 _controller.text; // Get the text from the controller
             Provider.of<MenuAppController>(context, listen: false)
@@ -117,15 +120,7 @@ class SearchField extends StatelessWidget {
             print(
                 Provider.of<MenuAppController>(context, listen: false).search);
           },
-          child: Container(
-            padding: EdgeInsets.all(defaultPadding * 0.75),
-            margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-            decoration: BoxDecoration(
-              color: primaryColor,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-            ),
-            child: Icon(Icons.search),
-          ),
+          child: Icon(Icons.search),
         ),
       ),
     );

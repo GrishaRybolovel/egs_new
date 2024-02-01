@@ -1,3 +1,4 @@
+import 'package:egs/responsive.dart';
 import 'package:egs/const.dart';
 import 'package:egs/controllers/MenuAppController.dart';
 import 'package:egs/screens/projects/components/table.dart';
@@ -18,25 +19,32 @@ class _ProjectsScreen extends State<ProjectsScreen> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        MyTable(),
-        SizedBox(
-          height: defaultPadding,
-        ),
-        InkWell(
-          onTap: () {
-            Provider.of<MenuAppController>(context, listen: false)
-                .navigateTo(AddEditProjectScreen());
-          },
-          child: Container(
-            padding: EdgeInsets.all(defaultPadding * 0.75),
-            margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-            decoration: BoxDecoration(
-              color: primaryColor,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Мои объекты",
+              style: Theme.of(context).textTheme.titleMedium,
             ),
-            child: Text('+Добавить объект'),
-          ),
-        )
+            ElevatedButton.icon(
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(
+                  horizontal: defaultPadding * 1.5,
+                  vertical:
+                  defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
+                ),
+              ),
+              onPressed: () {
+                Provider.of<MenuAppController>(context, listen: false)
+                    .navigateTo(AddEditProjectScreen());
+              },
+              icon: Icon(Icons.add),
+              label: Text("Создать"),
+            ),
+          ],
+        ),
+        SizedBox(height: defaultPadding),
+        MyTable(),
       ],
     );
   }

@@ -3,6 +3,7 @@
 import 'package:egs/api/project_api.dart';
 import 'package:egs/controllers/MenuAppController.dart';
 import 'package:egs/model/project.dart';
+import 'package:egs/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,12 +25,11 @@ class _MyTable extends State<MyTable> {
 
     try {
       projects = papiService.getProjects();
-    } catch (e){
+    } catch (e) {
       String exception = e.toString().substring(10);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content:
-          Text(exception),
+          content: Text(exception),
           duration: Duration(seconds: 3),
         ),
       );
@@ -46,10 +46,6 @@ class _MyTable extends State<MyTable> {
       ),
       child: Column(
         children: [
-          Text(
-            "Объекты",
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
           SizedBox(
               width: double.maxFinite,
               child: FutureBuilder<List<Project>?>(
@@ -74,32 +70,29 @@ class _MyTable extends State<MyTable> {
                     }).map((project) {
                       return DataRow(
                         cells: [
-                          DataCell(InkWell(
-                            onTap: () {
+                          DataCell(ElevatedButton(
+                            onPressed: () {
                               Provider.of<MenuAppController>(context,
                                       listen: false)
                                   .navigateTo(AddEditProjectScreen(
                                 initialProject: project,
                               ));
                             },
-                            child: Container(
-                              padding: EdgeInsets.all(defaultPadding * 0.75),
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: defaultPadding / 2),
-                              decoration: BoxDecoration(
-                                color: primaryColor,
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(10)),
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: defaultPadding * 1.5,
+                                vertical: defaultPadding /
+                                    (Responsive.isMobile(context) ? 2 : 1),
                               ),
-                              child: Text(project.id.toString()),
                             ),
+                            child: Text(project.id.toString()),
                           )),
                           DataCell(Text(project.name)),
                           DataCell(Text(project.dateCreation
                               .toString()
                               .substring(0, 10))),
-                          DataCell(InkWell(
-                            onTap: () async {
+                          DataCell(ElevatedButton(
+                            onPressed: () async {
                               try {
                                 // Delete the project
                                 papiService.deleteProject(project.id ?? 0);
@@ -108,16 +101,15 @@ class _MyTable extends State<MyTable> {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content:
-                                    Text('Объект $name успешно удален'),
+                                        Text('Объект $name успешно удален'),
                                     duration: Duration(seconds: 3),
                                   ),
                                 );
-                              }catch (e) {
+                              } catch (e) {
                                 String exception = e.toString().substring(10);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content:
-                                        Text(exception),
+                                    content: Text(exception),
                                     duration: Duration(seconds: 3),
                                   ),
                                 );
@@ -130,16 +122,16 @@ class _MyTable extends State<MyTable> {
                                 // You can use a FutureBuilder or another method to fetch the updated project list
                               });
                             },
-                            child: Container(
-                              padding: EdgeInsets.all(defaultPadding * 0.25),
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: defaultPadding / 4),
-                              decoration: BoxDecoration(
-                                color: primaryColor,
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(10)),
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: defaultPadding * 1.5,
+                                vertical: defaultPadding /
+                                    (Responsive.isMobile(context) ? 2 : 1),
                               ),
-                              child: Icon(Icons.delete),
+                            ),
+                            child: Icon(
+                              Icons.delete,
+                              size: 20.0,
                             ),
                           ))
                           // Add more cells as needed

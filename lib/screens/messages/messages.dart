@@ -17,7 +17,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 600,
+      height: 500,
         padding: EdgeInsets.all(defaultPadding),
         decoration: BoxDecoration(
           color: secondaryColor,
