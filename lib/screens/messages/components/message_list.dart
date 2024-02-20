@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:egs/api/message_api.dart';
 import 'package:egs/model/message.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +7,13 @@ import 'package:file_picker/file_picker.dart';
 import 'dart:typed_data' show Uint8List;
 import 'package:flutter/foundation.dart';
 import 'package:egs/responsive.dart';
+
+import 'package:path/path.dart';
+
+import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:html' as html;
+import 'dart:io';
 
 import '../../../const.dart';
 
@@ -28,6 +33,8 @@ class _MessageListState extends State<MessageList> {
   final _formKey = GlobalKey<FormState>();
   final _messageController = TextEditingController();
   File? _selectedFile;
+  String? doc64;
+  String? docName;
 
   @override
   void initState() {
@@ -44,6 +51,16 @@ class _MessageListState extends State<MessageList> {
         print('Error fetching messages: $error');
       }
     });
+  }
+
+  Future<void> convertWebFileToDartFile(html.File webFile) async {
+    // Convert web file to base64
+    final reader = html.FileReader();
+    reader.readAsDataUrl(webFile);
+    await reader.onLoad.first;
+    final base64String = reader.result as String;
+    doc64 = base64String.split(',').last;
+    docName = webFile.name;
   }
 
   @override
@@ -150,22 +167,33 @@ class _MessageListState extends State<MessageList> {
                       children:[
                         ElevatedButton(
                           onPressed: () async {
-                            FilePickerResult? result = await FilePicker.platform
-                                .pickFiles(type: FileType.any);
+                            if (kIsWeb){
+                              final html.InputElement input = html.InputElement(type: 'file');
+                              input.click();
 
-                            if (result != null) {
-                              if (kIsWeb) {
-                                print('Web');
-                                // On the web, use the bytes property to access the file content
-                                List<int> fileBytes = result.files.single.bytes!;
-                                _selectedFile = File.fromRawPath(Uint8List.fromList(fileBytes));
-                              } else{
+                              input.onChange.listen((e) {
+                                final file = input.files!.first;
+                                convertWebFileToDartFile(file).then((dartFile) {
+                                  print(doc64);
+                                  print(docName);
+                                }).catchError((error) {
+                                  print('Error converting file to base64: $error');
+                                });
+                              });
+                            } else {
+                              FilePickerResult? result = await FilePicker
+                                  .platform
+                                  .pickFiles(type: FileType.any);
+
+                              if (result != null) {
                                 print('mobile');
                                 // On mobile or desktop, use the path property to access the file path
                                 // _selectedFile = File(result.files.single.path!);
 
-                                _selectedFile = File(result.files.single.path!);
-                                print(_selectedFile);
+                                _selectedFile =
+                                    File(result.files.single.path!);
+                                doc64 = base64Encode(Uint8List.fromList(_selectedFile!.readAsBytesSync()));
+                                docName = basename(_selectedFile!.path);
                               }
                             }
                           },
@@ -177,7 +205,7 @@ class _MessageListState extends State<MessageList> {
                           child: Icon(Icons.file_present,
                           size: 24.0,),
                         ),
-                        Container(width: Responsive.ScreenWidth(context) - 192,
+                        Container(width: Responsive.ScreenWidth(context) - (Responsive.isDesktop(context) ? 420 : 192),
                         child: TextFormField(
                           controller: _messageController,
                           decoration: InputDecoration(labelText: 'Сообщение'),
@@ -198,6 +226,8 @@ class _MessageListState extends State<MessageList> {
                             author: widget.userId,
                             task: widget.taskId,
                             doc: _selectedFile,
+                            docBase64: doc64,
+                            doc_name: docName,
                           );
 
                           try {

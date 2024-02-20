@@ -40,6 +40,11 @@ class Project {
     // Add more constructor parameters for additional fields
   });
 
+  @override
+  String toString() {
+    return '$name';
+  }
+
   factory Project.fromJson(Map<String, dynamic> json) {
     return Project(
       id: json['id'] ?? null,

@@ -2,23 +2,23 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
+import 'package:egs/model/document.dart';
+import 'package:egs/const.dart';
 
 class DocumentsApi {
-  final String baseUrl; // Your Django backend base URL
-
-  DocumentsApi(this.baseUrl);
 
   Future<List<Document>> fetchDocuments() async {
     final response = await http.get(Uri.parse('$baseUrl/document/documents/'));
     if (response.statusCode == 200) {
-      List<dynamic> data = json.decode(response.body);
+      List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
       return data.map((json) => Document.fromJson(json)).toList();
     } else {
-      throw Exception('Failed to fetch documents');
+      throw Exception('Ошибка загрузки документов');
     }
   }
 
   Future<Document> createDocument(Document document) async {
+    print(json.encode(document.toJson()));
     final response = await http.post(
       Uri.parse('$baseUrl/document/documents/'),
       headers: {'Content-Type': 'application/json'},
@@ -51,10 +51,5 @@ class DocumentsApi {
     if (response.statusCode != 204) {
       throw Exception('Failed to delete document');
     }
-  }
-
-  Future<void> downloadDocument(int id) async {
-    // Implement file download logic here (e.g., using FlutterDownloader)
-    // You may need to adjust this based on your Django backend's file handling
   }
 }

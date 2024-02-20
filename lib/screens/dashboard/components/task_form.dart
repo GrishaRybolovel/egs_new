@@ -221,8 +221,6 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                       onPressed: () {
                         if (user != null) {
                           deleteProject();
-                        } else {
-                          print('1');
                         }
                       },
                     ),
@@ -277,8 +275,6 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                       onPressed: () {
                         if (user != null) {
                           deleteUser(user);
-                        } else {
-                          print('1');
                         }
                       },
                     ),

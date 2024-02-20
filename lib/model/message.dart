@@ -14,6 +14,7 @@ class Message {
   DateTime? created;
   File? doc;
   String? doc_name;
+  String? docBase64;
 
   Message({
     this.message,
@@ -22,6 +23,7 @@ class Message {
     this.created,
     this.doc,
     this.doc_name,
+    this.docBase64,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -54,31 +56,13 @@ class Message {
   }
 
   Map<String, dynamic> toJson() {
-    print('toJson');
-
-    String? docBase64;
-    String? docName;
-
-
-
-    if (doc != null) {
-      docBase64 = base64Encode(Uint8List.fromList(doc!.readAsBytesSync()));
-      docName = kIsWeb ? doc!.uri.pathSegments.last : basename(doc!.path);
-      // _readFileBytes(doc!).then((fileBytes) {
-      //   docBase64 = base64Encode(Uint8List.fromList(fileBytes));
-      //   docName = kIsWeb ? doc!.uri.pathSegments.last : basename(doc!.path);
-      // });
-    }
-
-    print(docBase64);
-
     Map<String, dynamic> jsonMap = {
       'message': message,
       'author': author,
       'task': task,
       'created': created != null ? created!.toIso8601String() : null,
       'doc': docBase64,
-      'doc_name': docName,
+      'doc_name': doc_name,
     };
 
     jsonMap.removeWhere((key, value) => (value == null || value.toString().isEmpty) && key != 'cost');

@@ -8,7 +8,8 @@ const secondaryColor = Color(0xFF2A2D3E);
 const bgColor = Color(0xFF212332);
 const defaultPadding = 16.0;
 
-const String baseUrl = 'http://127.0.0.1:8000';
+// const String baseUrl = 'http://127.0.0.1:8000';
+const String baseUrl = 'https://37.140.192.74:8000';
 
 const EMAIL = 'Почта';
 const PASSWORD = 'Пароль';
