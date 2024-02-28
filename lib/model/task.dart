@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:egs/model/user.dart';
-import 'package:egs/model/project.dart';
 import 'package:intl/intl.dart';
 
 class Task {
@@ -26,8 +24,8 @@ class Task {
 
   factory Task.fromJson(Map<String, dynamic> json) {
 
-    DateTime? done = null;
-    DateTime? completion = null;
+    DateTime? done;
+    DateTime? completion;
 
     if (json['done'] != null) {
       try {
@@ -47,7 +45,7 @@ class Task {
       id: json['id'],
       name: json['name'],
       authorId: json['author'],
-      created: DateTime.parse(json['created'] ?? null),
+      created: DateTime.parse(json['created']),
       completion: completion,
       done: done,
       projectId: json['project'],

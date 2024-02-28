@@ -1,7 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:egs/const.dart';
+import 'package:egs/ui/const.dart';
 import 'package:egs/model/message.dart';
 
 class MessageApi {

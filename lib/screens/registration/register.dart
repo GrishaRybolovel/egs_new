@@ -1,17 +1,18 @@
 import 'package:egs/api/service.dart';
-import 'package:egs/const.dart';
-import 'package:egs/controllers/MenuAppController.dart';
+import 'package:egs/ui/const.dart';
 import 'package:egs/responsive.dart';
 import 'package:egs/screens/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class RegistrationScreen extends StatefulWidget {
+  const RegistrationScreen({super.key});
+
   @override
-  _RegistrationScreenState createState() => _RegistrationScreenState();
+  RegistrationScreenState createState() => RegistrationScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
+class RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
@@ -29,20 +30,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
 
     if (response?.statusCode == 201) {
-      Provider.of<MenuAppController>(context, listen: false)
-          .navigateTo(LoginScreen());
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
     } else {
       String message = '';
       if (emailController.text.isEmpty) {
-        message = "Поле '$EMAIL' не должно быть пустым";
+        message = "Поле '$email' не должно быть пустым";
       } else if (passwordController.text.isEmpty) {
-        message = "Поле '$PASSWORD' не должно быть пустым";
+        message = "Поле '$password' не должно быть пустым";
       } else if (nameController.text.isEmpty) {
-        message = "Поле '$NAME' не должно быть пустым";
+        message = "Поле '$name' не должно быть пустым";
       } else if (surnameController.text.isEmpty) {
-        message = "Поле '$SURNAME' не должно быть пустым";
+        message = "Поле '$surname' не должно быть пустым";
       } else if (lastnameController.text.isEmpty) {
-        message = "Поле '$LAST_NAME' не должно быть пустым";
+        message = "Поле '$lastName' не должно быть пустым";
       } else if (response?.statusCode == 500) {
         message = 'Пользователь с такой почтой уже существует';
       } else {
@@ -52,7 +55,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(message),
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
         ),
       );
       // Registration failed, show an error message or handle accordingly
@@ -63,7 +66,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Регистрация'),
+        title: const Text('Регистрация'),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Padding(
@@ -74,53 +78,56 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ? CrossAxisAlignment.stretch
                   : CrossAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: !Responsive.isDesktop(context) ? 200 : 400,
                   child: TextFormField(
                     controller: emailController,
-                    decoration: InputDecoration(labelText: EMAIL),
+                    decoration: const InputDecoration(labelText: email),
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: !Responsive.isDesktop(context) ? 200 : 400,
                   child: TextFormField(
                     controller: passwordController,
-                    decoration: InputDecoration(labelText: PASSWORD),
+                    decoration: const InputDecoration(labelText: password),
                     obscureText: true,
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: !Responsive.isDesktop(context) ? 200 : 400,
                   child: TextFormField(
                     controller: nameController,
-                    decoration: InputDecoration(labelText: NAME),
+                    decoration: const InputDecoration(labelText: name),
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: !Responsive.isDesktop(context) ? 200 : 400,
                   child: TextFormField(
                     controller: surnameController,
-                    decoration: InputDecoration(labelText: SURNAME),
+                    decoration: const InputDecoration(labelText: surname),
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: !Responsive.isDesktop(context) ? 200 : 400,
                   child: TextFormField(
                     controller: lastnameController,
-                    decoration: InputDecoration(labelText: LAST_NAME),
+                    decoration: const InputDecoration(labelText: lastName),
                   ),
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: _register,
-                  child: Text(REGISTER),
+                  child: const Text(register),
                 ),
                 TextButton(
                   onPressed: () {
-                    Provider.of<MenuAppController>(context, listen: false)
-                        .navigateTo(LoginScreen());
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen()),
+                    );
                   },
-                  child: Text(ALREADY_HAVE_AN_ACCOUNT),
+                  child: const Text(alreadyHaveAccount),
                 ),
               ],
             ),

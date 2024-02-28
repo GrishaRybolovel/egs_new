@@ -1,50 +1,27 @@
 import 'package:egs/api/service.dart';
-import 'package:egs/const.dart';
-import 'package:egs/controllers/MenuAppController.dart';
+import 'package:egs/ui/const.dart';
 import 'package:egs/responsive.dart';
-import 'package:egs/screens/dashboard/dashboard_screen.dart';
 import 'package:egs/screens/registration/register.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  LoginScreenState createState() => LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+class LoginScreenState extends State<LoginScreen> {
+  final TextEditingController emailController = TextEditingController(text: "test@test.ru");
+  final TextEditingController passwordController = TextEditingController(text: "test");
   final ApiService apiService = ApiService();
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  void _login() async {
-    final response = await apiService.login(
-      emailController.text,
-      passwordController.text,
-    );
-    print(response);
-
-    if (response?.containsKey('token') == true) {
-      // Login successful, navigate to the Dashboard screen
-      Provider.of<MenuAppController>(context, listen: false)
-          .navigateTo(DashboardScreen());
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Ошибка входа. Проверьте почту и пароль'),
-          duration: Duration(seconds: 3),
-        ),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Логин'),
+        title: const Text('Логин'),
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -54,32 +31,50 @@ class _LoginScreenState extends State<LoginScreen> {
                 ? CrossAxisAlignment.stretch
                 : CrossAxisAlignment.center,
             children: [
-              Container(
+              SizedBox(
                 width: !Responsive.isDesktop(context) ? 200 : 400,
                 child: TextFormField(
                   controller: emailController,
-                  decoration: InputDecoration(labelText: EMAIL),
+                  decoration: const InputDecoration(labelText: email),
                 ),
               ),
-              Container(
-                  width: !Responsive.isDesktop(context) ? 200 : 400,
-                  child: TextFormField(
-                    controller: passwordController,
-                    decoration: InputDecoration(labelText: PASSWORD),
-                    obscureText: true,
-                  )),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: _login,
-                child: Text(LOGIN),
+              SizedBox(
+                width: !Responsive.isDesktop(context) ? 200 : 400,
+                child: TextFormField(
+                  controller: passwordController,
+                  decoration: const InputDecoration(labelText: password),
+                  obscureText: true,
+                ),
               ),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () async {
+                  final response = await apiService.login(
+                    emailController.text,
+                    passwordController.text,
+                  );
+
+                  if (!context.mounted) return;
+
+                  if (response?.containsKey('token') == true) {
+                    Navigator.pushNamed(context, '/dashboard');
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Ошибка входа. Проверьте почту и пароль'),
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                },
+                child: const Text(login),
+              ),
+              const SizedBox(height: 8.0),
               TextButton(
                 onPressed: () {
-                  Provider.of<MenuAppController>(context, listen: false)
-                      .navigateTo(RegistrationScreen());
+                  Navigator.pushNamed(context, '/register');
                 },
-                child: Text(DONT_HAVE_AN_ACCOUNT),
+                child: const Text(dontHaveAccount),
               ),
             ],
           ),

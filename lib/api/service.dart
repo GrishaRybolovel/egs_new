@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:egs/const.dart';
+import 'package:egs/ui/const.dart';
 import 'package:egs/model/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   Future<http.Response?> register(String email, String password, String name,
-      String surname, String last_name) async {
+      String surname, String lastName) async {
     final response = await http.post(
       Uri.parse('$baseUrl/user/register/'),
       body: {
@@ -15,7 +15,7 @@ class ApiService {
         'password': password,
         'name': name,
         'surname': surname,
-        'last_name': last_name,
+        'last_name': lastName,
       },
     );
     return response;

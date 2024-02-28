@@ -3,34 +3,34 @@ import 'package:egs/controllers/MenuAppController.dart';
 import 'package:egs/responsive.dart';
 import 'package:egs/screens/login/login.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../../const.dart';
+import '../ui/const.dart';
 
-class Header extends StatelessWidget {
-  const Header({
-    Key? key,
-  }) : super(key: key);
+class Header extends StatefulWidget implements PreferredSizeWidget {
+  const Header({super.key});
+
+  @override
+  Size get preferredSize => const Size.fromHeight(50);
+
+  @override
+  State<Header> createState() => _HeaderState();
+}
+
+class _HeaderState extends State<Header> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        if (!Responsive.isDesktop(context))
-          IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: context.read<MenuAppController>().controlMenu,
-          ),
-        if (!Responsive.isMobile(context))
-          Text(
-            "Сводка",
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-        if (!Responsive.isMobile(context))
-          Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+    return AppBar(
+      title: const Text('ЭГС'),
+      actions: [
+        IconButton(
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+            icon: const Icon(Icons.menu)),
         Expanded(child: SearchField()),
-        ProfileCard()
+        const ProfileCard()
       ],
     );
   }
@@ -44,10 +44,10 @@ class ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
-        offset: Offset(0, 60),
+        offset: const Offset(0, 60),
         itemBuilder: (context) {
           return [
-            PopupMenuItem<String>(
+            const PopupMenuItem<String>(
               value: 'logout',
               child: ListTile(
                 contentPadding:
@@ -60,15 +60,18 @@ class ProfileCard extends StatelessWidget {
         },
         onSelected: (value) {
           if (value == 'logout') {
-            context.read<MenuAppController>().closeMenu();
+            // TODO change
+            // context.read<MenuAppController>().closeMenu();
             ApiService().logout();
-            Provider.of<MenuAppController>(context, listen: false)
-                .navigateTo(LoginScreen());
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+            );
           }
         },
         child: Container(
-          margin: EdgeInsets.only(left: defaultPadding),
-          padding: EdgeInsets.symmetric(
+          margin: const EdgeInsets.only(left: defaultPadding),
+          padding: const EdgeInsets.symmetric(
             horizontal: defaultPadding,
             vertical: defaultPadding / 2,
           ),
@@ -79,14 +82,13 @@ class ProfileCard extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(Icons.person),
+              const Icon(Icons.person),
               if (!Responsive.isMobile(context))
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: defaultPadding / 2),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
                   child: Text("Test Test"),
                 ),
-              Icon(Icons.keyboard_arrow_down),
+              const Icon(Icons.keyboard_arrow_down),
             ],
           ),
         ));
@@ -96,6 +98,8 @@ class ProfileCard extends StatelessWidget {
 class SearchField extends StatelessWidget {
   final TextEditingController _controller = TextEditingController();
 
+  SearchField({super.key});
+
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -104,13 +108,13 @@ class SearchField extends StatelessWidget {
         hintText: "Поиск",
         fillColor: secondaryColor,
         filled: true,
-        border: OutlineInputBorder(
+        border: const OutlineInputBorder(
           borderSide: BorderSide.none,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         suffixIcon: ElevatedButton(
           style: TextButton.styleFrom(
-            minimumSize: Size.square(defaultPadding),
+            minimumSize: const Size.square(defaultPadding),
           ),
           onPressed: () {
             String searchText =
@@ -120,7 +124,7 @@ class SearchField extends StatelessWidget {
             print(
                 Provider.of<MenuAppController>(context, listen: false).search);
           },
-          child: Icon(Icons.search),
+          child: const Icon(Icons.search),
         ),
       ),
     );

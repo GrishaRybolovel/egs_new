@@ -1,6 +1,7 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:egs/api/project_api.dart';
-import 'package:egs/const.dart';
-import 'package:egs/controllers/MenuAppController.dart';
+import 'package:egs/ui/const.dart';
 import 'package:egs/screens/documents/components/table.dart';
 import 'package:egs/screens/documents/components/document_form.dart';
 import 'package:egs/model/project.dart';
@@ -17,10 +18,10 @@ class AddEditProjectScreen extends StatefulWidget {
   const AddEditProjectScreen({Key? key, this.initialProject}) : super(key: key);
 
   @override
-  _AddEditProjectScreenState createState() => _AddEditProjectScreenState();
+  AddEditProjectScreenState createState() => AddEditProjectScreenState();
 }
 
-class _AddEditProjectScreenState extends State<AddEditProjectScreen> {
+class AddEditProjectScreenState extends State<AddEditProjectScreen> {
   late TextEditingController _projTypeController;
   late TextEditingController _nameController;
   late TextEditingController _regNumController;
@@ -45,25 +46,23 @@ class _AddEditProjectScreenState extends State<AddEditProjectScreen> {
     _nameController =
         TextEditingController(text: widget.initialProject?.name ?? '');
     _regNumController =
-        TextEditingController(text: widget.initialProject?.regNum ?? null);
+        TextEditingController(text: widget.initialProject?.regNum);
     _contractController =
-        TextEditingController(text: widget.initialProject?.contract ?? null);
+        TextEditingController(text: widget.initialProject?.contract);
     _dateCreationController = TextEditingController(
-        text:
-            widget.initialProject?.dateCreation?.toLocal().toString() ?? null);
+        text: widget.initialProject?.dateCreation?.toLocal().toString());
     _dateNotificationController = TextEditingController(
-        text: widget.initialProject?.dateNotification?.toLocal().toString() ??
-            null);
+        text: widget.initialProject?.dateNotification?.toLocal().toString());
     _objectTypeController =
-        TextEditingController(text: widget.initialProject?.objectType ?? null);
+        TextEditingController(text: widget.initialProject?.objectType);
     _addressController =
-        TextEditingController(text: widget.initialProject?.address ?? null);
+        TextEditingController(text: widget.initialProject?.address);
     _contactController =
-        TextEditingController(text: widget.initialProject?.contact ?? null);
+        TextEditingController(text: widget.initialProject?.contact);
     _phoneController =
-        TextEditingController(text: widget.initialProject?.phone ?? null);
+        TextEditingController(text: widget.initialProject?.phone);
     _emailController =
-        TextEditingController(text: widget.initialProject?.email ?? null);
+        TextEditingController(text: widget.initialProject?.email);
     _statusController =
         TextEditingController(text: widget.initialProject?.status ?? '1');
     _seasoningController =
@@ -74,220 +73,233 @@ class _AddEditProjectScreenState extends State<AddEditProjectScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Container(
-      padding: EdgeInsets.all(defaultPadding),
-      decoration: BoxDecoration(
-        color: secondaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(
-          widget.initialProject == null ? 'Добавить объект' : 'Изменить объект',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        SizedBox(height: defaultPadding),
-        DropdownButtonFormField<String>(
-          value: _projTypeController.text,
-          items: [
-            DropdownMenuItem(
-              value: '1',
-              child: Text('В работе'),
-            ),
-            DropdownMenuItem(
-              value: '2',
-              child: Text('ПНР'),
-            ),
-            DropdownMenuItem(
-              value: '3',
-              child: Text('Сезон откл.'),
-            ),
-            DropdownMenuItem(
-              value: '4',
-              child: Text('СМР'),
-            ),
-            DropdownMenuItem(
-              value: '5',
-              child: Text('Аварийное откл.'),
-            ),
-          ],
-          onChanged: (value) {
-            setState(() {
-              _projTypeController.text = value!;
-            });
-          },
-          decoration: InputDecoration(labelText: 'Статус объекта'),
-        ),
-        TextFormField(
-          controller: _nameController,
-          decoration: InputDecoration(labelText: 'Название*'),
-        ),
-        TextFormField(
-          controller: _regNumController,
-          decoration: InputDecoration(labelText: 'Рег. номер*'),
-        ),
-        TextFormField(
-          controller: _contractController,
-          decoration: InputDecoration(labelText: 'Договор'),
-        ),
-        TextFormField(
-          controller: _dateCreationController,
-          decoration: InputDecoration(labelText: 'Дата создания*'),
-          onTap: () async {
-            DateTime? date = await showDatePicker(
-              context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2100),
-            );
-            if (date != null) {
-              _dateCreationController.text =
-                  date.toLocal().toString().substring(0, 10);
-            }
-          },
-        ),
-        TextFormField(
-          controller: _dateNotificationController,
-          decoration: InputDecoration(labelText: 'Дата оповещений*'),
-          onTap: () async {
-            DateTime? date = await showDatePicker(
-              context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2100),
-            );
-            if (date != null) {
-              _dateNotificationController.text =
-                  date.toLocal().toString().substring(0, 10);
-            }
-          },
-        ),
-        TextFormField(
-          controller: _objectTypeController,
-          decoration: InputDecoration(labelText: 'Тип объекта'),
-        ),
-        TextFormField(
-          controller: _addressController,
-          decoration: InputDecoration(labelText: 'Адрес'),
-        ),
-        TextFormField(
-          controller: _contactController,
-          decoration: InputDecoration(labelText: 'Контакт'),
-        ),
-        TextFormField(
-          controller: _phoneController,
-          decoration: InputDecoration(labelText: 'Телефон'),
-        ),
-        TextFormField(
-          controller: _emailController,
-          decoration: InputDecoration(labelText: 'Почта'),
-        ),
-        DropdownButtonFormField<String>(
-          value: _statusController.text,
-          items: [
-            DropdownMenuItem(
-              value: '1',
-              child: Text('Эксплуатация'),
-            ),
-            DropdownMenuItem(
-              value: '2',
-              child: Text('Техническое обслуживание'),
-            ),
-            DropdownMenuItem(
-              value: '3',
-              child: Text('СМР'),
-            ),
-            DropdownMenuItem(
-              value: '4',
-              child: Text('Производство'),
-            ),
-          ],
-          onChanged: (value) {
-            setState(() {
-              _statusController.text = value!;
-            });
-          },
-          decoration: InputDecoration(labelText: 'Тип объекта'),
-        ),
-        DropdownButtonFormField<String>(
-          value: _seasoningController.text,
-          items: [
-            DropdownMenuItem(
-              value: '1',
-              child: Text('Сезонная'),
-            ),
-            DropdownMenuItem(
-              value: '2',
-              child: Text('Круглогодичная'),
-            ),
-          ],
-          onChanged: (value) {
-            setState(() {
-              _seasoningController.text = value!;
-            });
-          },
-          decoration: InputDecoration(labelText: 'Сезонность'),
-        ),
-        TextFormField(
-          controller: _costController,
-          decoration: InputDecoration(labelText: 'Цена обслуживания*'),
-        ),
-        SizedBox(height: defaultPadding),
-        TextButton(
-          onPressed: () {
-            _saveOrUpdateProject();
-          },
-          child: Text('Сохранить'),
-        ),
-      ]),
-    ),
-      SizedBox(height: defaultPadding),
-      SelectUsers(initialProject: widget.initialProject,),
-      SizedBox(height: defaultPadding),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "Документы",
-            style: Theme.of(context).textTheme.titleMedium,
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(defaultPadding),
+          decoration: const BoxDecoration(
+            color: secondaryColor,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
-          ElevatedButton.icon(
-            style: TextButton.styleFrom(
-              padding: EdgeInsets.symmetric(
-                horizontal: defaultPadding * 1.5,
-                vertical:
-                defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(
+              widget.initialProject == null
+                  ? 'Добавить объект'
+                  : 'Изменить объект',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: defaultPadding),
+            DropdownButtonFormField<String>(
+              value: _projTypeController.text,
+              items: const [
+                DropdownMenuItem(
+                  value: '1',
+                  child: Text('В работе'),
+                ),
+                DropdownMenuItem(
+                  value: '2',
+                  child: Text('ПНР'),
+                ),
+                DropdownMenuItem(
+                  value: '3',
+                  child: Text('Сезон откл.'),
+                ),
+                DropdownMenuItem(
+                  value: '4',
+                  child: Text('СМР'),
+                ),
+                DropdownMenuItem(
+                  value: '5',
+                  child: Text('Аварийное откл.'),
+                ),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  _projTypeController.text = value!;
+                });
+              },
+              decoration: const InputDecoration(labelText: 'Статус объекта'),
+            ),
+            TextFormField(
+              controller: _nameController,
+              decoration: const InputDecoration(labelText: 'Название*'),
+            ),
+            TextFormField(
+              controller: _regNumController,
+              decoration: const InputDecoration(labelText: 'Рег. номер*'),
+            ),
+            TextFormField(
+              controller: _contractController,
+              decoration: const InputDecoration(labelText: 'Договор'),
+            ),
+            TextFormField(
+              controller: _dateCreationController,
+              decoration: const InputDecoration(labelText: 'Дата создания*'),
+              onTap: () async {
+                DateTime? date = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2100),
+                );
+                if (date != null) {
+                  _dateCreationController.text =
+                      date.toLocal().toString().substring(0, 10);
+                }
+              },
+            ),
+            TextFormField(
+              controller: _dateNotificationController,
+              decoration: const InputDecoration(labelText: 'Дата оповещений*'),
+              onTap: () async {
+                DateTime? date = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2100),
+                );
+                if (date != null) {
+                  _dateNotificationController.text =
+                      date.toLocal().toString().substring(0, 10);
+                }
+              },
+            ),
+            TextFormField(
+              controller: _objectTypeController,
+              decoration: const InputDecoration(labelText: 'Тип объекта'),
+            ),
+            TextFormField(
+              controller: _addressController,
+              decoration: const InputDecoration(labelText: 'Адрес'),
+            ),
+            TextFormField(
+              controller: _contactController,
+              decoration: const InputDecoration(labelText: 'Контакт'),
+            ),
+            TextFormField(
+              controller: _phoneController,
+              decoration: const InputDecoration(labelText: 'Телефон'),
+            ),
+            TextFormField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: 'Почта'),
+            ),
+            DropdownButtonFormField<String>(
+              value: _statusController.text,
+              items: const [
+                DropdownMenuItem(
+                  value: '1',
+                  child: Text('Эксплуатация'),
+                ),
+                DropdownMenuItem(
+                  value: '2',
+                  child: Text('Техническое обслуживание'),
+                ),
+                DropdownMenuItem(
+                  value: '3',
+                  child: Text('СМР'),
+                ),
+                DropdownMenuItem(
+                  value: '4',
+                  child: Text('Производство'),
+                ),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  _statusController.text = value!;
+                });
+              },
+              decoration: const InputDecoration(labelText: 'Тип объекта'),
+            ),
+            DropdownButtonFormField<String>(
+              value: _seasoningController.text,
+              items: const [
+                DropdownMenuItem(
+                  value: '1',
+                  child: Text('Сезонная'),
+                ),
+                DropdownMenuItem(
+                  value: '2',
+                  child: Text('Круглогодичная'),
+                ),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  _seasoningController.text = value!;
+                });
+              },
+              decoration: const InputDecoration(labelText: 'Сезонность'),
+            ),
+            TextFormField(
+              controller: _costController,
+              decoration:
+                  const InputDecoration(labelText: 'Цена обслуживания*'),
+            ),
+            const SizedBox(height: defaultPadding),
+            TextButton(
+              onPressed: () {
+                _saveOrUpdateProject();
+              },
+              child: const Text('Сохранить'),
+            ),
+          ]),
+        ),
+        const SizedBox(height: defaultPadding),
+        SelectUsers(
+          initialProject: widget.initialProject,
+        ),
+        const SizedBox(height: defaultPadding),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Документы",
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            ElevatedButton.icon(
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(
+                  horizontal: defaultPadding * 1.5,
+                  vertical:
+                      defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
+                ),
               ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DocumentForm(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.add),
+              label: const Text("Создать"),
             ),
-            onPressed: () {
-              Provider.of<MenuAppController>(context, listen: false)
-                  .navigateTo(DocumentForm());
-            },
-            icon: Icon(Icons.add),
-            label: Text("Создать"),
-          ),
-        ],
-      ),
-      MyTable(initialProject: widget.initialProject,),
-    ],
+          ],
+        ),
+        MyTable(
+          initialProject: widget.initialProject,
+        ),
+      ],
     );
   }
 
-  void _saveOrUpdateProject() async{
+  void _saveOrUpdateProject() async {
     try {
-      final String? projType = _projTypeController?.text;
+      final String projType = _projTypeController.text;
       final String projectName = _nameController.text;
-      final String? regNum = _regNumController?.text;
-      final String? contract = _contractController?.text;
+      final String regNum = _regNumController.text;
+      final String contract = _contractController.text;
       final String dateCreation = _dateCreationController.text;
       final String dateNotification = _dateNotificationController.text;
-      final String? objectType = _objectTypeController?.text;
-      final String? address = _addressController?.text;
-      final String? contact = _contactController?.text;
-      final String? phone = _phoneController?.text;
-      final String? email = _emailController?.text;
-      final String? status = _statusController?.text;
-      final String? seasoning = _seasoningController?.text;
+      final String objectType = _objectTypeController.text;
+      final String address = _addressController.text;
+      final String contact = _contactController.text;
+      final String phone = _phoneController.text;
+      final String email = _emailController.text;
+      final String status = _statusController.text;
+      final String seasoning = _seasoningController.text;
       final double cost = double.parse(_costController.text);
 
       Project project = Project(
@@ -322,19 +334,20 @@ class _AddEditProjectScreenState extends State<AddEditProjectScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Объект $name успешно создан'),
-              duration: Duration(seconds: 3),
+              duration: const Duration(seconds: 3),
             ),
           );
-          Provider.of<MenuAppController>(context, listen: false)
-              .navigateTo(ProjectsScreen());
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ProjectsScreen()),
+          );
         }
       } else {
-
-        int my_id = widget.initialProject?.id ?? 0;
-        var updatedProject = await papiService.updateProject(my_id, project);
+        int myId = widget.initialProject?.id ?? 0;
+        var updatedProject = await papiService.updateProject(myId, project);
         if (updatedProject != null) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               content: Text('Информация об объекте успешно обновлена.'),
               duration: Duration(seconds: 3),
             ),
@@ -345,9 +358,8 @@ class _AddEditProjectScreenState extends State<AddEditProjectScreen> {
       String exception = e.toString();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content:
-              Text(exception),
-          duration: Duration(seconds: 3),
+          content: Text(exception),
+          duration: const Duration(seconds: 3),
         ),
       );
     }

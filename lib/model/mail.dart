@@ -1,9 +1,5 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'dart:io';
-import 'package:path/path.dart';
-import 'dart:io' as io;
-import 'dart:typed_data' show Uint8List;
 import 'package:flutter/foundation.dart';
 
 class Mail {
@@ -60,16 +56,13 @@ class Mail {
 
   Map<String, dynamic> toJson() {
     String? docBase64;
-    String? docName;
 
     if (doc != null) {
       docBase64 = base64Encode(Uint8List.fromList(doc!.readAsBytesSync()));
-      docName = kIsWeb ? doc!.uri.pathSegments.last : basename(doc!.path);
     }
 
-    print(docBase64);
     Map<String, dynamic> jsonMap = {
-      'id': id ?? null,
+      'id': id,
       'name': name,
       'naming': naming,
       'created': created?.toIso8601String(),

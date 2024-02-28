@@ -1,9 +1,9 @@
 import 'package:egs/responsive.dart';
-import 'package:egs/const.dart';
-import 'package:egs/controllers/MenuAppController.dart';
+import 'package:egs/screens/header.dart';
+import 'package:egs/screens/side_menu.dart';
+import 'package:egs/ui/const.dart';
 import 'package:egs/screens/projects/components/table.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'components/edit_project.dart';
 
@@ -17,35 +17,43 @@ class ProjectsScreen extends StatefulWidget {
 class _ProjectsScreen extends State<ProjectsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Мои объекты",
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            ElevatedButton.icon(
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.symmetric(
-                  horizontal: defaultPadding * 1.5,
-                  vertical:
-                  defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
-                ),
+    return Scaffold(
+      appBar: const Header(),
+      drawer: const SideMenu(),
+      body: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Мои объекты",
+                style: Theme.of(context).textTheme.titleMedium,
               ),
-              onPressed: () {
-                Provider.of<MenuAppController>(context, listen: false)
-                    .navigateTo(AddEditProjectScreen());
-              },
-              icon: Icon(Icons.add),
-              label: Text("Создать"),
-            ),
-          ],
-        ),
-        SizedBox(height: defaultPadding),
-        MyTable(),
-      ],
+              ElevatedButton.icon(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: defaultPadding * 1.5,
+                    vertical:
+                    defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AddEditProjectScreen(),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.add),
+                label: const Text("Создать"),
+              ),
+            ],
+          ),
+          const SizedBox(height: defaultPadding),
+          const MyTable(),
+        ],
+      ),
     );
   }
 }

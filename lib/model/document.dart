@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:io';
-import 'package:path/path.dart';
-import 'dart:io' as io;
 import 'dart:typed_data' show Uint8List;
 import 'package:flutter/foundation.dart';
 
@@ -15,7 +13,7 @@ class Document {
   File? doc;
   List<int>? users;
   List<int>? projects;
-  String? doc_name;
+  String? docName;
   String? docBase64;
 
 
@@ -29,15 +27,15 @@ class Document {
     this.users,
     this.projects,
     this.docBase64,
-    this.doc_name,
+    this.docName,
   });
 
   factory Document.fromJson(Map<String, dynamic> json) {
-    File? myDoc = null;
+    File? myDoc;
     if(json['doc'] != null){
       String docPath = json['doc'] as String;
       List<int> docBytes = base64Decode(docPath);
-      myDoc = docBytes != null ? File.fromRawPath(Uint8List.fromList(docBytes!)) : null;
+      myDoc = docBytes.isNotEmpty ? File.fromRawPath(Uint8List.fromList(docBytes)) : null;
     }
 
     return Document(
@@ -47,7 +45,7 @@ class Document {
       docType: json['doc_type'],
       duration: json['duration'] != null ? DateTime.parse(json['duration']) : null,
       doc: myDoc,
-      doc_name: json['doc_name'],
+      docName: json['doc_name'],
       users: json['users'] != null ? List<int>.from(json['users']) : null,
       projects: json['projects'] != null ? List<int>.from(json['projects']) : null,
     );
@@ -62,7 +60,7 @@ class Document {
       'doc_type': docType,
       'duration': duration?.toIso8601String().substring(0, 10),
       'doc': docBase64,
-      'doc_name': doc_name,
+      'doc_name': docName,
       'users': users,
       'projects': projects,
     };

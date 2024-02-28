@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:egs/const.dart';
+import 'package:egs/ui/const.dart';
 import 'package:egs/model/project.dart'; // Import the Project class
 import 'package:http/http.dart' as http;
 

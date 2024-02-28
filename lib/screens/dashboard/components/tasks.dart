@@ -1,21 +1,17 @@
 import 'package:egs/responsive.dart';
 import 'package:flutter/material.dart';
-import 'package:egs/const.dart';
+import 'package:egs/ui/const.dart';
 import 'package:egs/model/task.dart';
 import 'package:egs/api/task_api.dart';
-import 'package:egs/controllers/MenuAppController.dart';
-import 'package:provider/provider.dart';
 import 'package:egs/screens/dashboard/components/task_form.dart';
 import 'task_info.dart';
 
 class MyTasks extends StatelessWidget {
-  const MyTasks({
-    Key? key,
-  }) : super(key: key);
+  const MyTasks({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final Size _size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
     return Column(
       children: [
         Row(
@@ -30,27 +26,26 @@ class MyTasks extends StatelessWidget {
                 padding: EdgeInsets.symmetric(
                   horizontal: defaultPadding * 1.5,
                   vertical:
-                  defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
+                      defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
                 ),
               ),
               onPressed: () {
-                Provider.of<MenuAppController>(context, listen: false)
-                    .navigateTo(TaskFormScreen());
+                Navigator.pushNamed(context, '/taskForm');
               },
-              icon: Icon(Icons.add),
-              label: Text("Создать"),
+              icon: const Icon(Icons.add),
+              label: const Text("Создать"),
             ),
           ],
         ),
-        SizedBox(height: defaultPadding),
+        const SizedBox(height: defaultPadding),
         Responsive(
           mobile: TaskInfoGridView(
-            crossAxisCount: _size.width < 650 ? 2 : 4,
-            childAspectRatio: _size.width < 650 ? 1.3 : 1,
+            crossAxisCount: size.width < 650 ? 2 : 4,
+            childAspectRatio: size.width < 650 ? 1.3 : 1,
           ),
-          tablet: TaskInfoGridView(),
+          tablet: const TaskInfoGridView(),
           desktop: TaskInfoGridView(
-            childAspectRatio: _size.width < 1400 ? 1.1 : 1.4,
+            childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
           ),
         ),
       ],
@@ -69,10 +64,10 @@ class TaskInfoGridView extends StatefulWidget {
   final double childAspectRatio;
 
   @override
-  _TaskInfoGridViewState createState() => _TaskInfoGridViewState();
+  TaskInfoGridViewState createState() => TaskInfoGridViewState();
 }
 
-class _TaskInfoGridViewState extends State<TaskInfoGridView> {
+class TaskInfoGridViewState extends State<TaskInfoGridView> {
   final TaskApi tapiService = TaskApi();
 
   @override
@@ -82,17 +77,17 @@ class _TaskInfoGridViewState extends State<TaskInfoGridView> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // While the Future is still running, show a loading indicator.
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.data == null || snapshot.data!.isEmpty) {
           // If there's no data or the data is empty, display a message.
-          return Text('Нет заданий.');
+          return const Text('Нет заданий.');
         } else if (snapshot.hasError) {
           // If there's an error, throw it to propagate it further.
           throw snapshot.error!;
         } else {
           // If the Future is complete and there's data, build the GridView.
           return GridView.builder(
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: snapshot.data!.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -105,8 +100,7 @@ class _TaskInfoGridViewState extends State<TaskInfoGridView> {
               final task = snapshot.data![index];
               return InkWell(
                 onTap: () {
-                  Provider.of<MenuAppController>(context, listen: false)
-                      .navigateTo(TaskFormScreen(initialTask: task),);
+                  Navigator.pushNamed(context, '/taskForm', arguments: task);
                 },
                 child: FileInfoCard(info: task),
               );

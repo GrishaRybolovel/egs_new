@@ -1,11 +1,12 @@
 import 'dart:convert';
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 import 'dart:io';
 
 import 'package:egs/api/document_api.dart';
 import 'package:egs/api/project_api.dart';
 import 'package:egs/api/service.dart';
-import 'package:egs/const.dart';
+import 'package:egs/ui/const.dart';
 import 'package:egs/model/document.dart';
 import 'package:egs/model/project.dart';
 import 'package:egs/model/user.dart';
@@ -22,10 +23,10 @@ class DocumentForm extends StatefulWidget {
   const DocumentForm({Key? key, this.document}) : super(key: key);
 
   @override
-  _DocumentFormState createState() => _DocumentFormState();
+  DocumentFormState createState() => DocumentFormState();
 }
 
-class _DocumentFormState extends State<DocumentForm> {
+class DocumentFormState extends State<DocumentForm> {
   final _formKey = GlobalKey<FormState>();
 
   late TextEditingController _name;
@@ -39,7 +40,6 @@ class _DocumentFormState extends State<DocumentForm> {
   String? doc64;
   String? docName;
 
-  // Getting users and projects data
   final ApiService usersApiService = ApiService();
   final ProjectsApiService papiService = ProjectsApiService();
 
@@ -53,10 +53,10 @@ class _DocumentFormState extends State<DocumentForm> {
   void initState() {
     super.initState();
     setState(() {
-      _name = TextEditingController(text: widget.document?.name ?? null);
+      _name = TextEditingController(text: widget.document?.name);
       _status = widget.document?.status;
       _duration = TextEditingController(
-          text: widget.document?.duration?.toLocal().toString() ?? null);
+          text: widget.document?.duration?.toLocal().toString());
       _docType = widget.document?.docType;
       _doc = widget.document?.doc;
       _users = widget.document?.users;
@@ -93,11 +93,12 @@ class _DocumentFormState extends State<DocumentForm> {
       });
     } catch (e) {
       String exception = e.toString().substring(10);
+      // ignore: unused_element
       showSnackBar(BuildContext context) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(exception),
-            duration: Duration(seconds: 3),
+            duration: const Duration(seconds: 3),
           ),
         );
       }
@@ -108,7 +109,7 @@ class _DocumentFormState extends State<DocumentForm> {
     setState(() {
       if (selectedUsers == null) {
         selectedUsers?.add(user);
-      } else if (!selectedUsers!.contains(user) ?? false) {
+      } else if (!selectedUsers!.contains(user)) {
         selectedUsers?.add(user);
       }
     });
@@ -124,7 +125,7 @@ class _DocumentFormState extends State<DocumentForm> {
     setState(() {
       if (selectedProjects == null) {
         selectedProjects?.add(project);
-      } else if (!selectedProjects!.contains(project) ?? false) {
+      } else if (!selectedProjects!.contains(project)) {
         selectedProjects?.add(project);
       }
     });
@@ -153,19 +154,15 @@ class _DocumentFormState extends State<DocumentForm> {
 
       input.onChange.listen((e) {
         final file = input.files!.first;
-        convertWebFileToDartFile(file).then((dartFile) {
-          print(doc64);
-          print(docName);
-        }).catchError((error) {
-          print('Error converting file to base64: $error');
-        });
+        convertWebFileToDartFile(file)
+            .then((dartFile) {})
+            .catchError((error) {});
       });
     } else {
       FilePickerResult? result =
           await FilePicker.platform.pickFiles(type: FileType.any);
 
       if (result != null) {
-        print('mobile');
         // On mobile or desktop, use the path property to access the file path
         // _selectedFile = File(result.files.single.path!);
 
@@ -185,10 +182,10 @@ class _DocumentFormState extends State<DocumentForm> {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.all(defaultPadding),
-          decoration: BoxDecoration(
+          padding: const EdgeInsets.all(defaultPadding),
+          decoration: const BoxDecoration(
             color: secondaryColor,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -198,10 +195,10 @@ class _DocumentFormState extends State<DocumentForm> {
                   : 'Изменить документ',
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            SizedBox(height: defaultPadding),
+            const SizedBox(height: defaultPadding),
             TextFormField(
               controller: _name,
-              decoration: InputDecoration(labelText: 'Название'),
+              decoration: const InputDecoration(labelText: 'Название'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Введите название';
@@ -221,7 +218,7 @@ class _DocumentFormState extends State<DocumentForm> {
                   _status = newValue;
                 });
               },
-              items: [
+              items: const [
                 DropdownMenuItem(
                   value: '1',
                   child: Text('Без статуса'),
@@ -251,7 +248,7 @@ class _DocumentFormState extends State<DocumentForm> {
                   child: Text('Аннулированный'),
                 ),
               ],
-              decoration: InputDecoration(labelText: 'Статус'),
+              decoration: const InputDecoration(labelText: 'Статус'),
             ),
             DropdownButtonFormField<String>(
               value: _docType,
@@ -261,80 +258,80 @@ class _DocumentFormState extends State<DocumentForm> {
                 });
               },
               items: [
-                DropdownMenuItem(
+                const DropdownMenuItem(
                   value: '01',
                   child: Text('Договор'),
                 ),
                 DropdownMenuItem(
                   value: '02',
-                  child: Container(
+                  child: SizedBox(
                       width: Responsive.ScreenWidth(context) -
                           (Responsive.isDesktop(context) ? 400 : 88),
-                      child: Text(
+                      child: const Text(
                           'Регистрация объекта в государственном реестре')),
                 ),
-                DropdownMenuItem(
+                const DropdownMenuItem(
                   value: '03',
                   child: Text('Правоустанавливающие документы'),
                 ),
-                DropdownMenuItem(
+                const DropdownMenuItem(
                   value: '04',
                   child: Text('Проектные документы'),
                 ),
-                DropdownMenuItem(
+                const DropdownMenuItem(
                   value: '05',
                   child: Text('Экспертиза'),
                 ),
-                DropdownMenuItem(
+                const DropdownMenuItem(
                   value: '06',
                   child: Text('Страхование'),
                 ),
                 DropdownMenuItem(
                   value: '07',
-                  child: Container(
+                  child: SizedBox(
                       width: Responsive.ScreenWidth(context) -
                           (Responsive.isDesktop(context) ? 400 : 88),
-                      child: Text(
+                      child: const Text(
                           'Разрешительные документы и акты ввода в эксплуатацию')),
                 ),
                 DropdownMenuItem(
                   value: '08',
-                  child: Container(
+                  child: SizedBox(
                       width: Responsive.ScreenWidth(context) -
                           (Responsive.isDesktop(context) ? 400 : 88),
-                      child: Text(
+                      child: const Text(
                           'Исполнительно-техническая документация по строительству')),
                 ),
-                DropdownMenuItem(
+                const DropdownMenuItem(
                   value: '09',
                   child: Text('Эксплуатационные документы'),
                 ),
-                DropdownMenuItem(
+                const DropdownMenuItem(
                   value: '10',
                   child: Text('Обучение персонала'),
                 ),
                 DropdownMenuItem(
                   value: '11',
-                  child: Container(
+                  child: SizedBox(
                       width: Responsive.ScreenWidth(context) -
                           (Responsive.isDesktop(context) ? 400 : 88),
-                      child:
-                          Text('Документы сезонные в эксплуатационный период')),
+                      child: const Text(
+                          'Документы сезонные в эксплуатационный период')),
                 ),
-                DropdownMenuItem(
+                const DropdownMenuItem(
                   value: '12',
                   child: Text('Нормативно-правовые акты'),
                 ),
-                DropdownMenuItem(
+                const DropdownMenuItem(
                   value: '13',
                   child: Text('Иные документы'),
                 ),
               ],
-              decoration: InputDecoration(labelText: 'Тип документа'),
+              decoration: const InputDecoration(labelText: 'Тип документа'),
             ),
             TextFormField(
               controller: _duration,
-              decoration: InputDecoration(labelText: 'Срок действия'),
+              decoration: const InputDecoration(labelText: 'Срок действия'),
               onTap: () async {
                 DateTime? date = await showDatePicker(
                   context: context,
@@ -349,36 +346,37 @@ class _DocumentFormState extends State<DocumentForm> {
                 }
               },
             ),
-            SizedBox(height: defaultPadding),
+            const SizedBox(height: defaultPadding),
             GestureDetector(
                 onTap: () {
                   if (widget.document != null) {
-                    if (widget.document?.doc_name != null) {
-                      final downloadUrl = constructDownloadUrl(
-                          widget.document?.doc_name! ?? '');
+                    if (widget.document?.docName != null) {
+                      final downloadUrl =
+                          constructDownloadUrl(widget.document?.docName! ?? '');
+                      // ignore: deprecated_member_use
                       launch(downloadUrl);
                     }
                   }
                 },
                 child: Visibility(
-                    visible: widget.document?.doc_name != null,
+                    visible: widget.document?.docName != null,
                     child: Row(
                       children: [
-                        Text('Файл: ' + (widget.document?.doc_name ?? '')),
-                        Icon(Icons.download),
+                        Text('Файл: ${widget.document?.docName ?? ''}'),
+                        const Icon(Icons.download),
                       ],
                     ))),
             ElevatedButton(
               onPressed: _pickFile,
-              child: Text('Документ'),
+              child: const Text('Документ'),
             ),
-            SizedBox(height: defaultPadding),
+            const SizedBox(height: defaultPadding),
             // Users
             Container(
-              padding: EdgeInsets.all(defaultPadding),
-              decoration: BoxDecoration(
+              padding: const EdgeInsets.all(defaultPadding),
+              decoration: const BoxDecoration(
                 color: secondaryColor,
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -387,7 +385,7 @@ class _DocumentFormState extends State<DocumentForm> {
                     'Пользователи',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  SizedBox(height: defaultPadding),
+                  const SizedBox(height: defaultPadding),
                   DropdownButton<User>(
                     value: null,
                     items: allUsers?.map((user) {
@@ -413,7 +411,7 @@ class _DocumentFormState extends State<DocumentForm> {
                       return ListTile(
                         title: Text(user?.name ?? ''),
                         trailing: IconButton(
-                          icon: Icon(Icons.delete),
+                          icon: const Icon(Icons.delete),
                           onPressed: () {
                             if (user != null) {
                               deleteUser(user);
@@ -426,14 +424,14 @@ class _DocumentFormState extends State<DocumentForm> {
                 ],
               ),
             ),
-            SizedBox(height: defaultPadding),
+            const SizedBox(height: defaultPadding),
 
             // Projects
             Container(
-              padding: EdgeInsets.all(defaultPadding),
-              decoration: BoxDecoration(
+              padding: const EdgeInsets.all(defaultPadding),
+              decoration: const BoxDecoration(
                 color: secondaryColor,
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -442,7 +440,7 @@ class _DocumentFormState extends State<DocumentForm> {
                     'Объекты',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  SizedBox(height: defaultPadding),
+                  const SizedBox(height: defaultPadding),
                   DropdownButton<Project>(
                     value: null,
                     items: allProjects?.map((project) {
@@ -465,7 +463,7 @@ class _DocumentFormState extends State<DocumentForm> {
                       return ListTile(
                         title: Text(project?.name ?? ''),
                         trailing: IconButton(
-                          icon: Icon(Icons.delete),
+                          icon: const Icon(Icons.delete),
                           onPressed: () {
                             if (project != null) {
                               deleteProject(project);
@@ -478,15 +476,13 @@ class _DocumentFormState extends State<DocumentForm> {
                 ],
               ),
             ),
-            SizedBox(height: defaultPadding),
+            const SizedBox(height: defaultPadding),
 
             ElevatedButton(
               onPressed: () {
                 try {
-                  DateTime? myDate = null;
-                  if (_duration != null) {
-                    myDate = DateTime.parse(_duration.text!);
-                  }
+                  DateTime? myDate;
+                  myDate = DateTime.parse(_duration.text);
 
                   Document document = Document(
                     name: _name.text,
@@ -495,7 +491,7 @@ class _DocumentFormState extends State<DocumentForm> {
                     duration: myDate,
                     doc: _doc,
                     docBase64: doc64,
-                    doc_name: docName,
+                    docName: docName,
                     users: selectedUsers?.map((user) => user.id).toList(),
                     projects: selectedProjects
                         ?.map((project) => (project.id ?? 0))
@@ -504,9 +500,8 @@ class _DocumentFormState extends State<DocumentForm> {
 
                   String name = _name.text;
                   if (widget.document != null) {
-                    print('Updated document: ${document.toJson()}');
-                    int my_id = widget.document?.id ?? 0;
-                    DocumentsApi().updateDocument(my_id, document);
+                    int myId = widget.document?.id ?? 0;
+                    DocumentsApi().updateDocument(myId, document);
 
                     _formKey.currentState?.reset();
 
@@ -514,18 +509,17 @@ class _DocumentFormState extends State<DocumentForm> {
                       SnackBar(
                         content: Text(
                             'Информация о документе $name успешно обновлена'),
-                        duration: Duration(seconds: 3),
+                        duration: const Duration(seconds: 3),
                       ),
                     );
                   } else {
-                    print('Submitted document: ${document.toJson()}');
                     DocumentsApi().createDocument(document);
 
                     _formKey.currentState?.reset();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Документ $name успешно создан'),
-                        duration: Duration(seconds: 3),
+                        duration: const Duration(seconds: 3),
                       ),
                     );
                   }
@@ -534,12 +528,12 @@ class _DocumentFormState extends State<DocumentForm> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(exception),
-                      duration: Duration(seconds: 3),
+                      duration: const Duration(seconds: 3),
                     ),
                   );
                 }
               },
-              child: Text('Сохранить'),
+              child: const Text('Сохранить'),
             ),
           ]),
         ),

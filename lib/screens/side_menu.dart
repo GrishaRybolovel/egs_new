@@ -1,12 +1,5 @@
-import 'package:egs/controllers/MenuAppController.dart';
-import 'package:egs/screens/dashboard/dashboard_screen.dart';
-import 'package:egs/screens/projects/projects.dart';
-import 'package:egs/screens/documents/documents.dart';
-import 'package:egs/screens/mails/mails.dart';
-import 'package:egs/screens/employees/employees.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({
@@ -25,45 +18,47 @@ class SideMenu extends StatelessWidget {
             title: "Сводка",
             svgSrc: "assets/icons/menu_dashboard.svg",
             press: () {
-              context.read<MenuAppController>().closeMenu();
-              Provider.of<MenuAppController>(context, listen: false)
-                  .navigateTo(DashboardScreen());
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed("/dashboard");
+              // context.read<MenuAppController>().closeMenu();
+              // Provider.of<MenuAppController>(context, listen: false)
+              //     .navigateTo(const DashboardScreen());
             },
           ),
           DrawerListTile(
-            title: "Cотрудники",
+            title: "Сотрудники",
             svgSrc: "assets/icons/menu_human.svg",
             press: () {
-              context.read<MenuAppController>().closeMenu();
-              Provider.of<MenuAppController>(context, listen: false)
-                  .navigateTo(EmployeesScreen());
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed("/employees");
+
             },
           ),
           DrawerListTile(
             title: "Объекты",
             svgSrc: "assets/icons/menu_store.svg",
             press: () {
-              context.read<MenuAppController>().closeMenu();
-              Provider.of<MenuAppController>(context, listen: false)
-                  .navigateTo(ProjectsScreen());
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed("/projects");
+              // context.read<MenuAppController>().closeMenu();
+              // Provider.of<MenuAppController>(context, listen: false)
+                  // .navigateTo(const ProjectsScreen());
             },
           ),
           DrawerListTile(
             title: "Документы",
             svgSrc: "assets/icons/menu_doc.svg",
             press: () {
-              context.read<MenuAppController>().closeMenu();
-              Provider.of<MenuAppController>(context, listen: false)
-                  .navigateTo(DocumentsScreen());
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed("/documents");
             },
           ),
           DrawerListTile(
             title: "Письма",
             svgSrc: "assets/icons/menu_notification.svg",
             press: () {
-              context.read<MenuAppController>().closeMenu();
-              Provider.of<MenuAppController>(context, listen: false)
-                  .navigateTo(MailsScreen());
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed("/mails");
             },
           ),
         ],
@@ -91,12 +86,12 @@ class DrawerListTile extends StatelessWidget {
       horizontalTitleGap: 0.0,
       leading: SvgPicture.asset(
         svgSrc,
-        colorFilter: ColorFilter.mode(Colors.white54, BlendMode.srcIn),
+        colorFilter: const ColorFilter.mode(Colors.white54, BlendMode.srcIn),
         height: 16,
       ),
       title: Text(
         title,
-        style: TextStyle(color: Colors.white54),
+        style: const TextStyle(color: Colors.white54),
       ),
     );
   }

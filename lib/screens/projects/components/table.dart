@@ -7,10 +7,12 @@ import 'package:egs/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../const.dart';
+import '../../../ui/const.dart';
 import 'edit_project.dart';
 
 class MyTable extends StatefulWidget {
+  const MyTable({super.key});
+
   @override
   State<MyTable> createState() => _MyTable();
 }
@@ -30,7 +32,7 @@ class _MyTable extends State<MyTable> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(exception),
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
         ),
       );
     }
@@ -39,128 +41,130 @@ class _MyTable extends State<MyTable> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(defaultPadding),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.all(defaultPadding),
+      decoration: const BoxDecoration(
         color: secondaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
         children: [
           SizedBox(
-              width: double.maxFinite,
-              child: FutureBuilder<List<Project>?>(
-                future: projects,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator(); // Loading indicator
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Text('No projects available.');
-                  } else {
-                    List<DataRow> rows = snapshot.data!.where((project) {
-                      // Use lowercase for case-insensitive comparison
-                      final projectName = project.name.toLowerCase();
-                      final searchText = Provider.of<MenuAppController>(context)
-                          .search
-                          .toLowerCase();
+            width: double.maxFinite,
+            child: FutureBuilder<List<Project>?>(
+              future: projects,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator(); // Loading indicator
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Text('No projects available.');
+                } else {
+                  List<DataRow> rows = snapshot.data!.where((project) {
+                    // Use lowercase for case-insensitive comparison
+                    final projectName = project.name.toLowerCase();
+                    final searchText = Provider.of<MenuAppController>(context)
+                        .search
+                        .toLowerCase();
 
-                      // Check if the project name contains the search text
-                      return projectName.contains(searchText);
-                    }).map((project) {
-                      return DataRow(
-                        cells: [
-                          DataCell(ElevatedButton(
-                            onPressed: () {
-                              Provider.of<MenuAppController>(context,
-                                      listen: false)
-                                  .navigateTo(AddEditProjectScreen(
-                                initialProject: project,
-                              ));
-                            },
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: defaultPadding * 1.5,
-                                vertical: defaultPadding /
-                                    (Responsive.isMobile(context) ? 2 : 1),
+                    // Check if the project name contains the search text
+                    return projectName.contains(searchText);
+                  }).map((project) {
+                    return DataRow(
+                      cells: [
+                        DataCell(ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AddEditProjectScreen(
+                                  initialProject: project,
+                                ),
                               ),
+                            );
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: defaultPadding * 1.5,
+                              vertical: defaultPadding /
+                                  (Responsive.isMobile(context) ? 2 : 1),
                             ),
-                            child: Text(project.id.toString()),
-                          )),
-                          DataCell(Text(project.name)),
-                          DataCell(Text(project.dateCreation
-                              .toString()
-                              .substring(0, 10))),
-                          DataCell(ElevatedButton(
-                            onPressed: () async {
-                              try {
-                                // Delete the project
-                                papiService.deleteProject(project.id ?? 0);
-                                String name = project.name;
+                          ),
+                          child: Text(project.id.toString()),
+                        )),
+                        DataCell(Text(project.name)),
+                        DataCell(Text(
+                            project.dateCreation.toString().substring(0, 10))),
+                        DataCell(ElevatedButton(
+                          onPressed: () async {
+                            try {
+                              // Delete the project
+                              papiService.deleteProject(project.id ?? 0);
+                              String name = project.name;
 
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content:
-                                        Text('Объект $name успешно удален'),
-                                    duration: Duration(seconds: 3),
-                                  ),
-                                );
-                              } catch (e) {
-                                String exception = e.toString().substring(10);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(exception),
-                                    duration: Duration(seconds: 3),
-                                  ),
-                                );
-                              }
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Объект $name успешно удален'),
+                                  duration: const Duration(seconds: 3),
+                                ),
+                              );
+                            } catch (e) {
+                              String exception = e.toString().substring(10);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(exception),
+                                  duration: const Duration(seconds: 3),
+                                ),
+                              );
+                            }
 
-                              // Update the UI by triggering a rebuild
-                              setState(() {
-                                projects = papiService.getProjects();
-                                // Re-fetch the project list or update it in some way
-                                // You can use a FutureBuilder or another method to fetch the updated project list
-                              });
-                            },
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: defaultPadding * 1.5,
-                                vertical: defaultPadding /
-                                    (Responsive.isMobile(context) ? 2 : 1),
-                              ),
+                            // Update the UI by triggering a rebuild
+                            setState(() {
+                              projects = papiService.getProjects();
+                              // Re-fetch the project list or update it in some way
+                              // You can use a FutureBuilder or another method to fetch the updated project list
+                            });
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: defaultPadding * 1.5,
+                              vertical: defaultPadding /
+                                  (Responsive.isMobile(context) ? 2 : 1),
                             ),
-                            child: Icon(
-                              Icons.delete,
-                              size: 20.0,
-                            ),
-                          ))
-                          // Add more cells as needed
-                        ],
-                      );
-                    }).toList();
-
-                    return DataTable(
-                      columnSpacing: defaultPadding,
-                      // minWidth: 600,
-                      columns: [
-                        DataColumn(
-                          label: Text("Номер"),
-                        ),
-                        DataColumn(
-                          label: Text("Название"),
-                        ),
-                        DataColumn(
-                          label: Text("Дата"),
-                        ),
-                        DataColumn(
-                          label: Text("Управление"),
-                        ),
+                          ),
+                          child: const Icon(
+                            Icons.delete,
+                            size: 20.0,
+                          ),
+                        ))
+                        // Add more cells as needed
                       ],
-                      rows: rows,
                     );
-                  }
-                },
-              )),
+                  }).toList();
+
+                  return DataTable(
+                    columnSpacing: defaultPadding,
+                    // minWidth: 600,
+                    columns: const [
+                      DataColumn(
+                        label: Text("Номер"),
+                      ),
+                      DataColumn(
+                        label: Text("Название"),
+                      ),
+                      DataColumn(
+                        label: Text("Дата"),
+                      ),
+                      DataColumn(
+                        label: Text("Управление"),
+                      ),
+                    ],
+                    rows: rows,
+                  );
+                }
+              },
+            ),
+          ),
         ],
       ),
     );

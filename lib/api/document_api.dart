@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
 import 'package:egs/model/document.dart';
-import 'package:egs/const.dart';
+import 'package:egs/ui/const.dart';
 
 class DocumentsApi {
 

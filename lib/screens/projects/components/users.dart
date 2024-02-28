@@ -3,7 +3,7 @@ import 'package:egs/api/project_api.dart';
 import 'package:egs/api/service.dart';
 import 'package:egs/model/project.dart';
 import 'package:egs/model/user.dart';
-import 'package:egs/const.dart';
+import 'package:egs/ui/const.dart';
 
 class SelectUsers extends StatefulWidget {
   final Project? initialProject;
@@ -11,10 +11,10 @@ class SelectUsers extends StatefulWidget {
   const SelectUsers({Key? key, this.initialProject}) : super(key: key);
 
   @override
-  _SelectUsersState createState() => _SelectUsersState();
+  SelectUsersState createState() => SelectUsersState();
 }
 
-class _SelectUsersState extends State<SelectUsers> {
+class SelectUsersState extends State<SelectUsers> {
   final ApiService usersApiService = ApiService();
   final ProjectsApiService papiService = ProjectsApiService();
   List<User>? selectedUsers = [];
@@ -33,13 +33,12 @@ class _SelectUsersState extends State<SelectUsers> {
       setState(() {
         allUsers = users;
       });
-    } catch (e){
+    } catch (e) {
       String exception = e.toString().substring(10);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content:
-          Text(exception),
-          duration: Duration(seconds: 3),
+          content: Text(exception),
+          duration: const Duration(seconds: 3),
         ),
       );
     }
@@ -60,29 +59,25 @@ class _SelectUsersState extends State<SelectUsers> {
   Future<void> saveProject() async {
     try {
       if (widget.initialProject != null) {
-        int my_id = widget.initialProject?.id ?? 0;
         List<User>? copiedUsers = List.from(selectedUsers ?? []);
 
         widget.initialProject?.projectToUser?.clear();
         widget.initialProject?.projectToUser?.addAll(copiedUsers);
 
-        var updatedProject = await papiService.updateProject(my_id, widget.initialProject!);
 
-        if (updatedProject != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Пользователи объекта успешно изменены'),
-              duration: Duration(seconds: 3),
-            ),
-          );
-        }
-      }
-    } catch (e){
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Пользователи объекта успешно изменены'),
+            duration: Duration(seconds: 3),
+          ),
+        );
+            }
+    } catch (e) {
       String exception = e.toString().substring(10);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(exception),
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
         ),
       );
     }
@@ -91,10 +86,10 @@ class _SelectUsersState extends State<SelectUsers> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(defaultPadding),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.all(defaultPadding),
+      decoration: const BoxDecoration(
         color: secondaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +98,7 @@ class _SelectUsersState extends State<SelectUsers> {
             'Пользователи',
             style: Theme.of(context).textTheme.titleMedium,
           ),
-          SizedBox(height: defaultPadding),
+          const SizedBox(height: defaultPadding),
           DropdownButton<User>(
             value: null,
             items: allUsers.map((user) {
@@ -129,12 +124,11 @@ class _SelectUsersState extends State<SelectUsers> {
               return ListTile(
                 title: Text(user?.name ?? ''),
                 trailing: IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: const Icon(Icons.delete),
                   onPressed: () {
-                    if(user != null) {
+                    if (user != null) {
                       deleteUser(user);
-                    }
-                    else{
+                    } else {
                       print('1');
                     }
                   },
@@ -146,7 +140,7 @@ class _SelectUsersState extends State<SelectUsers> {
             onPressed: () {
               saveProject();
             },
-            child: Text('Сохранить'),
+            child: const Text('Сохранить'),
           ),
         ],
       ),

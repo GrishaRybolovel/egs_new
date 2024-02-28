@@ -4,14 +4,13 @@ import 'package:egs/api/service.dart';
 import 'package:egs/controllers/MenuAppController.dart';
 import 'package:egs/model/user.dart';
 import 'package:egs/responsive.dart';
+import 'package:egs/ui/const.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:math';
-
-import '../../../const.dart';
-
 
 class MyTable extends StatefulWidget {
+  const MyTable({super.key});
+
   @override
   State<MyTable> createState() => _MyTable();
 }
@@ -31,7 +30,7 @@ class _MyTable extends State<MyTable> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(exception),
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
         ),
       );
     }
@@ -40,116 +39,113 @@ class _MyTable extends State<MyTable> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(defaultPadding),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.all(defaultPadding),
+      decoration: const BoxDecoration(
         color: secondaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
         children: [
           SizedBox(
-              width: double.maxFinite,
-              child: FutureBuilder<List<User>?>(
-                future: users,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator(); // Loading indicator
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Text('Пользователей.');
-                  } else {
-                    List<DataRow> rows = snapshot.data!.where((user) {
-                      // Use lowercase for case-insensitive comparison
-                      final userName = user.name.toLowerCase() + ' ' + user.surname.toLowerCase() + ' ' + (user.lastName?.toLowerCase() ?? '');
-                      final searchText = Provider.of<MenuAppController>(context)
-                          .search
-                          .toLowerCase();
+            width: double.maxFinite,
+            child: FutureBuilder<List<User>?>(
+              future: users,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator(); // Loading indicator
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Text('Пользователей.');
+                } else {
+                  List<DataRow> rows = snapshot.data!.where((user) {
+                    // Use lowercase for case-insensitive comparison
+                    final userName =
+                        '${user.name.toLowerCase()} ${user.surname.toLowerCase()} ${user.lastName?.toLowerCase() ?? ''}';
+                    final searchText = Provider.of<MenuAppController>(context)
+                        .search
+                        .toLowerCase();
 
-                      // Check if the project name contains the search text
-                      return userName.contains(searchText);
-                    }).map((user) {
-                      return DataRow(
-                        cells: [
-                          DataCell(ElevatedButton(
-                            onPressed: () {
-                            },
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: defaultPadding * 1.5,
-                                vertical: defaultPadding /
-                                    (Responsive.isMobile(context) ? 2 : 1),
+                    // Check if the project name contains the search text
+                    return userName.contains(searchText);
+                  }).map((user) {
+                    return DataRow(
+                      cells: [
+                        DataCell(ElevatedButton(
+                          onPressed: () {},
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: defaultPadding * 1.5,
+                              vertical: defaultPadding /
+                                  (Responsive.isMobile(context) ? 2 : 1),
+                            ),
+                          ),
+                          child: Text(user.id.toString()),
+                        )),
+                        DataCell(Text(user.toString())),
+                        DataCell(InkWell(
+                          onTap: () {},
+                          child: Container(
+                            width: 24,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: user.status ? Colors.blue : Colors.grey,
+                                width: 2,
                               ),
                             ),
-                            child: Text(user.id.toString()),
-                          )),
-                          DataCell(Text(user.toString())),
-                          DataCell(
-                              InkWell(
-                                onTap: () {
-                                },
-                                child: Container(
-                                  width: 24,
-                                  height: 24,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                      color: user.status ? Colors.blue : Colors.grey,
-                                      width: 2,
-                                    ),
-                                  ),
-                                  child: user.status
-                                      ? Icon(
+                            child: user.status
+                                ? const Icon(
                                     Icons.check,
                                     size: 20,
                                     color: Colors.blue,
                                   )
-                                      : SizedBox(),
-                                ),
-                              )
+                                : const SizedBox(),
                           ),
-                          DataCell(ElevatedButton(
-                            onPressed: () async {
-                            },
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: defaultPadding * 1.5,
-                                vertical: defaultPadding /
-                                    (Responsive.isMobile(context) ? 2 : 1),
-                              ),
+                        )),
+                        DataCell(ElevatedButton(
+                          onPressed: () async {},
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: defaultPadding * 1.5,
+                              vertical: defaultPadding /
+                                  (Responsive.isMobile(context) ? 2 : 1),
                             ),
-                            child: Icon(
-                              Icons.delete,
-                              size: 20.0,
-                            ),
-                          ))
-                          // Add more cells as needed
-                        ],
-                      );
-                    }).toList();
-
-                    return DataTable(
-                      columnSpacing: defaultPadding,
-                      // minWidth: 600,
-                      columns: [
-                        DataColumn(
-                          label: Text("Номер"),
-                        ),
-                        DataColumn(
-                          label: Text("Имя"),
-                        ),
-                        DataColumn(
-                          label: Text("Статус"),
-                        ),
-                        DataColumn(
-                          label: Text("Действие"),
-                        ),
+                          ),
+                          child: const Icon(
+                            Icons.delete,
+                            size: 20.0,
+                          ),
+                        ))
+                        // Add more cells as needed
                       ],
-                      rows: rows,
                     );
-                  }
-                },
-              )),
+                  }).toList();
+
+                  return DataTable(
+                    columnSpacing: defaultPadding,
+                    // minWidth: 600,
+                    columns: const [
+                      DataColumn(
+                        label: Text("Номер"),
+                      ),
+                      DataColumn(
+                        label: Text("Имя"),
+                      ),
+                      DataColumn(
+                        label: Text("Статус"),
+                      ),
+                      DataColumn(
+                        label: Text("Действие"),
+                      ),
+                    ],
+                    rows: rows,
+                  );
+                }
+              },
+            ),
+          ),
         ],
       ),
     );

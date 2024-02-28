@@ -1,8 +1,7 @@
-import 'package:egs/const.dart';
+import 'package:egs/ui/const.dart';
 import 'package:egs/model/task.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:egs/screens/messages/messages.dart';
 
 class FileInfoCard extends StatelessWidget {
   const FileInfoCard({
@@ -15,10 +14,10 @@ class FileInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(defaultPadding),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.all(defaultPadding),
+      decoration: const BoxDecoration(
         color: secondaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,7 +27,7 @@ class FileInfoCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: EdgeInsets.all(defaultPadding * 0.75),
+                padding: const EdgeInsets.all(defaultPadding * 0.75),
                 height: 40,
                 width: 40,
                 decoration: BoxDecoration(
@@ -39,7 +38,7 @@ class FileInfoCard extends StatelessWidget {
                   "assets/icons/doc_file.svg",
                 ),
               ),
-              Icon(Icons.more_vert, color: Colors.white54)
+              const Icon(Icons.more_vert, color: Colors.white54)
             ],
           ),
           Text(
@@ -51,28 +50,30 @@ class FileInfoCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "${info.created.toString().substring(0, 11)}",
+                info.created.toString().substring(0, 11),
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall!
                     .copyWith(color: Colors.white70),
               ),
-              Column(children: [
-                Text(
-                  'Автор:',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(color: Colors.white),
-                ),
-                Text(
-                  info.authorId!.toString(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(color: Colors.white),
-                ),
-              ]),
+              Column(
+                children: [
+                  Text(
+                    'Автор:',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: Colors.white),
+                  ),
+                  Text(
+                    info.authorId!.toString(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: Colors.white),
+                  ),
+                ],
+              ),
             ],
           ),
         ],
