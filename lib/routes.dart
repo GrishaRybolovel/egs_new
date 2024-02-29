@@ -58,7 +58,7 @@ class RouteGenerator {
       case '/taskForm':
         return MaterialPageRoute(
           builder: (context) =>
-              TaskFormScreen(initialTask: settings.arguments as Task),
+              TaskFormScreen(initialTask: settings.arguments as Task?),
           settings: const RouteSettings(name: '/taskForm'),
         );
       default:

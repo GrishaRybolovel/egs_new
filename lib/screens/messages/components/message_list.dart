@@ -1,5 +1,7 @@
 import 'package:egs/api/message_api.dart';
+import 'package:egs/api/service.dart';
 import 'package:egs/model/message.dart';
+import 'package:egs/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';

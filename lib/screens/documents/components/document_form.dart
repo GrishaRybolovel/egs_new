@@ -16,6 +16,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:egs/screens/header.dart';
+import 'package:egs/screens/side_menu.dart';
 
 class DocumentForm extends StatefulWidget {
   final Document? document;
@@ -179,7 +181,11 @@ class DocumentFormState extends State<DocumentForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Scaffold(
+        appBar: const Header(),
+        drawer: const SideMenu(),
+        body: SingleChildScrollView(
+        child: Column(
       children: [
         Container(
           padding: const EdgeInsets.all(defaultPadding),
@@ -538,6 +544,8 @@ class DocumentFormState extends State<DocumentForm> {
           ]),
         ),
       ],
+    )
+        )
     );
   }
 }
