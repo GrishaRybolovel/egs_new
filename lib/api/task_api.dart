@@ -24,7 +24,7 @@ class TaskApi {
     print(jsonEncode(task.toJson()));
 
     if (response.statusCode == 201) {
-      return Task.fromJson(jsonDecode(response.body));
+      return Task.fromJson(json.decode(utf8.decode(response.bodyBytes)));
     } else {
       throw Exception('Ошибка создания задачи. Заполните все необходимые поля.');
     }
@@ -38,7 +38,7 @@ class TaskApi {
     );
 
     if (response.statusCode == 200) {
-      return Task.fromJson(jsonDecode(response.body));
+      return Task.fromJson(json.decode(utf8.decode(response.bodyBytes)));
     } else {
       throw Exception('Ошибка обновления задачи.');
     }

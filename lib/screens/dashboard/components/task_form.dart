@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:html' as html;
+import 'dart:io';
+
 import 'package:egs/api/project_api.dart';
 import 'package:egs/api/service.dart';
 import 'package:egs/api/task_api.dart';
@@ -8,8 +12,12 @@ import 'package:egs/model/project.dart';
 import 'package:egs/model/task.dart';
 import 'package:egs/model/user.dart';
 import 'package:egs/screens/dashboard/dashboard_screen.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:egs/screens/messages/messages.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:path/path.dart';
 
 class TaskFormScreen extends StatefulWidget {
   final Task? initialTask;
@@ -23,12 +31,19 @@ class TaskFormScreen extends StatefulWidget {
 class TaskFormScreenState extends State<TaskFormScreen> {
   // Basic task fields1
   late TextEditingController nameController = TextEditingController();
+  late TextEditingController descriptionController = TextEditingController();
   late TextEditingController completionController = TextEditingController();
   late TextEditingController doneController = TextEditingController();
+
+  File? _doc;
+  String? doc64;
+  String? docName;
 
   // Foreign keys task fields
   final ApiService usersApiService = ApiService();
   final ProjectsApiService papiService = ProjectsApiService();
+
+  List<int>? _users;
   List<User>? selectedUsers = [];
   late List<User> allUsers = [];
 
@@ -43,11 +58,15 @@ class TaskFormScreenState extends State<TaskFormScreen> {
 
     nameController =
         TextEditingController(text: widget.initialTask?.name ?? '');
+    descriptionController =
+        TextEditingController(text: widget.initialTask?.description ?? '');
     completionController = TextEditingController(
         text: widget.initialTask?.completion?.toLocal().toString());
     doneController = TextEditingController(
         text: widget.initialTask?.done?.toLocal().toString());
-    selectedUsers = widget.initialTask?.taskToUserIds ?? [];
+    _doc = widget.initialTask?.doc;
+    docName = widget.initialTask?.docName;
+    _users = widget.initialTask?.taskToUserIds ?? [];
 
     fetchInitialData();
   }
@@ -61,6 +80,14 @@ class TaskFormScreenState extends State<TaskFormScreen> {
         allUsers = users;
         allProjects = projects;
 
+        if (_users != null) {
+          for (var user in allUsers) {
+            if (_users?.contains(user.id) ?? false) {
+              addUser(user);
+            }
+          }
+        }
+
         for (var project in projects) {
           if (project.id == widget.initialTask?.projectId) {
             selectedProject = project;
@@ -70,7 +97,7 @@ class TaskFormScreenState extends State<TaskFormScreen> {
       });
     } catch (e) {
       String exception = e.toString().substring(10);
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(this.context).showSnackBar(
         SnackBar(
           content: Text(exception),
           duration: const Duration(seconds: 3),
@@ -101,6 +128,52 @@ class TaskFormScreenState extends State<TaskFormScreen> {
     setState(() {
       selectedProject = null;
     });
+  }
+
+  Future<void> convertWebFileToDartFile(html.File webFile) async {
+    // Convert web file to base64
+    final reader = html.FileReader();
+    reader.readAsDataUrl(webFile);
+    await reader.onLoad.first;
+    final base64String = reader.result as String;
+
+    setState(() {
+      doc64 = base64String.split(',').last;
+      docName = webFile.name;
+    });
+  }
+
+  Future<void> _pickFile() async {
+    if (kIsWeb) {
+      final html.InputElement input = html.InputElement(type: 'file');
+      input.click();
+
+      input.onChange.listen((e) {
+        final file = input.files!.first;
+        convertWebFileToDartFile(file)
+            .then((dartFile) {})
+            .catchError((error) {});
+      });
+    } else {
+      FilePickerResult? result =
+      await FilePicker.platform.pickFiles(type: FileType.any);
+
+      if (result != null) {
+        // On mobile or desktop, use the path property to access the file path
+        // _selectedFile = File(result.files.single.path!);
+
+        setState(() {
+          _doc = File(result.files.single.path!);
+          doc64 = base64Encode(Uint8List.fromList(_doc!.readAsBytesSync()));
+          docName = basename(_doc!.path);
+          print(docName);
+        });
+      }
+    }
+  }
+
+  String constructDownloadUrl(String filePath) {
+    return '$baseUrl/task/tasks/download/$filePath';
   }
 
   @override
@@ -143,6 +216,10 @@ class TaskFormScreenState extends State<TaskFormScreen> {
                   controller: nameController,
                   decoration: const InputDecoration(labelText: 'Название*'),
                 ),
+                    TextFormField(
+                      controller: descriptionController,
+                      decoration: const InputDecoration(labelText: 'Описание'),
+                    ),
                 TextFormField(
                   controller: completionController,
                   decoration:
@@ -176,6 +253,32 @@ class TaskFormScreenState extends State<TaskFormScreen> {
                     }
                   },
                 ),
+                    const SizedBox(height: defaultPadding * 3),
+                    // File
+                    GestureDetector(
+                        onTap: () {
+                          if (widget.initialTask != null) {
+                            if (widget.initialTask?.docName != null) {
+                              final downloadUrl =
+                              constructDownloadUrl(widget.initialTask?.docName! ?? '');
+                              launch(downloadUrl);
+                            }
+                          }
+                        },
+                        child: Visibility(
+                            visible: docName != null,
+                            child: Row(
+                              children: [
+                                Text('Файл: ${docName ?? ''}'),
+                                const Icon(Icons.download),
+                              ],
+                            )
+                        )
+                    ),
+                    ElevatedButton(
+                      onPressed: _pickFile,
+                      child: const Text('Прикрепить документ'),
+                    ),
               ]),
             ),
             const SizedBox(height: defaultPadding),
@@ -305,45 +408,58 @@ class TaskFormScreenState extends State<TaskFormScreen> {
       User author = await ApiService().fetchUserData();
       final Task newTask = Task(
         name: nameController.text,
+        description: descriptionController.text,
         authorId: author.id,
         created: null,
         completion: null,
         done: null,
+        doc: _doc,
+        docBase64: doc64,
+        docName: docName,
         projectId: selectedProject?.id,
-        taskToUserIds: selectedUsers ?? [],
+        taskToUserIds: selectedUsers?.map((user) => user.id).toList(),
       );
 
       if (widget.initialTask == null) {
         String name = newTask.name;
+        Task createdTask = await TaskApi().createTask(newTask);
 
-        ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(this.context).showSnackBar(
           SnackBar(
             content: Text('Задача $name успешно создана'),
             duration: const Duration(seconds: 3),
           ),
         );
         Navigator.push(
-          context,
+          this.context,
           MaterialPageRoute(
             builder: (context) => DashboardScreen(),
           ),
         );
-
-        // Provider.of<MenuAppController>(context, listen: false)
-        // .navigateTo(DashboardScreen());
       } else {
         if (widget.initialTask?.id != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
+          int myId = widget.initialTask?.id ?? 0;
+
+          Task updatedTask = await TaskApi().updateTask(myId, newTask);
+
+          ScaffoldMessenger.of(this.context).showSnackBar(
             const SnackBar(
               content: Text('Информация о задаче успешно обновлена'),
               duration: Duration(seconds: 3),
+            ),
+          );
+
+          Navigator.push(
+            this.context,
+            MaterialPageRoute(
+              builder: (context) => TaskFormScreen(initialTask: updatedTask,),
             ),
           );
         }
       }
     } catch (e) {
       String exception = e.toString().substring(10);
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(this.context).showSnackBar(
         SnackBar(
           content: Text(exception),
           duration: const Duration(seconds: 3),

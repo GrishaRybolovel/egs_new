@@ -33,6 +33,7 @@ class Document {
   factory Document.fromJson(Map<String, dynamic> json) {
     File? myDoc;
     if(json['doc'] != null){
+      print(json['doc']);
       String docPath = json['doc'] as String;
       List<int> docBytes = base64Decode(docPath);
       myDoc = docBytes.isNotEmpty ? File.fromRawPath(Uint8List.fromList(docBytes)) : null;
