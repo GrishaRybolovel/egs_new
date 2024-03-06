@@ -72,7 +72,9 @@ class _MyTable extends State<MyTable> {
                     return DataRow(
                       cells: [
                         DataCell(ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/userForm', arguments: user);
+                          },
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.symmetric(
                               horizontal: defaultPadding * 1.5,
@@ -105,7 +107,11 @@ class _MyTable extends State<MyTable> {
                           ),
                         )),
                         DataCell(ElevatedButton(
-                          onPressed: () async {},
+                          onPressed: () async {
+                            if (user.id != null) {
+                              await deleteUser(user.id!);
+                            }
+                          },
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.symmetric(
                               horizontal: defaultPadding * 1.5,
@@ -149,5 +155,34 @@ class _MyTable extends State<MyTable> {
         ],
       ),
     );
+  }
+
+  Future<bool> deleteUser(int userId) async {
+    try {
+      ApiService().deleteUser(userId);
+
+      setState(() {
+        users = apiService.getUsers();
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Пользователь успешно удален'),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+      return true;
+    } catch (e) {
+      String exception = e.toString().substring(10);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(exception),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+
+      return false;
+    }
+
   }
 }

@@ -69,7 +69,7 @@ class _MyTable extends State<MyTable> {
                         .search
                         .toLowerCase();
                     if (widget.initialProject == null) {
-                      return documentName.contains(searchText);
+                      return false;
                     } else {
                       return document.projects!
                           .contains(widget.initialProject?.id);

@@ -409,15 +409,14 @@ class TaskFormScreenState extends State<TaskFormScreen> {
       final Task newTask = Task(
         name: nameController.text,
         description: descriptionController.text,
-        authorId: author.id,
-        created: null,
-        completion: null,
+        authorId: author.id ?? 0,
+        completion: completionController.text != null ? DateTime.parse(completionController.text) : null,
         done: null,
         doc: _doc,
         docBase64: doc64,
         docName: docName,
         projectId: selectedProject?.id,
-        taskToUserIds: selectedUsers?.map((user) => user.id).toList(),
+        taskToUserIds: selectedUsers?.map((user) => user.id ?? 0).toList(),
       );
 
       if (widget.initialTask == null) {

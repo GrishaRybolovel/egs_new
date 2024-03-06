@@ -77,13 +77,14 @@ class Task {
   }
 
   Map<String, dynamic> toJson() {
+    print(completion);
     Map<String, dynamic> jsonMap = {
       'id': id,
       'name': name,
       'description': description,
       'author': authorId,
       'created': created?.toIso8601String(),
-      'completion': completion?.toIso8601String(),
+      'completion': completion?.toIso8601String().substring(0, 10),
       'done': done?.toIso8601String(),
       'project': projectId,
       'task_to_user': taskToUserIds,

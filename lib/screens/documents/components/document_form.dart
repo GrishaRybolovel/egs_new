@@ -497,7 +497,7 @@ class DocumentFormState extends State<DocumentForm> {
                     doc: _doc,
                     docBase64: doc64,
                     docName: docName,
-                    users: selectedUsers?.map((user) => user.id).toList(),
+                    users: selectedUsers?.map((user) => user.id ?? 0).toList(),
                     projects: selectedProjects
                         ?.map((project) => (project.id ?? 0))
                         .toList(),

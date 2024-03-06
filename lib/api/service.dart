@@ -104,4 +104,41 @@ class ApiService {
       throw Exception('Не удалось загрузить пользователей');
     }
   }
+
+  Future<User> createUser(User user) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/user/register/'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(user.toJson()),
+    );
+
+    if (response.statusCode == 201) {
+      return User.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+    } else {
+      throw Exception('Ошибка создания пользователя. Заполните все необходимые поля.');
+    }
+  }
+
+  Future<User> updateUser(int userId, User user) async {
+
+    final response = await http.put(
+      Uri.parse('$baseUrl/user/users/${userId}/'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(user.toJson()),
+    );
+
+    if (response.statusCode == 200) {
+      return User.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+    } else {
+      throw Exception('Ошибка обновления пользователя.');
+    }
+  }
+
+  Future<void> deleteUser(int userId) async {
+    final response = await http.delete(Uri.parse('$baseUrl/user/users/${userId}/'));
+
+    if (response.statusCode != 204) {
+      throw Exception('Ошибка удаления пользователя');
+    }
+  }
 }
