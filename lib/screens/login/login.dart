@@ -1,7 +1,7 @@
 import 'package:egs/api/service.dart';
+import 'package:egs/main.dart';
 import 'package:egs/ui/const.dart';
 import 'package:egs/responsive.dart';
-import 'package:egs/screens/registration/register.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -21,6 +21,20 @@ class LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Логин'),
+        actions: [
+          Switch(
+            value: MyApp.of(context).themeMode == ThemeMode.light,
+            onChanged: (value) {
+              setState(() {});
+              if (value) {
+                MyApp.of(context).changeTheme(ThemeMode.light);
+              } else {
+                MyApp.of(context).changeTheme(ThemeMode.dark);
+              }
+            }
+            
+          ),
+        ],
         automaticallyImplyLeading: false,
       ),
       body: Padding(
