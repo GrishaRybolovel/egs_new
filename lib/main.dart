@@ -6,28 +6,47 @@ import 'package:provider/provider.dart';
 
 void main() async {
   runApp(
-  MultiProvider(
-    providers: [
-      ChangeNotifierProvider(
-        create: (context) => MenuAppController(),
-      ),
-    ],
-    child: MyApp(),
-  ),
-);
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => MenuAppController(),
+        ),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  MyAppState createState() => MyAppState();
+
+  static MyAppState of(BuildContext context) => 
+      context.findAncestorStateOfType<MyAppState>()!;
+}
+
+class MyAppState extends State<MyApp> {
+  ThemeMode themeMode = ThemeMode.system;
+
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'ЭГС',
-      theme: themeData,
       initialRoute: '/login',
       onGenerateRoute: RouteGenerator.generateRoute,
+      theme: lightThemeData,
+      darkTheme: darkThemeData,
+      themeMode: themeMode,
     );
+  }
+
+  void changeTheme(ThemeMode newThemeMode) {
+    setState(() {
+      themeMode = newThemeMode;
+    });
   }
 }

@@ -1,6 +1,7 @@
 import 'package:egs/responsive.dart';
 import 'package:egs/screens/header.dart';
 import 'package:egs/screens/side_menu.dart';
+import 'package:egs/model/user.dart';
 import 'package:egs/ui/const.dart';
 import 'package:egs/screens/employees/components/table.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,9 @@ class _EmployeesScreen extends State<EmployeesScreen> {
                         defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/userForm');
+                },
                 icon: const Icon(Icons.add),
                 label: const Text("Создать"),
               ),

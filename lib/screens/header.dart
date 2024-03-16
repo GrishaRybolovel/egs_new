@@ -4,6 +4,8 @@ import 'package:egs/responsive.dart';
 import 'package:egs/screens/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:egs/api/service.dart';
+import 'package:egs/model/user.dart';
 
 import '../ui/const.dart';
 
@@ -18,20 +20,74 @@ class Header extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _HeaderState extends State<Header> {
+  late Future<User>? userFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    loadUser();
+  }
+
+  Future<void> loadUser() async {
+    setState(() {
+      try {
+        userFuture = ApiService().fetchUserData();
+      } catch (error) {
+        print('Error fetching messages: $error');
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      title: const Text('ЭГС'),
-      actions: [
-        IconButton(
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-            icon: const Icon(Icons.menu)),
-        Expanded(child: SearchField()),
-        const ProfileCard()
-      ],
+    return FutureBuilder<User>(
+        future: userFuture,
+        builder: (context, snapshot) {
+          if (userFuture == null) {
+            // messagesFuture is not yet initialized
+            return AppBar(
+              title: const Text('ЭГС'),
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                    icon: const Icon(Icons.menu)),
+                Expanded(child: SearchField()),
+                const CircularProgressIndicator()
+              ],
+            );
+          } else if (snapshot.hasError) {
+            // Error while fetching data, show an error message
+            return AppBar(
+              title: const Text('ЭГС'),
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                    icon: const Icon(Icons.menu)),
+                Expanded(child: SearchField()),
+                ProfileCard(name: 'Undefined', surname: 'Undefined',)
+              ],
+            );
+          } else {
+            String name = snapshot.data?.name ?? 'Undefined';
+            String surname = snapshot.data?.surname ?? 'Undefined';
+            return AppBar(
+              title: const Text('ЭГС'),
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                    icon: const Icon(Icons.menu)),
+                Expanded(child: SearchField()),
+                ProfileCard(name: name, surname: surname,)
+              ],
+            );
+          }
+        }
     );
   }
 }
@@ -39,7 +95,12 @@ class _HeaderState extends State<Header> {
 class ProfileCard extends StatelessWidget {
   const ProfileCard({
     Key? key,
+    required this.name,
+    required this.surname,
   }) : super(key: key);
+
+  final String name;
+  final String surname;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +112,7 @@ class ProfileCard extends StatelessWidget {
               value: 'logout',
               child: ListTile(
                 contentPadding:
-                    EdgeInsets.symmetric(horizontal: defaultPadding / 4),
+                EdgeInsets.symmetric(horizontal: defaultPadding / 4),
                 leading: Icon(Icons.exit_to_app),
                 title: Text('Выйти'),
               ),
@@ -60,8 +121,6 @@ class ProfileCard extends StatelessWidget {
         },
         onSelected: (value) {
           if (value == 'logout') {
-            // TODO change
-            // context.read<MenuAppController>().closeMenu();
             ApiService().logout();
             Navigator.pushReplacement(
               context,
@@ -84,9 +143,9 @@ class ProfileCard extends StatelessWidget {
             children: [
               const Icon(Icons.person),
               if (!Responsive.isMobile(context))
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-                  child: Text("Test Test"),
+                  child: Text("$name $surname"),
                 ),
               const Icon(Icons.keyboard_arrow_down),
             ],
@@ -122,7 +181,9 @@ class SearchField extends StatelessWidget {
             Provider.of<MenuAppController>(context, listen: false)
                 .changeSearch(searchText);
             print(
-                Provider.of<MenuAppController>(context, listen: false).search);
+                Provider
+                    .of<MenuAppController>(context, listen: false)
+                    .search);
           },
           child: const Icon(Icons.search),
         ),

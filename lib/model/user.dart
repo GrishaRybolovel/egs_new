@@ -1,13 +1,15 @@
+import 'package:intl/intl.dart';
+
 class User {
-  final int id;
+  final int? id;
   final String email;
   final String name;
   final String surname;
   final String? lastName;
-  final bool isActive;
-  final bool isSuperuser;
-  final bool isStaff;
-  final DateTime dateJoined;
+  final bool? isActive;
+  final bool? isSuperuser;
+  final bool? isStaff;
+  final DateTime? dateJoined;
   final DateTime? lastLogin;
   final String? phone;
   final String? address;
@@ -22,17 +24,18 @@ class User {
   final String? qualification;
   final String? retraining;
   final bool status;
+  final String? password;
 
   User({
-    required this.id,
+    this.id,
     required this.email,
     required this.name,
     required this.surname,
     this.lastName,
-    required this.isActive,
-    required this.isSuperuser,
-    required this.isStaff,
-    required this.dateJoined,
+    this.isActive,
+    this.isSuperuser,
+    this.isStaff,
+    this.dateJoined,
     this.lastLogin,
     this.phone,
     this.address,
@@ -47,13 +50,17 @@ class User {
     this.qualification,
     this.retraining,
     required this.status,
+    this.password
   });
 
   // You can add other methods or properties as needed
 
   @override
   String toString() {
-    return '$name $surname';
+    String toName = name ?? '';
+    String toSurname = surname ?? '';
+    String toLastname = lastName ?? '';
+    return '$toName $toSurname $toLastname';
   }
 
   // Factory method to create a User instance from JSON data
@@ -103,12 +110,12 @@ class User {
       'is_active': isActive,
       'is_superuser': isSuperuser,
       'is_staff': isStaff,
-      'date_joined': dateJoined.toIso8601String(),
+      'date_joined': dateJoined?.toIso8601String(),
       'last_login': lastLogin?.toIso8601String(),
       'phone': phone,
       'address': address,
-      'date_of_birth': dateOfBirth?.toIso8601String(),
-      'date_of_start': dateOfStart?.toIso8601String(),
+      'date_of_birth': dateOfBirth?.toIso8601String().substring(0, 10),
+      'date_of_start': dateOfStart?.toIso8601String().substring(0, 10),
       'inn': inn,
       'snils': snils,
       'passport': passport,
@@ -118,6 +125,7 @@ class User {
       'qualification': qualification,
       'retraining': retraining,
       'status': status,
+      'password': password,
     };
     jsonMap.removeWhere((key, value) =>
     (value == null || value.toString().isEmpty));

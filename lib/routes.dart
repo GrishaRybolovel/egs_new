@@ -1,4 +1,5 @@
 import 'package:egs/model/task.dart';
+import 'package:egs/model/user.dart';
 import 'package:egs/screens/dashboard/components/task_form.dart';
 import 'package:egs/screens/dashboard/components/tasks.dart';
 import 'package:egs/screens/dashboard/dashboard_screen.dart';
@@ -9,6 +10,7 @@ import 'package:egs/screens/mails/mails.dart';
 import 'package:egs/screens/messages/messages.dart';
 import 'package:egs/screens/projects/projects.dart';
 import 'package:egs/screens/registration/register.dart';
+import 'package:egs/screens/employees/components/employee_form.dart';
 import 'package:flutter/material.dart';
 
 class RouteGenerator {
@@ -58,8 +60,13 @@ class RouteGenerator {
       case '/taskForm':
         return MaterialPageRoute(
           builder: (context) =>
-              TaskFormScreen(initialTask: settings.arguments as Task),
+              TaskFormScreen(initialTask: settings.arguments as Task?),
           settings: const RouteSettings(name: '/taskForm'),
+        );
+      case '/userForm':
+        return MaterialPageRoute(builder: (context) =>
+            EmployeeForm(user: settings.arguments as User?),
+          settings: const RouteSettings(name: '/userForm'),
         );
       default:
         return _errorRoute();

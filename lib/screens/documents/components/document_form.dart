@@ -16,6 +16,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:egs/screens/header.dart';
+import 'package:egs/screens/side_menu.dart';
 
 class DocumentForm extends StatefulWidget {
   final Document? document;
@@ -179,7 +181,11 @@ class DocumentFormState extends State<DocumentForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Scaffold(
+        appBar: const Header(),
+        drawer: const SideMenu(),
+        body: SingleChildScrollView(
+        child: Column(
       children: [
         Container(
           padding: const EdgeInsets.all(defaultPadding),
@@ -353,7 +359,6 @@ class DocumentFormState extends State<DocumentForm> {
                     if (widget.document?.docName != null) {
                       final downloadUrl =
                           constructDownloadUrl(widget.document?.docName! ?? '');
-                      // ignore: deprecated_member_use
                       launch(downloadUrl);
                     }
                   }
@@ -479,7 +484,7 @@ class DocumentFormState extends State<DocumentForm> {
             const SizedBox(height: defaultPadding),
 
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 try {
                   DateTime? myDate;
                   myDate = DateTime.parse(_duration.text);
@@ -492,7 +497,7 @@ class DocumentFormState extends State<DocumentForm> {
                     doc: _doc,
                     docBase64: doc64,
                     docName: docName,
-                    users: selectedUsers?.map((user) => user.id).toList(),
+                    users: selectedUsers?.map((user) => user.id ?? 0).toList(),
                     projects: selectedProjects
                         ?.map((project) => (project.id ?? 0))
                         .toList(),
@@ -501,7 +506,7 @@ class DocumentFormState extends State<DocumentForm> {
                   String name = _name.text;
                   if (widget.document != null) {
                     int myId = widget.document?.id ?? 0;
-                    DocumentsApi().updateDocument(myId, document);
+                    Document updatedDoc = await DocumentsApi().updateDocument(myId, document);
 
                     _formKey.currentState?.reset();
 
@@ -513,7 +518,7 @@ class DocumentFormState extends State<DocumentForm> {
                       ),
                     );
                   } else {
-                    DocumentsApi().createDocument(document);
+                    Document createdDoc = await DocumentsApi().createDocument(document);
 
                     _formKey.currentState?.reset();
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -538,6 +543,8 @@ class DocumentFormState extends State<DocumentForm> {
           ]),
         ),
       ],
+    )
+        )
     );
   }
 }
