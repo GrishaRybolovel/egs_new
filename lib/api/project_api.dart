@@ -32,7 +32,6 @@ class ProjectsApiService {
   }
 
   Future<Project> updateProject(int projectId, Project project) async {
-    print(json.encode(project.toJson()));
 
     final response = await http.put(
       Uri.parse('$baseUrl/project/projects/$projectId/'),
@@ -41,8 +40,7 @@ class ProjectsApiService {
     );
 
     if (response.statusCode == 200) {
-      print('project succesfully updated');
-      print(json.decode(utf8.decode(response.bodyBytes)));
+     
       return Project.fromJson(json.decode(utf8.decode(response.bodyBytes)));
     } else {
       throw Exception('Ошибка обновления проекта.');

@@ -25,6 +25,7 @@ class User {
   final String? retraining;
   final bool status;
   final String? password;
+  final bool? isDark;
 
   User({
     this.id,
@@ -50,15 +51,71 @@ class User {
     this.qualification,
     this.retraining,
     required this.status,
-    this.password
+    this.password,
+    this.isDark,
   });
 
-  // You can add other methods or properties as needed
+  User copyWith({
+    int? id,
+    String? email,
+    String? name,
+    String? surname,
+    String? lastName,
+    bool? isActive,
+    bool? isSuperuser,
+    bool? isStaff,
+    DateTime? dateJoined,
+    DateTime? lastLogin,
+    String? phone,
+    String? address,
+    DateTime? dateOfBirth,
+    DateTime? dateOfStart,
+    String? inn,
+    String? snils,
+    String? passport,
+    String? post,
+    String? infoAboutRelocate,
+    String? attestation,
+    String? qualification,
+    String? retraining,
+    bool? status,
+    String? password,
+    bool? isDark,
+
+  }) {
+    return User(
+      id: id ?? this.id,
+      email: email ?? this.email,
+      name: name ?? this.name,
+      surname: surname ?? this.surname,
+      lastName: lastName ?? this.lastName,
+      isActive: isActive ?? this.isActive,
+      isSuperuser: isSuperuser ?? this.isSuperuser,
+      isStaff: isStaff ?? this.isStaff,
+      dateJoined: dateJoined ?? this.dateJoined,
+      lastLogin: lastLogin ?? this.lastLogin,
+      phone: phone ?? this.phone,
+      address: address ?? this.address,
+      dateOfBirth: dateOfBirth ?? this.dateOfBirth,
+      dateOfStart: dateOfStart ?? this.dateOfStart,
+      inn: inn ?? this.inn,
+      snils: snils ?? this.snils,
+      passport: passport ?? this.passport,
+      post: post ?? this.post,
+      infoAboutRelocate: infoAboutRelocate ?? this.infoAboutRelocate,
+      attestation: attestation ?? this.attestation,
+      qualification: qualification ?? this.qualification,
+      retraining: retraining ?? this.retraining,
+      status: status ?? this.status,
+      password: password ?? this.password,
+      isDark: isDark ?? this.isDark,
+    );}
+
 
   @override
   String toString() {
-    String toName = name ?? '';
-    String toSurname = surname ?? '';
+    String toName = name;
+    String toSurname = surname;
     String toLastname = lastName ?? '';
     return '$toName $toSurname $toLastname';
   }
@@ -96,6 +153,7 @@ class User {
       qualification: json['qualification'],
       retraining: json['retraining'],
       status: json['status'] ?? false,
+      isDark: json['is_dark'] ?? true,
     );
   }
 
@@ -126,6 +184,7 @@ class User {
       'retraining': retraining,
       'status': status,
       'password': password,
+      'is_dark': isDark,
     };
     jsonMap.removeWhere((key, value) =>
     (value == null || value.toString().isEmpty));

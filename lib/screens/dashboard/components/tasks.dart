@@ -3,15 +3,36 @@ import 'package:flutter/material.dart';
 import 'package:egs/ui/const.dart';
 import 'package:egs/model/task.dart';
 import 'package:egs/api/task_api.dart';
-import 'package:egs/screens/dashboard/components/task_form.dart';
 import 'task_info.dart';
 
-class MyTasks extends StatelessWidget {
-  const MyTasks({Key? key}) : super(key: key);
+class MyTasks extends StatefulWidget {
+  const MyTasks({super.key});
+
+  @override
+  MyTasksState createState() => MyTasksState();
+}
+
+class MyTasksState extends State<MyTasks> {
+  List<Task> tasks = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getTasks().then(
+      (value) {
+        tasks = value;
+        setState(() {});
+      },
+    );
+  }
+
+  Future<List<Task>> getTasks() async {
+    final newTasks = await TaskApi().fetchTasks();
+    return newTasks;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return Column(
       children: [
         Row(
@@ -38,30 +59,53 @@ class MyTasks extends StatelessWidget {
           ],
         ),
         const SizedBox(height: defaultPadding),
-        Responsive(
-          mobile: TaskInfoGridView(
-            crossAxisCount: size.width < 650 ? 2 : 4,
-            childAspectRatio: size.width < 650 ? 1.3 : 1,
-          ),
-          tablet: const TaskInfoGridView(),
-          desktop: TaskInfoGridView(
-            childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
-          ),
-        ),
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                children: [
+                  const Text("Просроченный"),
+                  TaskInfoGridView(
+                      tasks: tasks
+                          .where((task) =>
+                              task.completion?.isBefore(DateTime.now()) == true)
+                          .toList()),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  const Text("В работе"),
+                  TaskInfoGridView(
+                      tasks: tasks
+                          .where((task) =>
+                              task.completion?.isBefore(DateTime.now()) ==
+                              false)
+                          .toList()),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  const Text("Закрытые"),
+                  TaskInfoGridView(
+                      tasks: tasks.where((task) => task.done != null).toList()),
+                ],
+              ),
+            ),
+          ],
+        )
       ],
     );
   }
 }
 
 class TaskInfoGridView extends StatefulWidget {
-  const TaskInfoGridView({
-    Key? key,
-    this.crossAxisCount = 4,
-    this.childAspectRatio = 1,
-  }) : super(key: key);
+  const TaskInfoGridView({super.key, required this.tasks});
 
-  final int crossAxisCount;
-  final double childAspectRatio;
+  final List<Task> tasks;
 
   @override
   TaskInfoGridViewState createState() => TaskInfoGridViewState();
@@ -72,41 +116,24 @@ class TaskInfoGridViewState extends State<TaskInfoGridView> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Task>>(
-      future: tapiService.fetchTasks(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          // While the Future is still running, show a loading indicator.
-          return const CircularProgressIndicator();
-        } else if (snapshot.data == null || snapshot.data!.isEmpty) {
-          // If there's no data or the data is empty, display a message.
-          return const Text('Нет заданий.');
-        } else if (snapshot.hasError) {
-          // If there's an error, throw it to propagate it further.
-          throw snapshot.error!;
-        } else {
-          // If the Future is complete and there's data, build the GridView.
-          return GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: snapshot.data!.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: widget.crossAxisCount,
-              crossAxisSpacing: defaultPadding,
-              mainAxisSpacing: defaultPadding,
-              childAspectRatio: widget.childAspectRatio,
-            ),
-            itemBuilder: (context, index) {
-              final task = snapshot.data![index];
-              return InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, '/taskForm', arguments: task);
-                },
-                child: FileInfoCard(info: task),
-              );
-            },
-          );
-        }
+    return GridView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: widget.tasks.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: Responsive.isMobile(context) ? 2 : 4,
+        crossAxisSpacing: defaultPadding,
+        mainAxisSpacing: defaultPadding,
+        childAspectRatio: Responsive.isMobile(context) ? 1.3 : 1,
+      ),
+      itemBuilder: (context, index) {
+        final task = widget.tasks[index];
+        return InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, '/taskForm', arguments: task);
+          },
+          child: FileInfoCard(info: task),
+        );
       },
     );
   }

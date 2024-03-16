@@ -1,5 +1,6 @@
 import 'package:egs/api/service.dart';
 import 'package:egs/controllers/MenuAppController.dart';
+import 'package:egs/main.dart';
 import 'package:egs/responsive.dart';
 import 'package:egs/screens/login/login.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,6 @@ class _HeaderState extends State<Header> {
       try {
         userFuture = ApiService().fetchUserData();
       } catch (error) {
-        print('Error fetching messages: $error');
       }
     });
   }
@@ -68,7 +68,10 @@ class _HeaderState extends State<Header> {
                     },
                     icon: const Icon(Icons.menu)),
                 Expanded(child: SearchField()),
-                ProfileCard(name: 'Undefined', surname: 'Undefined',)
+                ProfileCard(
+                  name: 'Undefined',
+                  surname: 'Undefined',
+                )
               ],
             );
           } else {
@@ -83,12 +86,15 @@ class _HeaderState extends State<Header> {
                     },
                     icon: const Icon(Icons.menu)),
                 Expanded(child: SearchField()),
-                ProfileCard(name: name, surname: surname,)
+                ThemeSwitch(alreadyLoggedIn: true),
+                ProfileCard(
+                  name: name,
+                  surname: surname,
+                )
               ],
             );
           }
-        }
-    );
+        });
   }
 }
 
@@ -112,7 +118,7 @@ class ProfileCard extends StatelessWidget {
               value: 'logout',
               child: ListTile(
                 contentPadding:
-                EdgeInsets.symmetric(horizontal: defaultPadding / 4),
+                    EdgeInsets.symmetric(horizontal: defaultPadding / 4),
                 leading: Icon(Icons.exit_to_app),
                 title: Text('Выйти'),
               ),
@@ -122,10 +128,7 @@ class ProfileCard extends StatelessWidget {
         onSelected: (value) {
           if (value == 'logout') {
             ApiService().logout();
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
-            );
+            Navigator.pushNamed(context, '/login');
           }
         },
         child: Container(
@@ -180,14 +183,43 @@ class SearchField extends StatelessWidget {
                 _controller.text; // Get the text from the controller
             Provider.of<MenuAppController>(context, listen: false)
                 .changeSearch(searchText);
-            print(
-                Provider
-                    .of<MenuAppController>(context, listen: false)
-                    .search);
+            
           },
           child: const Icon(Icons.search),
         ),
       ),
     );
+  }
+}
+
+class ThemeSwitch extends StatefulWidget {
+  ThemeSwitch({super.key, this.alreadyLoggedIn});
+  bool? alreadyLoggedIn = false;
+
+  @override
+  State<ThemeSwitch> createState() => _ThemeSwitchState();
+}
+
+class _ThemeSwitchState extends State<ThemeSwitch> {
+  @override
+  Widget build(BuildContext context) {
+    return Switch(
+      value: MyApp.of(context).themeMode == ThemeMode.dark ? true : false,
+      onChanged: (value) async {
+          if (widget.alreadyLoggedIn!) {
+            await sendChangeTheme(isDark: value);
+            if (!context.mounted) return;
+          }
+          MyApp.of(context).changeTheme(value ? ThemeMode.dark : ThemeMode.light);
+        setState(() {});
+      },
+    );
+  }
+
+  Future<void> sendChangeTheme({required bool isDark}) async {
+    final User user = await ApiService().fetchUserData();
+    int userId = user.id ?? 0;
+    final newUser = user.copyWith(isDark: isDark);
+    await ApiService().updateUser(userId, newUser);
   }
 }

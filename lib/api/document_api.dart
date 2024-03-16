@@ -16,7 +16,6 @@ class DocumentsApi {
   }
 
   Future<Document> createDocument(Document document) async {
-    print(json.encode(document.toJson()));
     final response = await http.post(
       Uri.parse('$baseUrl/document/documents/'),
       headers: {'Content-Type': 'application/json'},

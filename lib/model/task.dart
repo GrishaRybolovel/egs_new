@@ -77,7 +77,6 @@ class Task {
   }
 
   Map<String, dynamic> toJson() {
-    print(completion);
     Map<String, dynamic> jsonMap = {
       'id': id,
       'name': name,

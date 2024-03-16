@@ -17,7 +17,6 @@ class MessageApi {
   }
 
   Future<Message> createMessage(Message message) async {
-    print(json.encode(message.toJson()));
 
     final response = await http.post(
       Uri.parse('$baseUrl/message/messages/'),
@@ -26,7 +25,6 @@ class MessageApi {
     );
 
     if (response.statusCode == 201) {
-      print(json.decode(response.body));
       return message;
     } else {
       throw Exception('Failed to create message');

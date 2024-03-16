@@ -64,14 +64,13 @@ class SelectUsersState extends State<SelectUsers> {
         widget.initialProject?.projectToUser?.clear();
         widget.initialProject?.projectToUser?.addAll(copiedUsers);
 
-
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Пользователи объекта успешно изменены'),
             duration: Duration(seconds: 3),
           ),
         );
-            }
+      }
     } catch (e) {
       String exception = e.toString().substring(10);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -128,8 +127,6 @@ class SelectUsersState extends State<SelectUsers> {
                   onPressed: () {
                     if (user != null) {
                       deleteUser(user);
-                    } else {
-                      print('1');
                     }
                   },
                 ),

@@ -12,8 +12,7 @@ import 'package:egs/responsive.dart';
 import 'package:path/path.dart';
 
 import 'dart:convert';
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
 import 'dart:io';
 
 import '../../../ui/const.dart';
@@ -173,10 +172,9 @@ class MessageListState extends State<MessageList> {
 
                               input.onChange.listen((e) {
                                 final file = input.files!.first;
-                                convertWebFileToDartFile(file).then((dartFile) {
-                                  print(doc64);
-                                  print(docName);
-                                }).catchError((error) {
+                                convertWebFileToDartFile(file)
+                                    .then((dartFile) {})
+                                    .catchError((error) {
                                   print(
                                       'Error converting file to base64: $error');
                                 });
@@ -187,9 +185,6 @@ class MessageListState extends State<MessageList> {
                                   .pickFiles(type: FileType.any);
 
                               if (result != null) {
-                                if (kDebugMode) {
-                                  print('mobile');
-                                }
                                 // On mobile or desktop, use the path property to access the file path
                                 // _selectedFile = File(result.files.single.path!);
 

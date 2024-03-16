@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
 import 'dart:io';
 
 import 'package:egs/api/project_api.dart';
@@ -22,7 +22,7 @@ import 'package:path/path.dart';
 class TaskFormScreen extends StatefulWidget {
   final Task? initialTask;
 
-  const TaskFormScreen({Key? key, this.initialTask}) : super(key: key);
+  const TaskFormScreen({super.key, this.initialTask});
 
   @override
   TaskFormScreenState createState() => TaskFormScreenState();
@@ -156,7 +156,7 @@ class TaskFormScreenState extends State<TaskFormScreen> {
       });
     } else {
       FilePickerResult? result =
-      await FilePicker.platform.pickFiles(type: FileType.any);
+          await FilePicker.platform.pickFiles(type: FileType.any);
 
       if (result != null) {
         // On mobile or desktop, use the path property to access the file path
@@ -166,7 +166,6 @@ class TaskFormScreenState extends State<TaskFormScreen> {
           _doc = File(result.files.single.path!);
           doc64 = base64Encode(Uint8List.fromList(_doc!.readAsBytesSync()));
           docName = basename(_doc!.path);
-          print(docName);
         });
       }
     }
@@ -200,7 +199,9 @@ class TaskFormScreenState extends State<TaskFormScreen> {
               ),
             ),
             Text(
-              widget.initialTask == null ? 'Добавить задачу' : 'Изменить задачу',
+              widget.initialTask == null
+                  ? 'Добавить задачу'
+                  : 'Изменить задачу',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: defaultPadding),
@@ -210,57 +211,59 @@ class TaskFormScreenState extends State<TaskFormScreen> {
                 color: secondaryColor,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
-              child:
-                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                TextFormField(
-                  controller: nameController,
-                  decoration: const InputDecoration(labelText: 'Название*'),
-                ),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextFormField(
+                      controller: nameController,
+                      decoration: const InputDecoration(labelText: 'Название*'),
+                    ),
                     TextFormField(
                       controller: descriptionController,
                       decoration: const InputDecoration(labelText: 'Описание'),
                     ),
-                TextFormField(
-                  controller: completionController,
-                  decoration:
-                      const InputDecoration(labelText: 'Крайний срок выполнения'),
-                  onTap: () async {
-                    DateTime? date = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100),
-                    );
-                    if (date != null) {
-                      completionController.text =
-                          date.toLocal().toString().substring(0, 10);
-                    }
-                  },
-                ),
-                TextFormField(
-                  controller: doneController,
-                  decoration: const InputDecoration(labelText: 'Дата выполнения'),
-                  onTap: () async {
-                    DateTime? date = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100),
-                    );
-                    if (date != null) {
-                      doneController.text =
-                          date.toLocal().toString().substring(0, 10);
-                    }
-                  },
-                ),
+                    TextFormField(
+                      controller: completionController,
+                      decoration: const InputDecoration(
+                          labelText: 'Крайний срок выполнения'),
+                      onTap: () async {
+                        DateTime? date = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100),
+                        );
+                        if (date != null) {
+                          completionController.text =
+                              date.toLocal().toString().substring(0, 10);
+                        }
+                      },
+                    ),
+                    TextFormField(
+                      controller: doneController,
+                      decoration:
+                          const InputDecoration(labelText: 'Дата выполнения'),
+                      onTap: () async {
+                        DateTime? date = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100),
+                        );
+                        if (date != null) {
+                          doneController.text =
+                              date.toLocal().toString().substring(0, 10);
+                        }
+                      },
+                    ),
                     const SizedBox(height: defaultPadding * 3),
                     // File
                     GestureDetector(
                         onTap: () {
                           if (widget.initialTask != null) {
                             if (widget.initialTask?.docName != null) {
-                              final downloadUrl =
-                              constructDownloadUrl(widget.initialTask?.docName! ?? '');
+                              final downloadUrl = constructDownloadUrl(
+                                  widget.initialTask?.docName! ?? '');
                               launch(downloadUrl);
                             }
                           }
@@ -272,17 +275,15 @@ class TaskFormScreenState extends State<TaskFormScreen> {
                                 Text('Файл: ${docName ?? ''}'),
                                 const Icon(Icons.download),
                               ],
-                            )
-                        )
-                    ),
+                            ))),
                     ElevatedButton(
                       onPressed: _pickFile,
                       child: const Text('Прикрепить документ'),
                     ),
-              ]),
+                  ]),
             ),
             const SizedBox(height: defaultPadding),
-        
+
             // Projects
             Container(
               padding: const EdgeInsets.all(defaultPadding),
@@ -312,9 +313,9 @@ class TaskFormScreenState extends State<TaskFormScreen> {
                       }
                     },
                   ),
-        
+
                   // List of selected users with delete button
-        
+
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount: (selectedProject == null) ? 0 : 1,
@@ -366,9 +367,9 @@ class TaskFormScreenState extends State<TaskFormScreen> {
                       }
                     },
                   ),
-        
+
                   // List of selected users with delete button
-        
+
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount: selectedUsers?.length ?? 0,
@@ -410,7 +411,9 @@ class TaskFormScreenState extends State<TaskFormScreen> {
         name: nameController.text,
         description: descriptionController.text,
         authorId: author.id ?? 0,
-        completion: completionController.text != null ? DateTime.parse(completionController.text) : null,
+        completion: completionController.text != null
+            ? DateTime.parse(completionController.text)
+            : null,
         done: null,
         doc: _doc,
         docBase64: doc64,
@@ -451,7 +454,9 @@ class TaskFormScreenState extends State<TaskFormScreen> {
           Navigator.push(
             this.context,
             MaterialPageRoute(
-              builder: (context) => TaskFormScreen(initialTask: updatedTask,),
+              builder: (context) => TaskFormScreen(
+                initialTask: updatedTask,
+              ),
             ),
           );
         }

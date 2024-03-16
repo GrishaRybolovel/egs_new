@@ -1,5 +1,6 @@
 import 'package:egs/api/service.dart';
 import 'package:egs/main.dart';
+import 'package:egs/screens/header.dart';
 import 'package:egs/ui/const.dart';
 import 'package:egs/responsive.dart';
 import 'package:flutter/material.dart';
@@ -22,18 +23,7 @@ class LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         title: const Text('Логин'),
         actions: [
-          Switch(
-            value: MyApp.of(context).themeMode == ThemeMode.light,
-            onChanged: (value) {
-              setState(() {});
-              if (value) {
-                MyApp.of(context).changeTheme(ThemeMode.light);
-              } else {
-                MyApp.of(context).changeTheme(ThemeMode.dark);
-              }
-            }
-            
-          ),
+          ThemeSwitch(alreadyLoggedIn: false),
         ],
         automaticallyImplyLeading: false,
       ),

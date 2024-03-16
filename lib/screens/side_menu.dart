@@ -31,7 +31,6 @@ class SideMenu extends StatelessWidget {
             press: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushNamed("/employees");
-
             },
           ),
           DrawerListTile(
@@ -42,7 +41,7 @@ class SideMenu extends StatelessWidget {
               Navigator.of(context).pushNamed("/projects");
               // context.read<MenuAppController>().closeMenu();
               // Provider.of<MenuAppController>(context, listen: false)
-                  // .navigateTo(const ProjectsScreen());
+              // .navigateTo(const ProjectsScreen());
             },
           ),
           DrawerListTile(

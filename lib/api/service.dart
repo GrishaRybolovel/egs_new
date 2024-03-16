@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:egs/main.dart';
 import 'package:egs/ui/const.dart';
 import 'package:egs/model/user.dart';
 import 'package:http/http.dart' as http;
@@ -34,8 +35,7 @@ class ApiService {
       final Map<String, dynamic> data =
           json.decode(utf8.decode(response.bodyBytes));
       // Save token to SharedPreferences
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('token', data['token']);
+      sharedPreferences.setString('token', data['token']);
       return data;
     } else {
       return null;
@@ -43,15 +43,13 @@ class ApiService {
   }
 
   Future<bool> logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('token', '');
+    sharedPreferences.clear();
     return true;
   }
 
   Future<http.Response> updateProfile(
       String email, String name, String surname) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String token = prefs.getString('token') ?? '';
+    final String token = sharedPreferences.getString('token') ?? '';
 
     final response = await http.put(
       Uri.parse('$baseUrl/user/profile/'),
@@ -66,15 +64,14 @@ class ApiService {
   }
 
   Future<User> fetchUserData() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String token = prefs.getString('token') ?? '';
+    final String token = sharedPreferences.getString('token') ?? '';
     final response = await http.get(
       Uri.parse('$baseUrl/user/profile/'),
       headers: {
         'Authorization': 'Token $token',
         'Content-Type': 'application/json; charset=utf-8'
       },
-    );
+    ); 
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> userData =
@@ -86,8 +83,7 @@ class ApiService {
   }
 
   Future<List<User>> getUsers() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String token = prefs.getString('token') ?? '';
+    final String token = sharedPreferences.getString('token') ?? '';
     final response = await http.get(
       Uri.parse('$baseUrl/user/users/'),
       headers: {
@@ -141,4 +137,6 @@ class ApiService {
       throw Exception('Ошибка удаления пользователя');
     }
   }
+  
 }
+
