@@ -1,15 +1,16 @@
 // ignore_for_file: unnecessary_null_comparison
 
-import 'package:egs/api/project_api.dart';
-import 'package:egs/ui/const.dart';
-import 'package:egs/screens/documents/components/table.dart';
 import 'package:egs/screens/documents/components/document_form.dart';
-import 'package:egs/model/project.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:egs/responsive.dart';
-import 'package:egs/screens/header.dart';
+import 'package:egs/screens/projects/components/journal.dart';
+import 'package:egs/screens/documents/components/table.dart';
 import 'package:egs/screens/side_menu.dart';
+import 'package:egs/api/project_api.dart';
+import 'package:egs/screens/header.dart';
+import 'package:egs/model/project.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+import 'package:egs/responsive.dart';
+import 'package:egs/ui/const.dart';
 
 import '../projects.dart';
 import 'users.dart';
@@ -52,9 +53,9 @@ class AddEditProjectScreenState extends State<AddEditProjectScreen> {
     _contractController =
         TextEditingController(text: widget.initialProject?.contract);
     _dateCreationController = TextEditingController(
-        text: widget.initialProject?.dateCreation?.toLocal().toString());
+        text: widget.initialProject?.dateCreation?.toLocal().toString().substring(0, 10));
     _dateNotificationController = TextEditingController(
-        text: widget.initialProject?.dateNotification?.toLocal().toString());
+        text: widget.initialProject?.dateNotification?.toLocal().toString().substring(0, 10));
     _objectTypeController =
         TextEditingController(text: widget.initialProject?.objectType);
     _addressController =
@@ -79,9 +80,16 @@ class AddEditProjectScreenState extends State<AddEditProjectScreen> {
         appBar: const Header(),
         drawer: const SideMenu(),
         body: SingleChildScrollView(
-            child: Column(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+              Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(height: defaultPadding),
             Container(
+              width: Responsive.ScreenWidth(context) * 0.9,
               padding: const EdgeInsets.all(defaultPadding),
               decoration: const BoxDecoration(
                 color: secondaryColor,
@@ -260,10 +268,17 @@ class AddEditProjectScreenState extends State<AddEditProjectScreen> {
                   ]),
             ),
             const SizedBox(height: defaultPadding),
-            SelectUsers(
-              initialProject: widget.initialProject,
-            ),
+            widget.initialProject != null ? Container(
+              width: Responsive.ScreenWidth(context) * 0.9,
+                child:
+              SelectUsers(
+                initialProject: widget.initialProject,
+              )
+            ) : SizedBox(height: defaultPadding),
             const SizedBox(height: defaultPadding),
+            widget.initialProject != null ? Container(
+              width: Responsive.ScreenWidth(context) * 0.9,
+              child:
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -292,11 +307,25 @@ class AddEditProjectScreenState extends State<AddEditProjectScreen> {
                 ),
               ],
             ),
-            MyTable(
-              initialProject: widget.initialProject,
-            ),
+            ) : SizedBox(height: defaultPadding),
+            widget.initialProject != null ? Container(
+              width: Responsive.ScreenWidth(context) * 0.9,
+                child:
+              MyTable(
+                initialProject: widget.initialProject,
+              )
+            ) : SizedBox(height: defaultPadding),
+            widget.initialProject != null ? Container(
+              width: Responsive.ScreenWidth(context) * 0.9,
+              child: JournalScreen(
+                projectId: widget.initialProject?.id ?? 0,
+              ),
+            ) : SizedBox(height: defaultPadding),
+            SizedBox(height: defaultPadding * 2),
           ],
         )
+                ]
+            )
         )
     );
   }

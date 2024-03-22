@@ -11,12 +11,12 @@ final lightThemeData = ThemeData.light().copyWith(
   scaffoldBackgroundColor: lightCanvasColor,
   textTheme: GoogleFonts.poppinsTextTheme().apply(bodyColor: Colors.black),
   canvasColor: lightCanvasColor,
-  brightness: Brightness.light
+  brightness: Brightness.light,
 );
 
 final darkThemeData = ThemeData.dark().copyWith(
   scaffoldBackgroundColor: darkCanvasColor,
   textTheme: GoogleFonts.poppinsTextTheme().apply(bodyColor: Colors.white),
   canvasColor: darkCanvasColor,
-  brightness: Brightness.dark
+  brightness: Brightness.dark,
 );

@@ -16,6 +16,7 @@ class Project {
   final String? status;
   final String? seasoning;
   final double? cost;
+  final bool? is_archived;
   final List<User>? projectToUser;
 
   Project({
@@ -34,6 +35,7 @@ class Project {
     this.status,
     this.seasoning,
     this.cost,
+    this.is_archived,
     this.projectToUser,
   });
 
@@ -59,6 +61,7 @@ class Project {
       status: json['status'],
       seasoning: json['seasoning'],
       cost: json['cost'],
+      is_archived: json['is_archived'],
       projectToUser: (json['project_to_user'] as List<dynamic>)
           .map((userData) => User.fromJson(userData))
           .toList(),
@@ -82,6 +85,7 @@ class Project {
       'status': status,
       'seasoning': seasoning,
       'cost': cost,
+      'is_archived': is_archived,
       'project_to_user': projectToUser?.map((user) => user.toJson()).toList(),
     };
 

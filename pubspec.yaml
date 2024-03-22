@@ -26,6 +26,9 @@ dependencies:
   path: ^1.9.0
   responsive_framework: ^1.4.0
   universal_html: ^2.2.4
+  flutter_multi_formatter: ^2.12.4
+  table_calendar: ^3.0.9
+  fl_chart: ^0.66.2
 
 dev_dependencies:
   flutter_test:

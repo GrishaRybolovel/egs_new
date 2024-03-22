@@ -54,4 +54,20 @@ class TaskApi {
       throw Exception('Ошибка удаления задачи');
     }
   }
+
+  Future<Map<String, dynamic>?> fetchTasksByDate(int userId) async {
+    final body = jsonEncode({'user_id': userId});
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/task/tasks_by_date/?user_id=$userId'),
+      headers: {'Content-Type': 'application/json'},
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Ошибка загрузки заданий');
+    }
+  }
 }

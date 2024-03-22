@@ -20,6 +20,10 @@ class MyTable extends StatefulWidget {
 class _MyTable extends State<MyTable> {
   final ProjectsApiService papiService = ProjectsApiService();
   late Future<List<Project>?> projects;
+  String _selectedTypeParameter = '1';
+  final _selectedTypeParameterName = ['Эксплуатация', 'Техническое обслуживание', 'СМР', 'СМР'];
+
+  final statuses = ['В работе', 'ПНР', 'Сезон откл.', 'СМР', 'Аварийное откл.'];
 
   @override
   void initState() {
@@ -48,6 +52,22 @@ class _MyTable extends State<MyTable> {
       ),
       child: Column(
         children: [
+          DropdownButton<String>(
+            borderRadius: BorderRadius.circular(12),
+            value: _selectedTypeParameter,
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedTypeParameter = newValue!;
+              });
+            },
+            items: <String>['1', '2', '3', '4']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(_selectedTypeParameterName[int.parse(value) - 1]),
+              );
+            }).toList(),
+          ),
           SizedBox(
             width: double.maxFinite,
             child: FutureBuilder<List<Project>?>(
@@ -68,7 +88,7 @@ class _MyTable extends State<MyTable> {
                         .toLowerCase();
 
                     // Check if the project name contains the search text
-                    return projectName.contains(searchText);
+                    return projectName.contains(searchText) && project.projType == _selectedTypeParameter;
                   }).map((project) {
                     return DataRow(
                       cells: [
@@ -93,6 +113,8 @@ class _MyTable extends State<MyTable> {
                           child: Text(project.id.toString()),
                         )),
                         DataCell(Text(project.name)),
+                        DataCell(Text(statuses[int.parse(project.status ?? '1') - 1])),
+                        DataCell(Text(project.address ?? '')),
                         DataCell(Text(
                             project.dateCreation.toString().substring(0, 10))),
                         DataCell(ElevatedButton(
@@ -151,6 +173,12 @@ class _MyTable extends State<MyTable> {
                       ),
                       DataColumn(
                         label: Text("Название"),
+                      ),
+                      DataColumn(
+                        label: Text("Статус"),
+                      ),
+                      DataColumn(
+                        label: Text("Адрес"),
                       ),
                       DataColumn(
                         label: Text("Дата"),

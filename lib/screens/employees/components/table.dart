@@ -39,6 +39,7 @@ class _MyTable extends State<MyTable> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: Responsive.ScreenWidth(context) * 0.9,
       padding: const EdgeInsets.all(defaultPadding),
       decoration: const BoxDecoration(
         color: secondaryColor,
@@ -70,7 +71,7 @@ class _MyTable extends State<MyTable> {
                     return userName.contains(searchText);
                   }).map((user) {
                     return DataRow(
-                      cells: [
+                      cells: Responsive.isDesktop(context) ? [
                         DataCell(ElevatedButton(
                           onPressed: () {
                             Navigator.pushNamed(context, '/userForm', arguments: user);
@@ -84,7 +85,8 @@ class _MyTable extends State<MyTable> {
                           ),
                           child: Text(user.id.toString()),
                         )),
-                        DataCell(Text(user.toString())),
+                        DataCell(Text(user.toString(), maxLines: 3,)),
+                        DataCell(Text(user.email)),
                         DataCell(InkWell(
                           onTap: () {},
                           child: Container(
@@ -125,11 +127,87 @@ class _MyTable extends State<MyTable> {
                           ),
                         ))
                         // Add more cells as needed
+                      ] : [
+                        DataCell(ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/userForm', arguments: user);
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: defaultPadding * 1.5,
+                              vertical: defaultPadding /
+                                  (Responsive.isMobile(context) ? 2 : 1),
+                            ),
+                          ),
+                          child: Text(user.id.toString()),
+                        )),
+                        DataCell(Text(user.toString(), maxLines: 3,)),
+                        DataCell(InkWell(
+                          onTap: () {},
+                          child: Container(
+                            width: 24,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: user.status ? Colors.blue : Colors.grey,
+                                width: 2,
+                              ),
+                            ),
+                            child: user.status
+                                ? const Icon(
+                              Icons.check,
+                              size: 20,
+                              color: Colors.blue,
+                            )
+                                : const SizedBox(),
+                          ),
+                        )),
+                        DataCell(ElevatedButton(
+                          onPressed: () async {
+                            if (user.id != null) {
+                              await deleteUser(user.id!);
+                            }
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: defaultPadding * 1.5,
+                              vertical: defaultPadding /
+                                  (Responsive.isMobile(context) ? 2 : 1),
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.delete,
+                            size: 20.0,
+                          ),
+                        ))
+                        // Add more cells as needed
                       ],
                     );
                   }).toList();
 
-                  return DataTable(
+                  return Responsive.isDesktop(context) ? DataTable(
+                    columnSpacing: defaultPadding,
+                    // minWidth: 600,
+                    columns: const [
+                      DataColumn(
+                        label: Text("Номер"),
+                      ),
+                      DataColumn(
+                        label: Text("Имя"),
+                      ),
+                      DataColumn(
+                        label: Text("Почта"),
+                      ),
+                      DataColumn(
+                        label: Text("Статус"),
+                      ),
+                      DataColumn(
+                        label: Text("Действие"),
+                      ),
+                    ],
+                    rows: rows,
+                  ) : DataTable(
                     columnSpacing: defaultPadding,
                     // minWidth: 600,
                     columns: const [
@@ -184,5 +262,65 @@ class _MyTable extends State<MyTable> {
       return false;
     }
 
+  }
+}
+
+class PopupWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 200,
+      height: 100,
+      color: Colors.blue,
+      child: Center(
+        child: Text('Popup Window'),
+      ),
+    );
+  }
+}
+
+class PopupOverlay extends StatefulWidget {
+  @override
+  _PopupOverlayState createState() => _PopupOverlayState();
+}
+
+class _PopupOverlayState extends State<PopupOverlay> {
+  OverlayEntry? _overlayEntry;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        _showOverlay(context);
+      },
+      child: Container(
+        width: 100,
+        height: 50,
+        color: Colors.transparent,
+        // This container is just a placeholder for the DataCell
+      ),
+    );
+  }
+
+  void _showOverlay(BuildContext context) {
+    final overlay = Overlay.of(context)!;
+
+    _overlayEntry = OverlayEntry(
+      builder: (BuildContext context) {
+        return Positioned(
+          top: 50, // Adjust position as needed
+          left: 50, // Adjust position as needed
+          child: PopupWidget(),
+        );
+      },
+    );
+
+    overlay.insert(_overlayEntry!);
+  }
+
+  @override
+  void dispose() {
+    _overlayEntry?.remove();
+    super.dispose();
   }
 }
