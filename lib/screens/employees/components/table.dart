@@ -41,10 +41,7 @@ class _MyTable extends State<MyTable> {
     return Container(
       width: Responsive.ScreenWidth(context) * 0.9,
       padding: const EdgeInsets.all(defaultPadding),
-      decoration: const BoxDecoration(
-        color: secondaryColor,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
+      
       child: Column(
         children: [
           SizedBox(
@@ -95,7 +92,6 @@ class _MyTable extends State<MyTable> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color: user.status ? Colors.blue : Colors.grey,
                                 width: 2,
                               ),
                             ),
@@ -103,7 +99,6 @@ class _MyTable extends State<MyTable> {
                                 ? const Icon(
                                     Icons.check,
                                     size: 20,
-                                    color: Colors.blue,
                                   )
                                 : const SizedBox(),
                           ),

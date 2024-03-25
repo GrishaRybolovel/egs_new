@@ -49,10 +49,7 @@ class MessagesScreenState extends State<MessagesScreen> {
             return Container(
               height: 500,
               padding: const EdgeInsets.all(defaultPadding),
-              decoration: const BoxDecoration(
-                color: secondaryColor,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
+             
               child: MessageList(
                 userId: currentUser,
                 taskId: widget.projectId,

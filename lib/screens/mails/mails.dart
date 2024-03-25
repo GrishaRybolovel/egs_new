@@ -25,7 +25,6 @@ class _MailsScreen extends State<MailsScreen> {
             children: [
               Text(
                 "Мои письма",
-                style: Theme.of(context).textTheme.titleMedium,
               ),
               ElevatedButton.icon(
                 style: TextButton.styleFrom(

@@ -67,7 +67,6 @@ class _MyTable extends State<MyTable> {
       width: double.maxFinite,
       padding: const EdgeInsets.all(defaultPadding),
       decoration: const BoxDecoration(
-        color: secondaryColor,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Expanded(

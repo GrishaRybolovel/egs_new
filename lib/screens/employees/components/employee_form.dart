@@ -122,7 +122,6 @@ class _EmployeeFormState extends State<EmployeeForm> {
                                 Responsive.ScreenWidth(context) * 0.05),
                             padding: const EdgeInsets.all(defaultPadding),
                             decoration: const BoxDecoration(
-                              color: secondaryColor,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)),
                             ),
@@ -137,7 +136,6 @@ class _EmployeeFormState extends State<EmployeeForm> {
                                   Responsive.ScreenWidth(context) * 0.05),
                               padding: const EdgeInsets.all(defaultPadding),
                               decoration: const BoxDecoration(
-                                color: secondaryColor,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),
                               ),
@@ -164,7 +162,6 @@ class _EmployeeFormState extends State<EmployeeForm> {
                                 Responsive.ScreenWidth(context) * 0.05,
                             padding: const EdgeInsets.all(defaultPadding),
                             decoration: const BoxDecoration(
-                              color: secondaryColor,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)),
                             ),
@@ -325,7 +322,6 @@ class _EmployeeFormState extends State<EmployeeForm> {
                             width: (Responsive.ScreenWidth(context)),
                             padding: const EdgeInsets.all(defaultPadding),
                             decoration: const BoxDecoration(
-                              color: secondaryColor,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)),
                             ),
@@ -339,7 +335,6 @@ class _EmployeeFormState extends State<EmployeeForm> {
                               width: (Responsive.ScreenWidth(context)),
                               padding: const EdgeInsets.all(defaultPadding),
                               decoration: const BoxDecoration(
-                                color: secondaryColor,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),
                               ),
@@ -369,7 +364,6 @@ class _EmployeeFormState extends State<EmployeeForm> {
                             width: Responsive.ScreenWidth(context),
                             padding: const EdgeInsets.all(defaultPadding),
                             decoration: const BoxDecoration(
-                              color: secondaryColor,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)),
                             ),

@@ -87,7 +87,6 @@ class SelectUsersState extends State<SelectUsers> {
     return Container(
       padding: const EdgeInsets.all(defaultPadding),
       decoration: const BoxDecoration(
-        color: secondaryColor,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
@@ -95,7 +94,6 @@ class SelectUsersState extends State<SelectUsers> {
         children: [
           Text(
             'Пользователи',
-            style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: defaultPadding),
           DropdownButton<User>(

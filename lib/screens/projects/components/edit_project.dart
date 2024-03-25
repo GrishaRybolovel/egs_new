@@ -92,7 +92,6 @@ class AddEditProjectScreenState extends State<AddEditProjectScreen> {
               width: Responsive.ScreenWidth(context) * 0.9,
               padding: const EdgeInsets.all(defaultPadding),
               decoration: const BoxDecoration(
-                color: secondaryColor,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Column(
@@ -102,7 +101,6 @@ class AddEditProjectScreenState extends State<AddEditProjectScreen> {
                       widget.initialProject == null
                           ? 'Добавить объект'
                           : 'Изменить объект',
-                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: defaultPadding),
                     DropdownButtonFormField<String>(
@@ -284,7 +282,6 @@ class AddEditProjectScreenState extends State<AddEditProjectScreen> {
               children: [
                 Text(
                   "Документы",
-                  style: Theme.of(context).textTheme.titleMedium,
                 ),
                 ElevatedButton.icon(
                   style: TextButton.styleFrom(

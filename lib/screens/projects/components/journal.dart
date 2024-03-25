@@ -167,7 +167,6 @@ class _JournalScreenState extends State<JournalScreen> {
       Container(
         padding: const EdgeInsets.all(defaultPadding),
         decoration: const BoxDecoration(
-          color: secondaryColor,
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         height: 300,

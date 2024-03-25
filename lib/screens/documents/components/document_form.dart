@@ -189,7 +189,6 @@ class DocumentFormState extends State<DocumentForm> {
         Container(
           padding: const EdgeInsets.all(defaultPadding),
           decoration: const BoxDecoration(
-            color: secondaryColor,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           child:
@@ -198,7 +197,6 @@ class DocumentFormState extends State<DocumentForm> {
               widget.document == null
                   ? 'Добавить документ'
                   : 'Изменить документ',
-              style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: defaultPadding),
             TextFormField(
@@ -379,7 +377,6 @@ class DocumentFormState extends State<DocumentForm> {
             Container(
               padding: const EdgeInsets.all(defaultPadding),
               decoration: const BoxDecoration(
-                color: secondaryColor,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Column(
@@ -387,7 +384,6 @@ class DocumentFormState extends State<DocumentForm> {
                 children: [
                   Text(
                     'Пользователи',
-                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: defaultPadding),
                   DropdownButton<User>(
@@ -434,7 +430,6 @@ class DocumentFormState extends State<DocumentForm> {
             Container(
               padding: const EdgeInsets.all(defaultPadding),
               decoration: const BoxDecoration(
-                color: secondaryColor,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Column(
@@ -442,7 +437,6 @@ class DocumentFormState extends State<DocumentForm> {
                 children: [
                   Text(
                     'Объекты',
-                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: defaultPadding),
                   DropdownButton<Project>(

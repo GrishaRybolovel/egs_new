@@ -189,7 +189,6 @@ class TaskFormScreenState extends State<TaskFormScreen> {
                 children: [
                   Text(
                     'Чат задачи',
-                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: defaultPadding),
                   MessagesScreen(projectId: widget.initialTask?.id ?? 0),
@@ -202,13 +201,11 @@ class TaskFormScreenState extends State<TaskFormScreen> {
               widget.initialTask == null
                   ? 'Добавить задачу'
                   : 'Изменить задачу',
-              style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: defaultPadding),
             Container(
               padding: const EdgeInsets.all(defaultPadding),
               decoration: const BoxDecoration(
-                color: secondaryColor,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Column(
@@ -288,7 +285,6 @@ class TaskFormScreenState extends State<TaskFormScreen> {
             Container(
               padding: const EdgeInsets.all(defaultPadding),
               decoration: const BoxDecoration(
-                color: secondaryColor,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Column(
@@ -296,7 +292,6 @@ class TaskFormScreenState extends State<TaskFormScreen> {
                 children: [
                   Text(
                     'Проекты',
-                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: defaultPadding),
                   DropdownButton<Project>(
@@ -342,7 +337,6 @@ class TaskFormScreenState extends State<TaskFormScreen> {
             Container(
               padding: const EdgeInsets.all(defaultPadding),
               decoration: const BoxDecoration(
-                color: secondaryColor,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Column(
@@ -350,7 +344,6 @@ class TaskFormScreenState extends State<TaskFormScreen> {
                 children: [
                   Text(
                     'Пользователи',
-                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: defaultPadding),
                   DropdownButton<User>(

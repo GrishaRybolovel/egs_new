@@ -94,7 +94,6 @@ class MessageListState extends State<MessageList> {
                           Container(
                             padding: const EdgeInsets.all(defaultPadding),
                             decoration: const BoxDecoration(
-                              color: bgColor,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)),
                             ),
@@ -111,10 +110,6 @@ class MessageListState extends State<MessageList> {
                                     Text('Автор: ${messages[index].author}'),
                                     Text(
                                       'Дата отправки: ${messages[index].created.toString().substring(0, 11)}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall!
-                                          .copyWith(color: Colors.white70),
                                     ),
                                   ],
                                 ),
@@ -141,10 +136,6 @@ class MessageListState extends State<MessageList> {
                                 const SizedBox(height: defaultPadding),
                                 Text(
                                   messages[index].message ?? 'Нет текста',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .copyWith(color: Colors.white),
                                 ),
                               ],
                             ),
@@ -197,8 +188,6 @@ class MessageListState extends State<MessageList> {
                           },
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.zero,
-                            backgroundColor:
-                                secondaryColor, // Set the background color to transparent
                           ),
                           child: const Icon(
                             Icons.file_present,
@@ -249,8 +238,6 @@ class MessageListState extends State<MessageList> {
                           },
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.zero,
-                            backgroundColor:
-                                secondaryColor, // Set the background color to transparent
                           ),
                           child: const Icon(Icons.send),
                         ),

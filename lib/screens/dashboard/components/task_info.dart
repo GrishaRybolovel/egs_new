@@ -16,7 +16,6 @@ class FileInfoCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(defaultPadding),
       decoration: const BoxDecoration(
-        color: secondaryColor,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
@@ -31,14 +30,13 @@ class FileInfoCard extends StatelessWidget {
                 height: 40,
                 width: 40,
                 decoration: BoxDecoration(
-                  color: primaryColor.withOpacity(0.1),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: SvgPicture.asset(
                   "assets/icons/doc_file.svg",
                 ),
               ),
-              const Icon(Icons.more_vert, color: Colors.white54)
+              const Icon(Icons.more_vert)
             ],
           ),
           Text(
@@ -51,26 +49,17 @@ class FileInfoCard extends StatelessWidget {
             children: [
               Text(
                 info.created.toString().substring(0, 11),
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(color: Colors.white70),
+                
               ),
               Column(
                 children: [
                   Text(
                     'Автор:',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: Colors.white),
+                  
                   ),
                   Text(
                     info.authorId!.toString(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: Colors.white),
+                    
                   ),
                 ],
               ),

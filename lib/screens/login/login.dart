@@ -1,5 +1,4 @@
 import 'package:egs/api/service.dart';
-import 'package:egs/main.dart';
 import 'package:egs/screens/header.dart';
 import 'package:egs/ui/const.dart';
 import 'package:egs/responsive.dart';
@@ -31,9 +30,7 @@ class LoginScreenState extends State<LoginScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: Column(
-            crossAxisAlignment: !Responsive.isDesktop(context)
-                ? CrossAxisAlignment.stretch
-                : CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
                 width: !Responsive.isDesktop(context) ? 200 : 400,

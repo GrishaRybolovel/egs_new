@@ -26,7 +26,6 @@ class _DocumentsScreen extends State<DocumentsScreen> {
             children: [
               Text(
                 "Мои документы",
-                style: Theme.of(context).textTheme.titleMedium,
               ),
               ElevatedButton.icon(
                 style: TextButton.styleFrom(

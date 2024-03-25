@@ -27,7 +27,6 @@ class _ProjectsScreen extends State<ProjectsScreen> {
             children: [
               Text(
                 "Мои объекты",
-                style: Theme.of(context).textTheme.titleMedium,
               ),
               ElevatedButton.icon(
                 style: TextButton.styleFrom(

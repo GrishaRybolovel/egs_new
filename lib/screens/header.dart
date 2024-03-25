@@ -137,11 +137,6 @@ class ProfileCard extends StatelessWidget {
             horizontal: defaultPadding,
             vertical: defaultPadding / 2,
           ),
-          decoration: BoxDecoration(
-            color: secondaryColor,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            border: Border.all(color: Colors.white10),
-          ),
           child: Row(
             children: [
               const Icon(Icons.person),
@@ -168,16 +163,12 @@ class SearchField extends StatelessWidget {
       controller: _controller,
       decoration: InputDecoration(
         hintText: "Поиск",
-        fillColor: secondaryColor,
         filled: true,
         border: const OutlineInputBorder(
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         suffixIcon: ElevatedButton(
-          style: TextButton.styleFrom(
-            minimumSize: const Size.square(defaultPadding),
-          ),
           onPressed: () {
             String searchText =
                 _controller.text; // Get the text from the controller
