@@ -118,22 +118,22 @@ class _EmployeeFormState extends State<EmployeeForm> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            width: (Responsive.ScreenWidth(context) / 3 -
-                                Responsive.ScreenWidth(context) * 0.05),
+                            width: (Responsive.screenWidth(context) / 3 -
+                                Responsive.screenWidth(context) * 0.05),
                             padding: const EdgeInsets.all(defaultPadding),
                             decoration: const BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)),
                             ),
                             child: SizedBox(
-                              width: Responsive.ScreenWidth(context) / 3,
-                              height: Responsive.ScreenWidth(context) / 4,
+                              width: Responsive.screenWidth(context) / 3,
+                              height: Responsive.screenWidth(context) / 4,
                             ),
                           ),
                           SizedBox(height: defaultPadding),
                           Container(
-                              width: (Responsive.ScreenWidth(context) / 3 -
-                                  Responsive.ScreenWidth(context) * 0.05),
+                              width: (Responsive.screenWidth(context) / 3 -
+                                  Responsive.screenWidth(context) * 0.05),
                               padding: const EdgeInsets.all(defaultPadding),
                               decoration: const BoxDecoration(
                                 borderRadius:
@@ -146,7 +146,9 @@ class _EmployeeFormState extends State<EmployeeForm> {
                                     builder: (context, snapshot) {
                                       if (snapshot.connectionState ==
                                           ConnectionState.waiting) {
-                                        return const CircularProgressIndicator(); // Loading indicator
+                                        return const Center(
+                                                child:
+                                                    CircularProgressIndicator());
                                       } else if (snapshot.hasError) {
                                         return Text('Error: ${snapshot.error}');
                                       } else {
@@ -158,8 +160,8 @@ class _EmployeeFormState extends State<EmployeeForm> {
                       ),
                       Column(children: [
                         Container(
-                            width: Responsive.ScreenWidth(context) / 3 * 2 -
-                                Responsive.ScreenWidth(context) * 0.05,
+                            width: Responsive.screenWidth(context) / 3 * 2 -
+                                Responsive.screenWidth(context) * 0.05,
                             padding: const EdgeInsets.all(defaultPadding),
                             decoration: const BoxDecoration(
                               borderRadius:
@@ -271,8 +273,8 @@ class _EmployeeFormState extends State<EmployeeForm> {
                                     ]))),
                         SizedBox(height: defaultPadding),
                         Container(
-                          width: Responsive.ScreenWidth(context) / 3 * 2 -
-                              Responsive.ScreenWidth(context) * 0.05,
+                          width: Responsive.screenWidth(context) / 3 * 2 -
+                              Responsive.screenWidth(context) * 0.05,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -304,8 +306,8 @@ class _EmployeeFormState extends State<EmployeeForm> {
                           ),
                         ),
                         Container(
-                            width: Responsive.ScreenWidth(context) / 3 * 2 -
-                                Responsive.ScreenWidth(context) * 0.05,
+                            width: Responsive.screenWidth(context) / 3 * 2 -
+                                Responsive.screenWidth(context) * 0.05,
                             child: MyTable(
                               user: widget.user,
                             ))
@@ -319,20 +321,20 @@ class _EmployeeFormState extends State<EmployeeForm> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            width: (Responsive.ScreenWidth(context)),
+                            width: (Responsive.screenWidth(context)),
                             padding: const EdgeInsets.all(defaultPadding),
                             decoration: const BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)),
                             ),
                             child: SizedBox(
-                              width: Responsive.ScreenWidth(context) / 3,
-                              height: Responsive.ScreenWidth(context) / 4,
+                              width: Responsive.screenWidth(context) / 3,
+                              height: Responsive.screenWidth(context) / 4,
                             ),
                           ),
                           SizedBox(height: defaultPadding),
                           Container(
-                              width: (Responsive.ScreenWidth(context)),
+                              width: (Responsive.screenWidth(context)),
                               padding: const EdgeInsets.all(defaultPadding),
                               decoration: const BoxDecoration(
                                 borderRadius:
@@ -345,7 +347,9 @@ class _EmployeeFormState extends State<EmployeeForm> {
                                     builder: (context, snapshot) {
                                       if (snapshot.connectionState ==
                                           ConnectionState.waiting) {
-                                        return const CircularProgressIndicator(); // Loading indicator
+                                        return Center(
+                                                child:
+                                                    CircularProgressIndicator());
                                       } else if (snapshot.hasError) {
                                         return Text('Error: ${snapshot.error}');
                                       } else if (!snapshot.hasData ||
@@ -361,7 +365,7 @@ class _EmployeeFormState extends State<EmployeeForm> {
                       SizedBox(height: defaultPadding),
                       Column(children: [
                         Container(
-                            width: Responsive.ScreenWidth(context),
+                            width: Responsive.screenWidth(context),
                             padding: const EdgeInsets.all(defaultPadding),
                             decoration: const BoxDecoration(
                               borderRadius:
@@ -473,7 +477,7 @@ class _EmployeeFormState extends State<EmployeeForm> {
                                     ]))),
                         SizedBox(height: defaultPadding),
                         Container(
-                          width: Responsive.ScreenWidth(context),
+                          width: Responsive.screenWidth(context),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -505,7 +509,7 @@ class _EmployeeFormState extends State<EmployeeForm> {
                           ),
                         ),
                         Container(
-                            width: Responsive.ScreenWidth(context),
+                            width: Responsive.screenWidth(context),
                             child: MyTable(
                               user: widget.user,
                             ))
@@ -531,7 +535,7 @@ class _EmployeeFormState extends State<EmployeeForm> {
         width: defaultPadding,
       ),
       Container(
-        width: Responsive.ScreenWidth(context) * 0.4,
+        width: Responsive.screenWidth(context) * 0.4,
         child: TextFormField(
           controller: itemController,
           decoration: const InputDecoration(
@@ -564,7 +568,7 @@ class _EmployeeFormState extends State<EmployeeForm> {
       ),
       SizedBox(width: defaultPadding),
       Container(
-          width: Responsive.ScreenWidth(context) * 0.4,
+          width: Responsive.screenWidth(context) * 0.4,
           child: TextFormField(
             controller: itemController,
             decoration: const InputDecoration(
@@ -724,11 +728,11 @@ class CalendarWidget extends StatelessWidget {
       SizedBox(height: 16),
       SizedBox(
         width: Responsive.isDesktop(context)
-            ? Responsive.ScreenWidth(context) / 3
-            : Responsive.ScreenWidth(context),
+            ? Responsive.screenWidth(context) / 3
+            : Responsive.screenWidth(context),
         height: Responsive.isDesktop(context)
-            ? Responsive.ScreenWidth(context) / 4
-            : Responsive.ScreenWidth(context),
+            ? Responsive.screenWidth(context) / 4
+            : Responsive.screenWidth(context),
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 7,
@@ -740,7 +744,8 @@ class CalendarWidget extends StatelessWidget {
                 DateTime(DateTime.now().year, DateTime.now().month, day);
 
             final eventsForDay = tasksByDate?[
-                '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}'] ?? [];
+                    '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}'] ??
+                [];
 
             Color tileColor = eventsForDay != null ? lightBlue : lightPurple;
 

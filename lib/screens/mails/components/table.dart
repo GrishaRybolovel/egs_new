@@ -49,7 +49,8 @@ class _MyTable extends State<MyTable> {
               future: mails,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator(); // Loading indicator
+                  return const Expanded(
+                      child: Center(child: CircularProgressIndicator()));
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {

@@ -1,4 +1,5 @@
 import 'package:egs/api/service.dart';
+import 'package:egs/screens/header.dart';
 import 'package:egs/ui/const.dart';
 import 'package:egs/responsive.dart';
 import 'package:egs/screens/login/login.dart';
@@ -67,72 +68,150 @@ class RegistrationScreenState extends State<RegistrationScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Регистрация'),
+        actions: [
+          ThemeSwitch(alreadyLoggedIn: false),
+        ],
         automaticallyImplyLeading: false,
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Center(
+      body: Row(
+        children: [
+          const Spacer(
+            flex: 3,
+          ),
+          Expanded(
+            flex: 6,
             child: Column(
-              crossAxisAlignment: !Responsive.isDesktop(context)
-                  ? CrossAxisAlignment.stretch
-                  : CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  width: !Responsive.isDesktop(context) ? 200 : 400,
-                  child: TextFormField(
-                    controller: emailController,
-                    decoration: const InputDecoration(labelText: email),
+                const Spacer(flex: 3),
+                Expanded(
+                  flex: 15,
+                  child: Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).splashColor,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          width: 3.0,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(defaultPadding),
+                              child: TextField(
+                                textAlign: TextAlign.start,
+                                textAlignVertical: TextAlignVertical.center,
+                                controller: nameController,
+                                decoration: const InputDecoration(
+                                  labelText: name,
+                                  border: InputBorder.none,
+                                  filled: true,
+                                  fillColor: Colors.transparent,
+                                  prefixIcon: Icon(Icons.person),
+                                  hintText: 'Имя',
+                                ),
+                              ),
+                            ),
+                            // такое же для фамилии
+                            Padding(
+                              padding: const EdgeInsets.all(defaultPadding),
+                              child: TextField(
+                                textAlign: TextAlign.start,
+                                textAlignVertical: TextAlignVertical.center,
+                                controller: surnameController,
+                                decoration: const InputDecoration(
+                                  labelText: surname,
+                                  border: InputBorder.none,
+                                  filled: true,
+                                  fillColor: Colors.transparent,
+                                  prefixIcon: Icon(Icons.person),
+                                  hintText: 'Фамилия',
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(defaultPadding),
+                              child: TextField(
+                                textAlign: TextAlign.start,
+                                textAlignVertical: TextAlignVertical.center,
+                                controller: lastnameController,
+                                decoration: const InputDecoration(
+                                  labelText: lastName,
+                                  border: InputBorder.none,
+                                  filled: true,
+                                  fillColor: Colors.transparent,
+                                  prefixIcon: Icon(Icons.person),
+                                  hintText: 'Отчество',
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(defaultPadding),
+                              child: TextField(
+                                textAlign: TextAlign.start,
+                                textAlignVertical: TextAlignVertical.center,
+                                controller: emailController,
+                                decoration: const InputDecoration(
+                                  labelText: email,
+                                  border: InputBorder.none,
+                                  filled: true,
+                                  fillColor: Colors.transparent,
+                                  prefixIcon: Icon(Icons.mail_outline),
+                                  hintText: 'Электронная почта',
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(defaultPadding),
+                              child: TextField(
+                                textAlign: TextAlign.start,
+                                textAlignVertical: TextAlignVertical.center,
+                                controller: passwordController,
+                                decoration: const InputDecoration(
+                                  labelText: password,
+                                  border: InputBorder.none,
+                                  filled: true,
+                                  fillColor: Colors.transparent,
+                                  prefixIcon: Icon(Icons.lock_outline),
+                                  hintText: 'Пароль',
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(defaultPadding),
+                              child: ElevatedButton(
+                                onPressed: _register,
+                                child: const Text(register),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/login');
+                              },
+                              child: const Text(alreadyHaveAccount),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-                SizedBox(
-                  width: !Responsive.isDesktop(context) ? 200 : 400,
-                  child: TextFormField(
-                    controller: passwordController,
-                    decoration: const InputDecoration(labelText: password),
-                    obscureText: true,
-                  ),
-                ),
-                SizedBox(
-                  width: !Responsive.isDesktop(context) ? 200 : 400,
-                  child: TextFormField(
-                    controller: nameController,
-                    decoration: const InputDecoration(labelText: name),
-                  ),
-                ),
-                SizedBox(
-                  width: !Responsive.isDesktop(context) ? 200 : 400,
-                  child: TextFormField(
-                    controller: surnameController,
-                    decoration: const InputDecoration(labelText: surname),
-                  ),
-                ),
-                SizedBox(
-                  width: !Responsive.isDesktop(context) ? 200 : 400,
-                  child: TextFormField(
-                    controller: lastnameController,
-                    decoration: const InputDecoration(labelText: lastName),
-                  ),
-                ),
-                const SizedBox(height: 16.0),
-                ElevatedButton(
-                  onPressed: _register,
-                  child: const Text(register),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginScreen()),
-                    );
-                  },
-                  child: const Text(alreadyHaveAccount),
+                const Spacer(
+                  flex: 3,
                 ),
               ],
             ),
           ),
-        ),
+          const Spacer(
+            flex: 3,
+          ),
+        ],
       ),
     );
   }

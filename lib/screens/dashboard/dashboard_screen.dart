@@ -8,7 +8,7 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       drawer: SideMenu(),
       appBar: Header(),
       body: Row(

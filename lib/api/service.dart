@@ -4,7 +4,6 @@ import 'package:egs/main.dart';
 import 'package:egs/ui/const.dart';
 import 'package:egs/model/user.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   Future<http.Response?> register(String email, String password, String name,
@@ -38,6 +37,8 @@ class ApiService {
       sharedPreferences.setString('token', data['token']);
       return data;
     } else {
+      print("Failed to login");
+      print(response.body);
       return null;
     }
   }

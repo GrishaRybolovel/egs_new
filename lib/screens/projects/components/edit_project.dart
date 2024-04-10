@@ -89,7 +89,7 @@ class AddEditProjectScreenState extends State<AddEditProjectScreen> {
           children: [
             SizedBox(height: defaultPadding),
             Container(
-              width: Responsive.ScreenWidth(context) * 0.9,
+              width: Responsive.screenWidth(context) * 0.9,
               padding: const EdgeInsets.all(defaultPadding),
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -267,7 +267,7 @@ class AddEditProjectScreenState extends State<AddEditProjectScreen> {
             ),
             const SizedBox(height: defaultPadding),
             widget.initialProject != null ? Container(
-              width: Responsive.ScreenWidth(context) * 0.9,
+              width: Responsive.screenWidth(context) * 0.9,
                 child:
               SelectUsers(
                 initialProject: widget.initialProject,
@@ -275,7 +275,7 @@ class AddEditProjectScreenState extends State<AddEditProjectScreen> {
             ) : SizedBox(height: defaultPadding),
             const SizedBox(height: defaultPadding),
             widget.initialProject != null ? Container(
-              width: Responsive.ScreenWidth(context) * 0.9,
+              width: Responsive.screenWidth(context) * 0.9,
               child:
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -306,14 +306,14 @@ class AddEditProjectScreenState extends State<AddEditProjectScreen> {
             ),
             ) : SizedBox(height: defaultPadding),
             widget.initialProject != null ? Container(
-              width: Responsive.ScreenWidth(context) * 0.9,
+              width: Responsive.screenWidth(context) * 0.9,
                 child:
               MyTable(
                 initialProject: widget.initialProject,
               )
             ) : SizedBox(height: defaultPadding),
             widget.initialProject != null ? Container(
-              width: Responsive.ScreenWidth(context) * 0.9,
+              width: Responsive.screenWidth(context) * 0.9,
               child: JournalScreen(
                 projectId: widget.initialProject?.id ?? 0,
               ),

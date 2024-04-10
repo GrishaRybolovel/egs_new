@@ -25,9 +25,9 @@ class MessagesScreenState extends State<MessagesScreen> {
 
   Future<void> loadUser() async {
     setState(() {
-      try{
+      try {
         userFuture = ApiService().fetchUserData();
-      } catch (error){
+      } catch (error) {
         print('Error fetching messages: $error');
       }
     });
@@ -39,8 +39,8 @@ class MessagesScreenState extends State<MessagesScreen> {
         future: userFuture,
         builder: (context, snapshot) {
           if (userFuture == null) {
-            // messagesFuture is not yet initialized
-            return const CircularProgressIndicator();
+            return const Expanded(
+                child: Center(child: CircularProgressIndicator()));
           } else if (snapshot.hasError) {
             // Error while fetching data, show an error message
             return Text('Error: ${snapshot.error}');
@@ -49,14 +49,12 @@ class MessagesScreenState extends State<MessagesScreen> {
             return Container(
               height: 500,
               padding: const EdgeInsets.all(defaultPadding),
-             
               child: MessageList(
                 userId: currentUser,
                 taskId: widget.projectId,
               ),
             );
           }
-        }
-    );
+        });
   }
 }

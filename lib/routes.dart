@@ -1,7 +1,6 @@
 import 'package:egs/model/task.dart';
 import 'package:egs/model/user.dart';
 import 'package:egs/screens/dashboard/components/task_form.dart';
-import 'package:egs/screens/dashboard/components/tasks.dart';
 import 'package:egs/screens/dashboard/dashboard_screen.dart';
 import 'package:egs/screens/documents/documents.dart';
 import 'package:egs/screens/employees/employees.dart';

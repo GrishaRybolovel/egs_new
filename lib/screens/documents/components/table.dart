@@ -73,7 +73,7 @@ class _MyTable extends State<MyTable> {
         child: Column(
           children: [
             SizedBox(
-              width: Responsive.ScreenWidth(context) * 0.5,
+              width: Responsive.screenWidth(context) * 0.5,
               child: DropdownButton<String>(
                 borderRadius: BorderRadius.circular(12),
                 value: _selectedParameter,
@@ -113,7 +113,8 @@ class _MyTable extends State<MyTable> {
                 future: documents,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator(); // Loading indicator
+                    return const Expanded(
+                        child: Center(child: CircularProgressIndicator()));
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {

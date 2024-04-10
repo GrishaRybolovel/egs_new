@@ -268,7 +268,7 @@ class DocumentFormState extends State<DocumentForm> {
                 DropdownMenuItem(
                   value: '02',
                   child: SizedBox(
-                      width: Responsive.ScreenWidth(context) -
+                      width: Responsive.screenWidth(context) -
                           (Responsive.isDesktop(context) ? 400 : 88),
                       child: const Text(
                           'Регистрация объекта в государственном реестре')),
@@ -292,7 +292,7 @@ class DocumentFormState extends State<DocumentForm> {
                 DropdownMenuItem(
                   value: '07',
                   child: SizedBox(
-                      width: Responsive.ScreenWidth(context) -
+                      width: Responsive.screenWidth(context) -
                           (Responsive.isDesktop(context) ? 400 : 88),
                       child: const Text(
                           'Разрешительные документы и акты ввода в эксплуатацию')),
@@ -300,7 +300,7 @@ class DocumentFormState extends State<DocumentForm> {
                 DropdownMenuItem(
                   value: '08',
                   child: SizedBox(
-                      width: Responsive.ScreenWidth(context) -
+                      width: Responsive.screenWidth(context) -
                           (Responsive.isDesktop(context) ? 400 : 88),
                       child: const Text(
                           'Исполнительно-техническая документация по строительству')),
@@ -316,7 +316,7 @@ class DocumentFormState extends State<DocumentForm> {
                 DropdownMenuItem(
                   value: '11',
                   child: SizedBox(
-                      width: Responsive.ScreenWidth(context) -
+                      width: Responsive.screenWidth(context) -
                           (Responsive.isDesktop(context) ? 400 : 88),
                       child: const Text(
                           'Документы сезонные в эксплуатационный период')),

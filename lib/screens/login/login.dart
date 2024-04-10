@@ -3,6 +3,7 @@ import 'package:egs/screens/header.dart';
 import 'package:egs/ui/const.dart';
 import 'package:egs/responsive.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,74 +13,130 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
-  final TextEditingController emailController = TextEditingController(text: "test@test.ru");
-  final TextEditingController passwordController = TextEditingController(text: "test");
+  final TextEditingController emailController =
+      TextEditingController(text: "test@test.ru");
+  final TextEditingController passwordController =
+      TextEditingController(text: "test");
   final ApiService apiService = ApiService();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Логин'),
+        title: const Text('Вход'),
         actions: [
           ThemeSwitch(alreadyLoggedIn: false),
         ],
         automaticallyImplyLeading: false,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: !Responsive.isDesktop(context) ? 200 : 400,
-                child: TextFormField(
-                  controller: emailController,
-                  decoration: const InputDecoration(labelText: email),
-                ),
-              ),
-              SizedBox(
-                width: !Responsive.isDesktop(context) ? 200 : 400,
-                child: TextFormField(
-                  controller: passwordController,
-                  decoration: const InputDecoration(labelText: password),
-                  obscureText: true,
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () async {
-                  final response = await apiService.login(
-                    emailController.text,
-                    passwordController.text,
-                  );
-
-                  if (!context.mounted) return;
-
-                  if (response?.containsKey('token') == true) {
-                    Navigator.pushNamed(context, '/dashboard');
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Ошибка входа. Проверьте почту и пароль'),
-                        duration: Duration(seconds: 3),
-                      ),
-                    );
-                  }
-                },
-                child: const Text(login),
-              ),
-              const SizedBox(height: 8.0),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/register');
-                },
-                child: const Text(dontHaveAccount),
-              ),
-            ],
+      body: Row(
+        children: [
+          const Spacer(
+            flex: 3,
           ),
-        ),
+          Expanded(
+            flex: 4,
+            child: Column(
+              children: [
+                const Spacer(flex: 5),
+                Expanded(
+                  flex: 9,
+                  child: Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).splashColor,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          width: 3.0,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(defaultPadding),
+                              child: TextField(
+                                textAlign: TextAlign.start,
+                                textAlignVertical: TextAlignVertical.center,
+                                controller: emailController,
+                                decoration: const InputDecoration(
+                                  labelText: email,
+                                  border: InputBorder.none,
+                                  filled: true,
+                                  fillColor: Colors.transparent,
+                                  prefixIcon: Icon(Icons.mail_outline),
+                                  hintText: 'Электронная почта',
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(defaultPadding),
+                              child: TextField(
+                                  textAlign: TextAlign.start,
+                                  textAlignVertical: TextAlignVertical.center,
+                                  controller: passwordController,
+                                  decoration: const InputDecoration(
+                                    labelText: password,
+                                    border: InputBorder.none,
+                                    filled: true,
+                                    fillColor: Colors.transparent,
+                                    prefixIcon: Icon(Icons.lock_outline),
+                                    hintText: 'Пароль',
+                                  )),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(defaultPadding),
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  final response = await apiService.login(
+                                    emailController.text,
+                                    passwordController.text,
+                                  );
+
+                                  if (!context.mounted) return;
+
+                                  if (response?.containsKey('token') == true) {
+                                    Navigator.pushNamed(context, '/dashboard');
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            'Ошибка входа. Проверьте почту и пароль'),
+                                        duration: Duration(seconds: 3),
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: const Text(login),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/register');
+                              },
+                              child: const Text(dontHaveAccount),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const Spacer(
+                  flex: 5,
+                ),
+              ],
+            ),
+          ),
+          const Spacer(
+            flex: 3,
+          ),
+        ],
       ),
     );
   }

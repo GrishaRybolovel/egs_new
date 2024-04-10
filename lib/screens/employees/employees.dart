@@ -24,7 +24,7 @@ class _EmployeesScreen extends State<EmployeesScreen> {
             children: [
               const SizedBox(height: defaultPadding),
               Container(
-                  width: Responsive.ScreenWidth(context) * 0.9,
+                  width: Responsive.screenWidth(context) * 0.9,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

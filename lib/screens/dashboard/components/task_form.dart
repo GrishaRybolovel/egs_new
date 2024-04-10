@@ -201,6 +201,7 @@ class TaskFormScreenState extends State<TaskFormScreen> {
               widget.initialTask == null
                   ? 'Добавить задачу'
                   : 'Изменить задачу',
+              style: Theme.of(context).textTheme.labelLarge,
             ),
             const SizedBox(height: defaultPadding),
             Container(

@@ -70,8 +70,8 @@ class MessageListState extends State<MessageList> {
       future: messagesFuture,
       builder: (context, snapshot) {
         if (messagesFuture == null) {
-          // messagesFuture is not yet initialized
-          return const CircularProgressIndicator();
+          return const Expanded(
+              child: Center(child: CircularProgressIndicator()));
         } else if (snapshot.hasError) {
           // Error while fetching data, show an error message
           return Text('Error: ${snapshot.error}');
@@ -195,7 +195,7 @@ class MessageListState extends State<MessageList> {
                           ),
                         ),
                         SizedBox(
-                          width: Responsive.ScreenWidth(context) -
+                          width: Responsive.screenWidth(context) -
                               (Responsive.isDesktop(context) ? 420 : 192),
                           child: TextFormField(
                             controller: _messageController,

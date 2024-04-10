@@ -109,12 +109,14 @@ class MyTasksState extends State<MyTasks> {
         if (snapshot.connectionState == ConnectionState.done) {
           getGroups();
           return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Мои задания",
+                    style: Theme.of(context).textTheme.displayMedium,
                   ),
                   ElevatedButton.icon(
                     style: TextButton.styleFrom(
@@ -137,8 +139,7 @@ class MyTasksState extends State<MyTasks> {
                 width: 1000,
                 height: 300,
                 child: AppFlowyBoard(
-                  config: const AppFlowyBoardConfig(
-                  ),
+                  config: const AppFlowyBoardConfig(),
                   boardScrollController: scrollController,
                   groupConstraints: const BoxConstraints.tightFor(width: 320),
                   headerBuilder: (context, groupData) {
@@ -166,7 +167,8 @@ class MyTasksState extends State<MyTasks> {
             ],
           );
         } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const Expanded(
+              child: Center(child: CircularProgressIndicator()));
         } else if (snapshot.hasError) {
           return Center(
             child: Text('Error ${snapshot.error}'),

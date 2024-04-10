@@ -176,7 +176,8 @@ class _JournalScreenState extends State<JournalScreen> {
               future: statusChanges,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator(); // Loading indicator
+                  return const Expanded(
+                      child: Center(child: CircularProgressIndicator()));
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {

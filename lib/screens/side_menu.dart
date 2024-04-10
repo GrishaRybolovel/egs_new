@@ -3,8 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,9 @@ class SideMenu extends StatelessWidget {
       child: ListView(
         children: [
           DrawerHeader(
-            child: Image.asset("assets/logo.png"),
+            child: Theme.of(context).brightness == Brightness.dark
+                ? Image.asset("assets/images/logo_white.png")
+                : Image.asset("assets/logo.png"),
           ),
           DrawerListTile(
             title: "Сводка",
@@ -20,9 +22,6 @@ class SideMenu extends StatelessWidget {
             press: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushNamed("/dashboard");
-              // context.read<MenuAppController>().closeMenu();
-              // Provider.of<MenuAppController>(context, listen: false)
-              //     .navigateTo(const DashboardScreen());
             },
           ),
           DrawerListTile(
@@ -39,9 +38,6 @@ class SideMenu extends StatelessWidget {
             press: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushNamed("/projects");
-              // context.read<MenuAppController>().closeMenu();
-              // Provider.of<MenuAppController>(context, listen: false)
-              // .navigateTo(const ProjectsScreen());
             },
           ),
           DrawerListTile(
@@ -68,12 +64,11 @@ class SideMenu extends StatelessWidget {
 
 class DrawerListTile extends StatelessWidget {
   const DrawerListTile({
-    Key? key,
-    // For selecting those three line once press "Command+D"
+    super.key,
     required this.title,
     required this.svgSrc,
     required this.press,
-  }) : super(key: key);
+  });
 
   final String title, svgSrc;
   final VoidCallback press;
@@ -85,6 +80,14 @@ class DrawerListTile extends StatelessWidget {
       horizontalTitleGap: 0.0,
       leading: SvgPicture.asset(
         svgSrc,
+        // ignore: deprecated_member_use
+        color: Theme.of(context).brightness == Brightness.dark
+            ? Colors.white
+            : Colors.black,
+        colorFilter: ColorFilter.mode(
+          Theme.of(context).iconTheme.color!,
+          BlendMode.srcIn,
+        ),
         height: 16,
       ),
       title: Text(

@@ -22,13 +22,11 @@ class TaskApi {
       body: jsonEncode(task.toJson()),
     );
 
-    print(task.toJson());
 
     if (response.statusCode == 201) {
       return Task.fromJson(json.decode(utf8.decode(response.bodyBytes)));
     } else {
-      print(response.body);
-      print(response.statusCode);
+      
       throw Exception('Ошибка создания задачи. Заполните все необходимые поля.');
     }
   }

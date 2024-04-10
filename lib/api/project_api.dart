@@ -59,9 +59,7 @@ class ProjectsApiService {
 
   Future<List<Journal>> getJournal(int projectId) async {
     final response = await http.get(Uri.parse('$baseUrl/project/status-choice-change/$projectId'));
-    print(json.decode(utf8.decode(response.bodyBytes)));
-    print((json.decode(utf8.decode(response.bodyBytes)).map((json) => Journal.fromJson(json)).toList())[0]);
-
+   
     if (response.statusCode == 200) {
       final List<dynamic> jsonJournals =
       json.decode(utf8.decode(response.bodyBytes));
@@ -72,7 +70,6 @@ class ProjectsApiService {
   }
 
   Future<Journal> createJournal(Journal journal) async {
-    print(json.encode(journal.toJson()));
     final response = await http.post(
       Uri.parse('$baseUrl/project/status-choice-change/'),
       headers: {'Content-Type': 'application/json'},

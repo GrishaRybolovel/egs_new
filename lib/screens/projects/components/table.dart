@@ -21,7 +21,12 @@ class _MyTable extends State<MyTable> {
   final ProjectsApiService papiService = ProjectsApiService();
   late Future<List<Project>?> projects;
   String _selectedTypeParameter = '1';
-  final _selectedTypeParameterName = ['Эксплуатация', 'Техническое обслуживание', 'СМР', 'СМР'];
+  final _selectedTypeParameterName = [
+    'Эксплуатация',
+    'Техническое обслуживание',
+    'СМР',
+    'Производство',
+  ];
 
   final statuses = ['В работе', 'ПНР', 'Сезон откл.', 'СМР', 'Аварийное откл.'];
 
@@ -73,7 +78,8 @@ class _MyTable extends State<MyTable> {
               future: projects,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator(); // Loading indicator
+                  return const Expanded(
+                      child: Center(child: CircularProgressIndicator()));
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -87,7 +93,8 @@ class _MyTable extends State<MyTable> {
                         .toLowerCase();
 
                     // Check if the project name contains the search text
-                    return projectName.contains(searchText) && project.projType == _selectedTypeParameter;
+                    return projectName.contains(searchText) &&
+                        project.projType == _selectedTypeParameter;
                   }).map((project) {
                     return DataRow(
                       cells: [
@@ -112,7 +119,8 @@ class _MyTable extends State<MyTable> {
                           child: Text(project.id.toString()),
                         )),
                         DataCell(Text(project.name)),
-                        DataCell(Text(statuses[int.parse(project.status ?? '1') - 1])),
+                        DataCell(Text(
+                            statuses[int.parse(project.status ?? '1') - 1])),
                         DataCell(Text(project.address ?? '')),
                         DataCell(Text(
                             project.dateCreation.toString().substring(0, 10))),

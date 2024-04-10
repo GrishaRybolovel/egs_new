@@ -5,8 +5,6 @@ const defaultPadding = 16.0;
 const lightPurple = Color(0xFFE0B0FF);
 const lightBlue = Color(0xFFADD8E6);
 
-// const String baseUrl = 'http://127.0.0.1:8000';
-// const String baseUrl = 'https://37.140.192.74:8000';
 const String baseUrl = 'https://egs-back.ru';
 
 const email = 'Почта';
