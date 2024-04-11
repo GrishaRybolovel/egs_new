@@ -85,6 +85,9 @@ class _EmployeeFormState extends State<EmployeeForm> {
           tasksByDate = TaskApi().fetchTasksByDate(widget.user!.id!);
         });
       }
+      else{
+        tasksByDate = Future.value({});
+      }
     } catch (e) {
       String exception = e.toString().substring(10);
       // ignore: unused_element

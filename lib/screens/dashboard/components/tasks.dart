@@ -167,8 +167,7 @@ class MyTasksState extends State<MyTasks> {
             ],
           );
         } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Expanded(
-              child: Center(child: CircularProgressIndicator()));
+          return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(
             child: Text('Error ${snapshot.error}'),

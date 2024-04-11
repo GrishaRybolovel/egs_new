@@ -15,16 +15,18 @@ class TaskApi {
     }
   }
 
-  Future<Task> createTask(Task task) async {
+  Future<bool> createTask(Task task) async {
     final response = await http.post(
       Uri.parse('$baseUrl/task/tasks/'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(task.toJson()),
     );
 
+    print(json.decode(utf8.decode(response.bodyBytes)));
+
 
     if (response.statusCode == 201) {
-      return Task.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
     } else {
       
       throw Exception('Ошибка создания задачи. Заполните все необходимые поля.');

@@ -418,7 +418,7 @@ class TaskFormScreenState extends State<TaskFormScreen> {
 
       if (widget.initialTask == null) {
         String name = newTask.name;
-        Task createdTask = await TaskApi().createTask(newTask);
+        await TaskApi().createTask(newTask);
 
         ScaffoldMessenger.of(this.context).showSnackBar(
           SnackBar(

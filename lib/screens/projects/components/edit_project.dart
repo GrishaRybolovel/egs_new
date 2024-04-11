@@ -365,12 +365,15 @@ class AddEditProjectScreenState extends State<AddEditProjectScreen> {
         // Add other properties as needed
       );
 
+      print(project.status);
+
       final ProjectsApiService papiService = ProjectsApiService();
 
       if (widget.initialProject == null) {
         // Add logic to save the new project
         String name = project.name;
         var createdProject = await papiService.createProject(project);
+        setState(() {});
 
         if (createdProject != null) {
           ScaffoldMessenger.of(context).showSnackBar(
