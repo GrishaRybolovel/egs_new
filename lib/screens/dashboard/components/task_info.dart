@@ -19,28 +19,24 @@ class FileInfoCard extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                padding: const EdgeInsets.all(defaultPadding * 0.75),
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                ),
-                child: SvgPicture.asset(
-                  "assets/icons/doc_file.svg",
-                ),
-              ),
-              const Icon(Icons.more_vert)
+              Expanded(
+                  child: Container(
+                    height: 30,
+                alignment: Alignment.center,
+                color: Colors.blueGrey,
+                child: Text(info.name),
+              ))
             ],
           ),
           Text(
-            info.name!.toString(),
+            info.description == null ? "" : info.description!.toString(),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -49,17 +45,26 @@ class FileInfoCard extends StatelessWidget {
             children: [
               Text(
                 info.created.toString().substring(0, 11),
-                
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall!
+                    .copyWith(color: Colors.white70),
               ),
               Column(
                 children: [
                   Text(
                     'Автор:',
-                  
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: Colors.white),
                   ),
                   Text(
                     info.authorId!.toString(),
-                    
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: Colors.white),
                   ),
                 ],
               ),

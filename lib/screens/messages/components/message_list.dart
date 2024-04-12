@@ -78,7 +78,13 @@ class MessageListState extends State<MessageList> {
         } else {
           // Data has been fetched, build the ListView
           List<Message> originalMessages = snapshot.data ?? [];
-          List<Message> messages = List.from(originalMessages.reversed);
+          List<Message> taskMessages = [];
+          for (var message in originalMessages) {
+            if (message.task == widget.taskId){
+              taskMessages.add(message);
+            }
+          }
+          List<Message> messages = List.from(taskMessages.reversed);
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

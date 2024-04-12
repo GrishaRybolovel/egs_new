@@ -19,7 +19,7 @@ class TaskApi {
     final response = await http.post(
       Uri.parse('$baseUrl/task/tasks/'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(task.toJson()),
+      body: utf8.encode(jsonEncode(task.toJson())),
     );
 
     print(json.decode(utf8.decode(response.bodyBytes)));

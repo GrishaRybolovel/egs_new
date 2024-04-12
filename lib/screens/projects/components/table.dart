@@ -82,15 +82,18 @@ class _MyTable extends State<MyTable> {
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return const Text('No projects available.');
               } else {
+                print(_selectedTypeParameter);
+
                 List<DataRow> rows = snapshot.data!.where((project) {
                   final projectName = project.name.toLowerCase();
                   final searchText = Provider.of<MenuAppController>(context)
                       .search
                       .toLowerCase();
 
+
                   // Check if the project name contains the search text
-                  return projectName.contains(searchText) &&
-                      project.projType == _selectedTypeParameter;
+                  return project.status == _selectedTypeParameter &&
+                      projectName.contains(searchText);
                 }).map((project) {
                   return DataRow(
                     cells: [

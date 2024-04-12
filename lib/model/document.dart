@@ -45,7 +45,7 @@ class Document {
       docType: json['doc_type'],
       duration: json['duration'] != null ? DateTime.parse(json['duration']) : null,
       doc: myDoc,
-      docName: json['doc_name'],
+      docName: Uri.decodeComponent(json['doc_name'].toString()),
       users: json['users'] != null ? List<int>.from(json['users']) : null,
       projects: json['projects'] != null ? List<int>.from(json['projects']) : null,
     );

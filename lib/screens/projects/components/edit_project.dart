@@ -43,7 +43,6 @@ class AddEditProjectScreenState extends State<AddEditProjectScreen> {
   @override
   void initState() {
     super.initState();
-
     _projTypeController =
         TextEditingController(text: widget.initialProject?.projType ?? '1');
     _nameController =

@@ -19,6 +19,7 @@ class Task {
   String? docName;
   String? docBase64;
   File? doc;
+  int? type;
 
   Task({
     this.id,
@@ -33,10 +34,10 @@ class Task {
     this.taskToUserIds,
     this.docBase64,
     this.docName,
+    this.type,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {
-
     DateTime? done;
     DateTime? completion;
     File? myDoc;
@@ -69,9 +70,10 @@ class Task {
       completion: completion,
       done: done,
       doc: myDoc,
-      docName: json['doc_name'],
+      docName: Uri.decodeComponent(json['doc_name'].toString()),
       projectId: json['project'],
       taskToUserIds: json['task_to_user'] != null ? List<int>.from(json['task_to_user']) : null,
+      type: json['type'] != null ? int.parse(json['type']) : 5,
     );
     return myNewTask;
   }

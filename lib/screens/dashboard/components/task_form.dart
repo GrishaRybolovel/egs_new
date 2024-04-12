@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:universal_html/html.dart' as html;
+import 'dart:html' as html;
 import 'dart:io';
 
 import 'package:egs/api/project_api.dart';
@@ -22,7 +22,7 @@ import 'package:path/path.dart';
 class TaskFormScreen extends StatefulWidget {
   final Task? initialTask;
 
-  const TaskFormScreen({super.key, this.initialTask});
+  const TaskFormScreen({Key? key, this.initialTask}) : super(key: key);
 
   @override
   TaskFormScreenState createState() => TaskFormScreenState();
@@ -166,6 +166,7 @@ class TaskFormScreenState extends State<TaskFormScreen> {
           _doc = File(result.files.single.path!);
           doc64 = base64Encode(Uint8List.fromList(_doc!.readAsBytesSync()));
           docName = basename(_doc!.path);
+          print(docName);
         });
       }
     }
@@ -189,6 +190,7 @@ class TaskFormScreenState extends State<TaskFormScreen> {
                 children: [
                   Text(
                     'Чат задачи',
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: defaultPadding),
                   MessagesScreen(projectId: widget.initialTask?.id ?? 0),
@@ -201,7 +203,7 @@ class TaskFormScreenState extends State<TaskFormScreen> {
               widget.initialTask == null
                   ? 'Добавить задачу'
                   : 'Изменить задачу',
-              style: Theme.of(context).textTheme.labelLarge,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: defaultPadding),
             Container(
@@ -293,6 +295,7 @@ class TaskFormScreenState extends State<TaskFormScreen> {
                 children: [
                   Text(
                     'Проекты',
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: defaultPadding),
                   DropdownButton<Project>(
@@ -345,6 +348,7 @@ class TaskFormScreenState extends State<TaskFormScreen> {
                 children: [
                   Text(
                     'Пользователи',
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: defaultPadding),
                   DropdownButton<User>(
