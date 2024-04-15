@@ -80,7 +80,7 @@ class MessageListState extends State<MessageList> {
           List<Message> originalMessages = snapshot.data ?? [];
           List<Message> taskMessages = [];
           for (var message in originalMessages) {
-            if (message.task == widget.taskId){
+            if (message.task == widget.taskId) {
               taskMessages.add(message);
             }
           }
@@ -158,7 +158,7 @@ class MessageListState extends State<MessageList> {
                 child: Column(
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ElevatedButton(
                           onPressed: () async {
@@ -200,9 +200,7 @@ class MessageListState extends State<MessageList> {
                             size: 24.0,
                           ),
                         ),
-                        SizedBox(
-                          width: Responsive.screenWidth(context) -
-                              (Responsive.isDesktop(context) ? 420 : 192),
+                        Expanded(
                           child: TextFormField(
                             controller: _messageController,
                             decoration:

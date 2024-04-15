@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:egs/ui/const.dart';
 import 'package:egs/model/task.dart';
 import 'package:egs/api/task_api.dart';
-import 'package:egs/screens/dashboard/components/task_form.dart';
 import 'task_info.dart';
 
 class MyTasks extends StatelessWidget {
-  const MyTasks({Key? key}) : super(key: key);
+  const MyTasks({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,24 +15,31 @@ class MyTasks extends StatelessWidget {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              "Мои задания",
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            ElevatedButton.icon(
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.symmetric(
-                  horizontal: defaultPadding * 1.5,
-                  vertical:
-                      defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
-                ),
+            Padding(
+              padding: const EdgeInsets.all(defaultPadding),
+              child: Text(
+                "Мои задания",
+                style: Theme.of(context).textTheme.displayMedium,
               ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/taskForm');
-              },
-              icon: const Icon(Icons.add),
-              label: const Text("Создать"),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(defaultPadding),
+              child: ElevatedButton.icon(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: defaultPadding * 1.5,
+                    vertical:
+                        defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/taskForm');
+                },
+                icon: const Icon(Icons.add),
+                label: const Text("Создать"),
+              ),
             ),
           ],
         ),
@@ -55,10 +61,10 @@ class MyTasks extends StatelessWidget {
 
 class TaskInfoGridView extends StatefulWidget {
   const TaskInfoGridView({
-    Key? key,
+    super.key,
     this.crossAxisCount = 4,
     this.childAspectRatio = 1,
-  }) : super(key: key);
+  });
 
   final int crossAxisCount;
   final double childAspectRatio;
@@ -81,73 +87,86 @@ class TaskInfoGridViewState extends State<TaskInfoGridView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.all(defaultPadding),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        child: Column(children: [
-          DropdownButton<String>(
-            borderRadius: BorderRadius.circular(12),
-            value: _selectedTypeParameter,
-            onChanged: (String? newValue) {
-              setState(() {
-                _selectedTypeParameter = newValue!;
-              });
-            },
-            items: <String>['1', '2', '3', '4', '5']
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(_selectedTypeParameterName[int.parse(value) - 1]),
-              );
-            }).toList(),
-          ),
-          FutureBuilder<List<Task>>(
-            future: tapiService.fetchTasks(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                // While the Future is still running, show a loading indicator.
-                return const CircularProgressIndicator();
-              } else if (snapshot.data == null || snapshot.data!.isEmpty) {
-                // If there's no data or the data is empty, display a message.
-                return const Text('Нет заданий.');
-              } else if (snapshot.hasError) {
-                // If there's an error, throw it to propagate it further.
-                throw snapshot.error!;
-              } else {
-                var tasks_before = snapshot.data!;
-                List<dynamic> tasks = [];
-                for (var item in tasks_before){
-                  if (item.type == int.parse(_selectedTypeParameter)){
-                    tasks.add(item);
+      padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              DropdownButton<String>(
+                borderRadius: BorderRadius.circular(12),
+                value: _selectedTypeParameter,
+                onChanged: (String? newValue) {
+                  if (newValue != _selectedTypeParameter) {
+                    setState(() {
+                      _selectedTypeParameter = newValue!;
+                    });
                   }
-                }
-
-                // If the Future is complete and there's data, build the GridView.
-                return GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: tasks.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: widget.crossAxisCount,
-                    crossAxisSpacing: defaultPadding,
-                    mainAxisSpacing: defaultPadding,
-                    childAspectRatio: widget.childAspectRatio,
-                  ),
-                  itemBuilder: (context, index) {
-                    final task = tasks[index];
-                    return InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/taskForm',
-                            arguments: task);
-                      },
-                      child: FileInfoCard(info: task),
-                    );
-                  },
-                );
-              }
-            },
+                },
+                items: <String>['1', '2', '3', '4', '5']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      _selectedTypeParameterName[int.parse(value) - 1],
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
           ),
-        ]));
+          Column(
+            children: [
+              FutureBuilder<List<Task>>(
+                future: tapiService.fetchTasks(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.data == null || snapshot.data!.isEmpty) {
+                    return const Text('Нет заданий.');
+                  } else if (snapshot.hasError) {
+                    throw snapshot.error!;
+                  } else {
+                    var tasksBefore = snapshot.data!;
+                    List<dynamic> tasks = [];
+                    for (var item in tasksBefore) {
+                      if (item.type == int.parse(_selectedTypeParameter)) {
+                        tasks.add(item);
+                      }
+                    }
+
+                    return GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: tasks.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: widget.crossAxisCount,
+                        crossAxisSpacing: defaultPadding,
+                        mainAxisSpacing: defaultPadding,
+                        childAspectRatio: widget.childAspectRatio,
+                      ),
+                      itemBuilder: (context, index) {
+                        final task = tasks[index];
+                        return InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/taskForm',
+                                arguments: task);
+                          },
+                          child: FileInfoCard(info: task),
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

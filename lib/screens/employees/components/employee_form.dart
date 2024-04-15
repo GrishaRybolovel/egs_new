@@ -84,8 +84,7 @@ class _EmployeeFormState extends State<EmployeeForm> {
         setState(() async {
           tasksByDate = TaskApi().fetchTasksByDate(widget.user!.id!);
         });
-      }
-      else{
+      } else {
         tasksByDate = Future.value({});
       }
     } catch (e) {
@@ -105,18 +104,42 @@ class _EmployeeFormState extends State<EmployeeForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const Header(),
-        drawer: const SideMenu(),
-        body: SingleChildScrollView(
-            child: Column(children: [
-          SizedBox(
-            height: defaultPadding,
-          ),
-          Responsive.isDesktop(context)
-              ? Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
+      appBar: const Header(),
+      drawer: const SideMenu(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(defaultPadding),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Данные о сотруднике',
+                        style: Theme.of(context).textTheme.displayMedium,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    child: Icon(Icons.close),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: defaultPadding,
+            ),
+            Responsive.isDesktop(context)
+                ? Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -133,7 +156,7 @@ class _EmployeeFormState extends State<EmployeeForm> {
                               height: Responsive.screenWidth(context) / 4,
                             ),
                           ),
-                          SizedBox(height: defaultPadding),
+                          const SizedBox(height: defaultPadding),
                           Container(
                               width: (Responsive.screenWidth(context) / 3 -
                                   Responsive.screenWidth(context) * 0.05),
@@ -143,15 +166,14 @@ class _EmployeeFormState extends State<EmployeeForm> {
                                     BorderRadius.all(Radius.circular(10)),
                               ),
                               child: Column(children: [
-                                Text('График'),
+                                const Text('График'),
                                 FutureBuilder<Map<String, dynamic>?>(
                                     future: tasksByDate,
                                     builder: (context, snapshot) {
                                       if (snapshot.connectionState ==
                                           ConnectionState.waiting) {
                                         return const Center(
-                                                child:
-                                                    CircularProgressIndicator());
+                                            child: CircularProgressIndicator());
                                       } else if (snapshot.hasError) {
                                         return Text('Error: ${snapshot.error}');
                                       } else {
@@ -161,367 +183,393 @@ class _EmployeeFormState extends State<EmployeeForm> {
                               ]))
                         ],
                       ),
-                      Column(children: [
-                        Container(
+                      Column(
+                        children: [
+                          Container(
+                              width: Responsive.screenWidth(context) / 3 * 2 -
+                                  Responsive.screenWidth(context) * 0.05,
+                              padding: const EdgeInsets.all(defaultPadding),
+                              decoration: const BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              child: Form(
+                                  key: _formKey,
+                                  child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        createTextController(nameController,
+                                            'Имя', 'Введите имя', true),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(surnameController,
+                                            'Фамилия', 'Введите фамилию', true),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(
+                                            lastnameController,
+                                            'Отчество',
+                                            'Введите отчество',
+                                            true),
+                                        const SizedBox(height: defaultPadding),
+                                        TextFormField(
+                                          inputFormatters: [
+                                            PhoneInputFormatter()
+                                          ],
+                                          keyboardType: TextInputType.phone,
+                                          controller: phoneController,
+                                          decoration: const InputDecoration(
+                                              labelText: 'Телефон',
+                                              icon: Icon(Icons.phone)),
+                                        ),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(emailController,
+                                            'Почта', 'Введите Почту', true),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(addressController,
+                                            'Адрес', 'Введите Почту', false),
+                                        const SizedBox(height: defaultPadding),
+                                        createDateController(
+                                            birthController, 'Дата рождения'),
+                                        const SizedBox(height: defaultPadding),
+                                        createDateController(
+                                            dateofstartController,
+                                            'Принят на работу'),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(innController,
+                                            'ИНН', 'Введите Почту', false),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(snilsController,
+                                            'СНИЛС', 'Введите Почту', false),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(passportController,
+                                            'Паспорт', 'Введите Почту', false),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(
+                                            postController,
+                                            'Должность',
+                                            'Введите Почту',
+                                            false),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(
+                                            infoaboutrelocateController,
+                                            'Информация о переводе',
+                                            'Введите Почту',
+                                            false),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(
+                                            attestationController,
+                                            'Аттестация',
+                                            'Введите Почту',
+                                            false),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(
+                                            qualificationController,
+                                            'Квалификация',
+                                            'Введите Почту',
+                                            false),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(
+                                            retrainingController,
+                                            'Проф. переподготовка',
+                                            'Введите Почту',
+                                            false),
+                                        const SizedBox(height: defaultPadding),
+                                        CheckboxListTile(
+                                          title: const Text('Статус'),
+                                          // Label for the checkbox
+                                          value: status,
+                                          // Current value of the checkbox
+                                          onChanged: (bool? newValue) {
+                                            setState(() {
+                                              status = newValue ??
+                                                  false; // Update the status when the checkbox value changes
+                                            });
+                                          },
+                                        ),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(passwordController,
+                                            'Пароль', 'Введите Почту', false),
+                                        const SizedBox(height: defaultPadding),
+                                        const SizedBox(height: defaultPadding),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            if (_formKey.currentState
+                                                    ?.validate() ??
+                                                false) {
+                                              saveUser();
+                                            }
+                                          },
+                                          child: const Text('Сохранить'),
+                                        ),
+                                      ]))),
+                          const SizedBox(height: defaultPadding),
+                          Container(
                             width: Responsive.screenWidth(context) / 3 * 2 -
                                 Responsive.screenWidth(context) * 0.05,
-                            padding: const EdgeInsets.all(defaultPadding),
-                            decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                            ),
-                            child: Form(
-                                key: _formKey,
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      createTextController(nameController,
-                                          'Имя', 'Введите имя', true),
-                                      SizedBox(height: defaultPadding),
-                                      createTextController(surnameController,
-                                          'Фамилия', 'Введите фамилию', true),
-                                      SizedBox(height: defaultPadding),
-                                      createTextController(lastnameController,
-                                          'Отчество', 'Введите отчество', true),
-                                      const SizedBox(height: defaultPadding),
-                                      TextFormField(
-                                        inputFormatters: [
-                                          PhoneInputFormatter()
-                                        ],
-                                        keyboardType: TextInputType.phone,
-                                        controller: phoneController,
-                                        decoration: const InputDecoration(
-                                            labelText: 'Телефон',
-                                            icon: Icon(Icons.phone)),
-                                      ),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(emailController,
-                                          'Почта', 'Введите Почту', true),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(addressController,
-                                          'Адрес', 'Введите Почту', false),
-                                      const SizedBox(height: defaultPadding),
-                                      createDateController(
-                                          birthController, 'Дата рождения'),
-                                      const SizedBox(height: defaultPadding),
-                                      createDateController(
-                                          dateofstartController,
-                                          'Принят на работу'),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(innController, 'ИНН',
-                                          'Введите Почту', false),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(snilsController,
-                                          'СНИЛС', 'Введите Почту', false),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(passportController,
-                                          'Паспорт', 'Введите Почту', false),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(postController,
-                                          'Должность', 'Введите Почту', false),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(
-                                          infoaboutrelocateController,
-                                          'Информация о переводе',
-                                          'Введите Почту',
-                                          false),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(
-                                          attestationController,
-                                          'Аттестация',
-                                          'Введите Почту',
-                                          false),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(
-                                          qualificationController,
-                                          'Квалификация',
-                                          'Введите Почту',
-                                          false),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(
-                                          retrainingController,
-                                          'Проф. переподготовка',
-                                          'Введите Почту',
-                                          false),
-                                      const SizedBox(height: defaultPadding),
-                                      CheckboxListTile(
-                                        title: Text('Статус'),
-                                        // Label for the checkbox
-                                        value: status,
-                                        // Current value of the checkbox
-                                        onChanged: (bool? newValue) {
-                                          setState(() {
-                                            status = newValue ??
-                                                false; // Update the status when the checkbox value changes
-                                          });
-                                        },
-                                      ),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(passwordController,
-                                          'Пароль', 'Введите Почту', false),
-                                      const SizedBox(height: defaultPadding),
-                                      const SizedBox(height: defaultPadding),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          if (_formKey.currentState
-                                                  ?.validate() ??
-                                              false) {
-                                            saveUser();
-                                          }
-                                        },
-                                        child: const Text('Сохранить'),
-                                      ),
-                                    ]))),
-                        SizedBox(height: defaultPadding),
-                        Container(
-                          width: Responsive.screenWidth(context) / 3 * 2 -
-                              Responsive.screenWidth(context) * 0.05,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Документы",
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              ElevatedButton.icon(
-                                style: TextButton.styleFrom(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: defaultPadding * 1.5,
-                                    vertical: defaultPadding /
-                                        (Responsive.isMobile(context) ? 2 : 1),
-                                  ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Документы",
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
                                 ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const DocumentForm(),
+                                ElevatedButton.icon(
+                                  style: TextButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: defaultPadding * 1.5,
+                                      vertical: defaultPadding /
+                                          (Responsive.isMobile(context)
+                                              ? 2
+                                              : 1),
                                     ),
-                                  );
-                                },
-                                icon: const Icon(Icons.add),
-                                label: const Text("Создать"),
-                              ),
-                            ],
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const DocumentForm(),
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(Icons.add),
+                                  label: const Text("Создать"),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
+                          Container(
                             width: Responsive.screenWidth(context) / 3 * 2 -
                                 Responsive.screenWidth(context) * 0.05,
                             child: MyTable(
                               user: widget.user,
-                            ))
-                      ])
-                    ])
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: (Responsive.screenWidth(context)),
-                            padding: const EdgeInsets.all(defaultPadding),
-                            decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
                             ),
-                            child: SizedBox(
-                              width: Responsive.screenWidth(context) / 3,
-                              height: Responsive.screenWidth(context) / 4,
-                            ),
-                          ),
-                          SizedBox(height: defaultPadding),
-                          Container(
+                          )
+                        ],
+                      ),
+                    ],
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
                               width: (Responsive.screenWidth(context)),
                               padding: const EdgeInsets.all(defaultPadding),
                               decoration: const BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),
                               ),
-                              child: Column(children: [
-                                Text('График'),
-                                FutureBuilder<Map<String, dynamic>?>(
-                                    future: tasksByDate,
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return Center(
-                                                child:
-                                                    CircularProgressIndicator());
-                                      } else if (snapshot.hasError) {
-                                        return Text('Error: ${snapshot.error}');
-                                      } else if (!snapshot.hasData ||
-                                          snapshot.data!.isEmpty) {
-                                        return const Text('Пользователей.');
-                                      } else {
-                                        return CalendarWidget(snapshot.data);
-                                      }
-                                    }),
-                              ]))
-                        ],
-                      ),
-                      SizedBox(height: defaultPadding),
-                      Column(children: [
-                        Container(
-                            width: Responsive.screenWidth(context),
-                            padding: const EdgeInsets.all(defaultPadding),
-                            decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
+                              child: SizedBox(
+                                width: Responsive.screenWidth(context) / 3,
+                                height: Responsive.screenWidth(context) / 4,
+                              ),
                             ),
-                            child: Form(
-                                key: _formKey,
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      createTextController(nameController,
-                                          'Имя', 'Введите имя', true),
-                                      SizedBox(height: defaultPadding),
-                                      createTextController(surnameController,
-                                          'Фамилия', 'Введите фамилию', true),
-                                      SizedBox(height: defaultPadding),
-                                      createTextController(lastnameController,
-                                          'Отчество', 'Введите отчество', true),
-                                      const SizedBox(height: defaultPadding),
-                                      TextFormField(
-                                        inputFormatters: [
-                                          PhoneInputFormatter()
-                                        ],
-                                        keyboardType: TextInputType.phone,
-                                        controller: phoneController,
-                                        decoration: const InputDecoration(
-                                            labelText: 'Телефон',
-                                            icon: Icon(Icons.phone)),
-                                      ),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(emailController,
-                                          'Почта', 'Введите Почту', true),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(addressController,
-                                          'Адрес', 'Введите Почту', false),
-                                      const SizedBox(height: defaultPadding),
-                                      createDateController(
-                                          birthController, 'Дата рождения'),
-                                      const SizedBox(height: defaultPadding),
-                                      createDateController(
-                                          dateofstartController,
-                                          'Принят на работу'),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(innController, 'ИНН',
-                                          'Введите Почту', false),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(snilsController,
-                                          'СНИЛС', 'Введите Почту', false),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(passportController,
-                                          'Паспорт', 'Введите Почту', false),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(postController,
-                                          'Должность', 'Введите Почту', false),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(
-                                          infoaboutrelocateController,
-                                          'Информация о переводе',
-                                          'Введите Почту',
-                                          false),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(
-                                          attestationController,
-                                          'Аттестация',
-                                          'Введите Почту',
-                                          false),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(
-                                          qualificationController,
-                                          'Квалификация',
-                                          'Введите Почту',
-                                          false),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(
-                                          retrainingController,
-                                          'Проф. переподготовка',
-                                          'Введите Почту',
-                                          false),
-                                      const SizedBox(height: defaultPadding),
-                                      CheckboxListTile(
-                                        title: Text('Статус'),
-                                        // Label for the checkbox
-                                        value: status,
-                                        // Current value of the checkbox
-                                        onChanged: (bool? newValue) {
-                                          setState(() {
-                                            status = newValue ??
-                                                false; // Update the status when the checkbox value changes
-                                          });
-                                        },
-                                      ),
-                                      const SizedBox(height: defaultPadding),
-                                      createTextController(passwordController,
-                                          'Пароль', 'Введите Почту', false),
-                                      const SizedBox(height: defaultPadding),
-                                      const SizedBox(height: defaultPadding),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          if (_formKey.currentState
-                                                  ?.validate() ??
-                                              false) {
-                                            saveUser();
-                                          }
-                                        },
-                                        child: const Text('Сохранить'),
-                                      ),
-                                    ]))),
-                        SizedBox(height: defaultPadding),
-                        Container(
-                          width: Responsive.screenWidth(context),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Документы",
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              ElevatedButton.icon(
-                                style: TextButton.styleFrom(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: defaultPadding * 1.5,
-                                    vertical: defaultPadding /
-                                        (Responsive.isMobile(context) ? 2 : 1),
-                                  ),
+                            const SizedBox(height: defaultPadding),
+                            Container(
+                                width: (Responsive.screenWidth(context)),
+                                padding: const EdgeInsets.all(defaultPadding),
+                                decoration: const BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
                                 ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const DocumentForm(),
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(Icons.add),
-                                label: const Text("Создать"),
-                              ),
-                            ],
-                          ),
+                                child: Column(children: [
+                                  const Text('График'),
+                                  FutureBuilder<Map<String, dynamic>?>(
+                                      future: tasksByDate,
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const Center(
+                                              child:
+                                                  CircularProgressIndicator());
+                                        } else if (snapshot.hasError) {
+                                          return Text(
+                                              'Error: ${snapshot.error}');
+                                        } else if (!snapshot.hasData ||
+                                            snapshot.data!.isEmpty) {
+                                          return const Text('Пользователей.');
+                                        } else {
+                                          return CalendarWidget(snapshot.data);
+                                        }
+                                      }),
+                                ]))
+                          ],
                         ),
-                        Container(
+                        const SizedBox(height: defaultPadding),
+                        Column(children: [
+                          Container(
+                              width: Responsive.screenWidth(context),
+                              padding: const EdgeInsets.all(defaultPadding),
+                              decoration: const BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              child: Form(
+                                  key: _formKey,
+                                  child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        createTextController(nameController,
+                                            'Имя', 'Введите имя', true),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(surnameController,
+                                            'Фамилия', 'Введите фамилию', true),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(
+                                            lastnameController,
+                                            'Отчество',
+                                            'Введите отчество',
+                                            true),
+                                        const SizedBox(height: defaultPadding),
+                                        TextFormField(
+                                          inputFormatters: [
+                                            PhoneInputFormatter()
+                                          ],
+                                          keyboardType: TextInputType.phone,
+                                          controller: phoneController,
+                                          decoration: const InputDecoration(
+                                              labelText: 'Телефон',
+                                              icon: Icon(Icons.phone)),
+                                        ),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(emailController,
+                                            'Почта', 'Введите Почту', true),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(addressController,
+                                            'Адрес', 'Введите Почту', false),
+                                        const SizedBox(height: defaultPadding),
+                                        createDateController(
+                                            birthController, 'Дата рождения'),
+                                        const SizedBox(height: defaultPadding),
+                                        createDateController(
+                                            dateofstartController,
+                                            'Принят на работу'),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(innController,
+                                            'ИНН', 'Введите Почту', false),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(snilsController,
+                                            'СНИЛС', 'Введите Почту', false),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(passportController,
+                                            'Паспорт', 'Введите Почту', false),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(
+                                            postController,
+                                            'Должность',
+                                            'Введите Почту',
+                                            false),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(
+                                            infoaboutrelocateController,
+                                            'Информация о переводе',
+                                            'Введите Почту',
+                                            false),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(
+                                            attestationController,
+                                            'Аттестация',
+                                            'Введите Почту',
+                                            false),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(
+                                            qualificationController,
+                                            'Квалификация',
+                                            'Введите Почту',
+                                            false),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(
+                                            retrainingController,
+                                            'Проф. переподготовка',
+                                            'Введите Почту',
+                                            false),
+                                        const SizedBox(height: defaultPadding),
+                                        CheckboxListTile(
+                                          title: const Text('Статус'),
+                                          // Label for the checkbox
+                                          value: status,
+                                          // Current value of the checkbox
+                                          onChanged: (bool? newValue) {
+                                            setState(() {
+                                              status = newValue ??
+                                                  false; // Update the status when the checkbox value changes
+                                            });
+                                          },
+                                        ),
+                                        const SizedBox(height: defaultPadding),
+                                        createTextController(passwordController,
+                                            'Пароль', 'Введите Почту', false),
+                                        const SizedBox(height: defaultPadding),
+                                        const SizedBox(height: defaultPadding),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            if (_formKey.currentState
+                                                    ?.validate() ??
+                                                false) {
+                                              saveUser();
+                                            }
+                                          },
+                                          child: const Text('Сохранить'),
+                                        ),
+                                      ]))),
+                          const SizedBox(height: defaultPadding),
+                          Container(
                             width: Responsive.screenWidth(context),
-                            child: MyTable(
-                              user: widget.user,
-                            ))
-                      ])
-                    ]),
-          SizedBox(
-            height: defaultPadding,
-          )
-        ])));
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Документы",
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
+                                ElevatedButton.icon(
+                                  style: TextButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: defaultPadding * 1.5,
+                                      vertical: defaultPadding /
+                                          (Responsive.isMobile(context)
+                                              ? 2
+                                              : 1),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const DocumentForm(),
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(Icons.add),
+                                  label: const Text("Создать"),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                              width: Responsive.screenWidth(context),
+                              child: MyTable(
+                                user: widget.user,
+                              ))
+                        ])
+                      ]),
+            const SizedBox(
+              height: defaultPadding,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Row createTextController(TextEditingController itemController,
@@ -529,12 +577,12 @@ class _EmployeeFormState extends State<EmployeeForm> {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Text(
         itemText,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 16.0,
           fontWeight: FontWeight.w100,
         ),
       ),
-      SizedBox(
+      const SizedBox(
         width: defaultPadding,
       ),
       Container(
@@ -564,12 +612,12 @@ class _EmployeeFormState extends State<EmployeeForm> {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Text(
         itemText,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 16.0,
           fontWeight: FontWeight.w100,
         ),
       ),
-      SizedBox(width: defaultPadding),
+      const SizedBox(width: defaultPadding),
       Container(
           width: Responsive.screenWidth(context) * 0.4,
           child: TextFormField(
@@ -647,7 +695,7 @@ class _EmployeeFormState extends State<EmployeeForm> {
         Navigator.push(
           this.context,
           MaterialPageRoute(
-            builder: (context) => EmployeesScreen(),
+            builder: (context) => const EmployeesScreen(),
           ),
         );
       } else {
@@ -666,7 +714,7 @@ class _EmployeeFormState extends State<EmployeeForm> {
           Navigator.push(
             this.context,
             MaterialPageRoute(
-              builder: (context) => EmployeesScreen(),
+              builder: (context) => const EmployeesScreen(),
             ),
           );
         }
@@ -712,23 +760,23 @@ class CalendarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      SizedBox(height: 16), // Adjust spacing as needed
+      const SizedBox(height: 16), // Adjust spacing as needed
       Text(
         month,
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
       ),
-      SizedBox(height: 16), // Adjust spacing as needed
+      const SizedBox(height: 16), // Adjust spacing as needed
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: List.generate(
           7,
           (index) => Text(
             daysOfWeek[index],
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
       ),
-      SizedBox(height: 16),
+      const SizedBox(height: 16),
       SizedBox(
         width: Responsive.isDesktop(context)
             ? Responsive.screenWidth(context) / 3
@@ -737,7 +785,7 @@ class CalendarWidget extends StatelessWidget {
             ? Responsive.screenWidth(context) / 4
             : Responsive.screenWidth(context),
         child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 7,
           ),
           itemCount: 31, // Assuming 31 days in the month
@@ -793,17 +841,18 @@ class CalendarWidget extends StatelessWidget {
                       return AlertDialog(
                         title: Text(
                             'Задачи на ${date.day}/${date.month}/${date.year}'),
-                        content:
-                            Column(mainAxisSize: MainAxisSize.min, children: [
-                          SizedBox(
-                              width: double.maxFinite,
-                              // Adjust width as needed
-                              height: 200,
-                              child: ListTile(
-                                title: Text('Нет задач на эту дату'),
-                                // Add more ListTile properties as needed
-                              )),
-                        ]),
+                        content: const Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                  width: double.maxFinite,
+                                  // Adjust width as needed
+                                  height: 200,
+                                  child: ListTile(
+                                    title: Text('Нет задач на эту дату'),
+                                    // Add more ListTile properties as needed
+                                  )),
+                            ]),
                       );
                     },
                   );
@@ -815,13 +864,13 @@ class CalendarWidget extends StatelessWidget {
                   color: tileColor,
                 ),
                 child: ListTile(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 4),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 4),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         day.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 12), // Adjust font size as needed
                       ),
                       // Additional widgets can be added here

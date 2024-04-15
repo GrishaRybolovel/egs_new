@@ -11,18 +11,12 @@ class DashboardScreen extends StatelessWidget {
     return const Scaffold(
       drawer: SideMenu(),
       appBar: Header(),
-      body: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 5,
-            child: Column(
-              children: [
-                MyTasks(),
-              ],
-            ),
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            MyTasks(),
+          ],
+        ),
       ),
     );
   }
