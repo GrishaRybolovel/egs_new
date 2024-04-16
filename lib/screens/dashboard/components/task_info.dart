@@ -13,11 +13,24 @@ class FileInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         border: Border.fromBorderSide(
-            BorderSide(color: Theme.of(context).primaryColor, width: 2)),
+          BorderSide(
+              color: (info.completion!.difference(DateTime.now()) <
+                              const Duration(days: 7) &&
+                          DateTime.now().isBefore(info.completion!)) ||
+                      DateTime.now().isAfter(info.completion!)
+                  ? Colors.red
+                  : ((info.completion!.difference(DateTime.now()) <
+                              const Duration(days: 14) &&
+                          DateTime.now().isBefore(info.completion!))
+                      ? Colors.orange
+                      : Theme.of(context).colorScheme.primary),
+              width: 2),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -31,12 +44,22 @@ class FileInfoCard extends StatelessWidget {
                 child: Container(
                   height: 30,
                   alignment: Alignment.center,
-                  color: Theme.of(context).primaryColor,
+                  color: (info.completion!.difference(DateTime.now()) <
+                                  const Duration(days: 7) &&
+                              DateTime.now().isBefore(info.completion!)) ||
+                          DateTime.now().isAfter(info.completion!)
+                      ? Colors.red
+                      : ((info.completion!.difference(DateTime.now()) <
+                                  const Duration(days: 14) &&
+                              DateTime.now().isBefore(info.completion!))
+                          ? Colors.orange
+                          : Theme.of(context).colorScheme.primary),
                   child: Text(
                     info.name,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!.copyWith(color: Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.black
+                            : Colors.white),
                   ),
                 ),
               ),
@@ -78,14 +101,16 @@ class FileInfoCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        info.done == null ? Container() :
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          child: Text("Выполнено ${DateFormat('dd.MM.yyyy').format(info.done ?? DateTime.now())}",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
+                        info.done == null
+                            ? Container()
+                            : Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Выполнено ${DateFormat('dd.MM.yyyy').format(info.done ?? DateTime.now())}",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
                       ],
                     ),
                     Column(

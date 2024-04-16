@@ -139,6 +139,10 @@ class TaskInfoGridViewState extends State<TaskInfoGridView> {
                       }
                     }
 
+                    tasks.sort(((a, b) {
+                      return a.completion.compareTo(b.completion);
+                    }));
+
                     return GridView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
