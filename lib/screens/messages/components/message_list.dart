@@ -70,8 +70,7 @@ class MessageListState extends State<MessageList> {
       future: messagesFuture,
       builder: (context, snapshot) {
         if (messagesFuture == null) {
-          return const Expanded(
-              child: Center(child: CircularProgressIndicator()));
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           // Error while fetching data, show an error message
           return Text('Error: ${snapshot.error}');

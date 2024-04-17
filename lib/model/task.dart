@@ -1,4 +1,3 @@
-import 'package:egs/model/user.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'dart:typed_data';

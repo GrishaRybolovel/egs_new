@@ -1,5 +1,5 @@
 import 'package:egs/api/service.dart';
-import 'package:egs/controllers/MenuAppController.dart';
+import 'package:egs/controllers/menu_app_controller.dart';
 import 'package:egs/model/user.dart';
 import 'package:egs/routes.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
