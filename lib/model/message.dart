@@ -23,12 +23,6 @@ class Message {
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
-    File? myDoc;
-    if(json['doc'] != null){
-      String docPath = json['doc'] as String;
-      List<int> docBytes = base64Decode(docPath);
-      myDoc = docBytes.isNotEmpty ? File.fromRawPath(Uint8List.fromList(docBytes)) : null;
-    }
 
 
     return Message(
@@ -36,7 +30,6 @@ class Message {
       author: json['author'],
       task: json['task'],
       created: DateTime.parse(json['created']),
-      doc: myDoc,
       docName: Uri.decodeComponent(json['doc_name'].toString()),
     );
   }

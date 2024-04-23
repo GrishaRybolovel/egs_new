@@ -39,12 +39,6 @@ class Task {
   factory Task.fromJson(Map<String, dynamic> json) {
     DateTime? done;
     DateTime? completion;
-    File? myDoc;
-    if(json['doc'] != null){
-      String docPath = json['doc'] as String;
-      List<int> docBytes = base64Decode(docPath);
-      myDoc = docBytes.isNotEmpty ? File.fromRawPath(Uint8List.fromList(docBytes)) : null;
-    }
 
     if (json['done'] != null) {
       try {
@@ -68,7 +62,6 @@ class Task {
       created: DateTime.parse(json['created']),
       completion: completion,
       done: done,
-      doc: myDoc,
       docName: Uri.decodeComponent(json['doc_name'].toString()),
       projectId: json['project'],
       taskToUserIds: json['task_to_user'] != null ? List<int>.from(json['task_to_user']) : null,

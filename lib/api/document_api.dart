@@ -18,9 +18,10 @@ class DocumentsApi {
   Future<Document> createDocument(Document document) async {
     final response = await http.post(
       Uri.parse('$baseUrl/document/documents/'),
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Content-Type': 'application/json; charset=utf-8'},
       body: json.encode(document.toJson()),
     );
+    print(json.decode(response.body));
 
     if (response.statusCode == 201) {
       return Document.fromJson(json.decode(response.body));
@@ -32,7 +33,7 @@ class DocumentsApi {
   Future<Document> updateDocument(int id, Document document) async {
     final response = await http.put(
       Uri.parse('$baseUrl/document/documents/$id/'),
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Content-Type': 'application/json; charset=utf-8'},
       body: json.encode(document.toJson()),
     );
 

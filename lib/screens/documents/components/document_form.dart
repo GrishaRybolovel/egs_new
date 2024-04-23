@@ -470,58 +470,58 @@ class DocumentFormState extends State<DocumentForm> {
 
             ElevatedButton(
               onPressed: () async {
-                try {
-                  DateTime? myDate;
-                  myDate = DateTime.parse(_duration.text);
+                // try {
+                DateTime? myDate;
+                myDate = DateTime.parse(_duration.text);
 
-                  Document document = Document(
-                    name: _name.text,
-                    status: _status,
-                    docType: _docType,
-                    duration: myDate,
-                    doc: _doc,
-                    docBase64: doc64,
-                    docName: docName,
-                    users: selectedUsers?.map((user) => user.id ?? 0).toList(),
-                    projects: selectedProjects
-                        ?.map((project) => (project.id ?? 0))
-                        .toList(),
-                  );
+                Document document = Document(
+                  name: _name.text,
+                  status: _status,
+                  docType: _docType,
+                  duration: myDate,
+                  doc: _doc,
+                  docBase64: doc64,
+                  docName: docName,
+                  users: selectedUsers?.map((user) => user.id ?? 0).toList(),
+                  projects: selectedProjects
+                      ?.map((project) => (project.id ?? 0))
+                      .toList(),
+                );
 
-                  String name = _name.text;
-                  if (widget.document != null) {
-                    int myId = widget.document?.id ?? 0;
-                    Document updatedDoc = await DocumentsApi().updateDocument(myId, document);
+                String name = _name.text;
+                if (widget.document != null) {
+                  int myId = widget.document?.id ?? 0;
+                  Document updatedDoc = await DocumentsApi().updateDocument(myId, document);
 
-                    _formKey.currentState?.reset();
+                  _formKey.currentState?.reset();
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                            'Информация о документе $name успешно обновлена'),
-                        duration: const Duration(seconds: 3),
-                      ),
-                    );
-                  } else {
-                    Document createdDoc = await DocumentsApi().createDocument(document);
-
-                    _formKey.currentState?.reset();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Документ $name успешно создан'),
-                        duration: const Duration(seconds: 3),
-                      ),
-                    );
-                  }
-                } catch (e) {
-                  String exception = e.toString().substring(10);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(exception),
+                      content: Text(
+                          'Информация о документе $name успешно обновлена'),
+                      duration: const Duration(seconds: 3),
+                    ),
+                  );
+                } else {
+                  Document createdDoc = await DocumentsApi().createDocument(document);
+
+                  _formKey.currentState?.reset();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Документ $name успешно создан'),
                       duration: const Duration(seconds: 3),
                     ),
                   );
                 }
+                // } catch (e) {
+                //   String exception = e.toString();
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //     SnackBar(
+                //       content: Text(exception),
+                //       duration: const Duration(seconds: 3),
+                //     ),
+                //   );
+                // }
               },
               child: const Text('Сохранить'),
             ),

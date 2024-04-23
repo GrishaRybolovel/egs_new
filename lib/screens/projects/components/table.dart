@@ -29,6 +29,7 @@ class _MyTable extends State<MyTable> {
   ];
 
   final statuses = ['В работе', 'ПНР', 'Сезон откл.', 'СМР', 'Аварийное откл.'];
+  final seasoning = ['Сезонная', 'Круглогодичная'];
 
   @override
   void initState() {
@@ -109,27 +110,21 @@ class _MyTable extends State<MyTable> {
                               ),
                             );
                           },
-                          style: TextButton.styleFrom(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: defaultPadding * 1.5,
-                              vertical: defaultPadding /
-                                  (Responsive.isMobile(context) ? 2 : 1),
-                            ),
-                          ),
-                          child: Text(project.id.toString()),
+                          child: SelectableText(project.id.toString()),
                         ),
                       ),
-                      DataCell(Text(project.name)),
+                      DataCell(SizedBox(width: 180, child: SelectableText(project.name, maxLines: 3,))),
+                      DataCell(SizedBox(width: 130, child: SelectableText(project.contract ?? '', maxLines: 3,))),
                       DataCell(
-                          Text(statuses[int.parse(project.status ?? '1') - 1])),
-                      DataCell(Text(project.address ?? '')),
-                      DataCell(Text(
+                          SelectableText(statuses[int.parse(project.status ?? '1') - 1])),
+                      DataCell(SelectableText(seasoning[int.parse(project.seasoning ?? '1') - 1], maxLines: 3,)),
+                      DataCell(SizedBox(width: 180, child: SelectableText(project.address ?? '', maxLines: 3,))),
+                      DataCell(SelectableText(
                           project.dateCreation.toString().substring(0, 10))),
                       DataCell(
                         ElevatedButton(
                           onPressed: () async {
                             try {
-                              // Delete the project
                               papiService.deleteProject(project.id ?? 0);
                               String name = project.name;
 
@@ -156,13 +151,6 @@ class _MyTable extends State<MyTable> {
                               // You can use a FutureBuilder or another method to fetch the updated project list
                             });
                           },
-                          style: TextButton.styleFrom(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: defaultPadding * 1.5,
-                              vertical: defaultPadding /
-                                  (Responsive.isMobile(context) ? 2 : 1),
-                            ),
-                          ),
                           child: const Icon(
                             Icons.delete,
                             size: 20.0,
@@ -179,7 +167,7 @@ class _MyTable extends State<MyTable> {
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
                           columnSpacing: defaultPadding,
-                          columns: const [
+                          columns: [
                             DataColumn(
                               label: Text("Номер"),
                             ),
@@ -187,13 +175,19 @@ class _MyTable extends State<MyTable> {
                               label: Text("Название"),
                             ),
                             DataColumn(
+                              label: Text("Договор"),
+                            ),
+                            DataColumn(
                               label: Text("Статус"),
+                            ),
+                            DataColumn(
+                              label: Text("Сезон."),
                             ),
                             DataColumn(
                               label: Text("Адрес"),
                             ),
                             DataColumn(
-                              label: Text("Дата"),
+                              label: Text("Дата создан."),
                             ),
                             DataColumn(
                               label: Text("Управление"),

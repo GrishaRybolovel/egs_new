@@ -31,12 +31,6 @@ class Document {
   });
 
   factory Document.fromJson(Map<String, dynamic> json) {
-    File? myDoc;
-    if(json['doc'] != null){
-      String docPath = json['doc'] as String;
-      List<int> docBytes = base64Decode(docPath);
-      myDoc = docBytes.isNotEmpty ? File.fromRawPath(Uint8List.fromList(docBytes)) : null;
-    }
 
     return Document(
       id: json['id'],
@@ -44,7 +38,6 @@ class Document {
       status: json['status'],
       docType: json['doc_type'],
       duration: json['duration'] != null ? DateTime.parse(json['duration']) : null,
-      doc: myDoc,
       docName: Uri.decodeComponent(json['doc_name'].toString()),
       users: json['users'] != null ? List<int>.from(json['users']) : null,
       projects: json['projects'] != null ? List<int>.from(json['projects']) : null,
