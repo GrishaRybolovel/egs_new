@@ -37,7 +37,7 @@ class Message {
       task: json['task'],
       created: DateTime.parse(json['created']),
       doc: myDoc,
-      docName: json['doc_name'],
+      docName: Uri.decodeComponent(json['doc_name'].toString()),
     );
   }
 

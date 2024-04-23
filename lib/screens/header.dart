@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:egs/api/service.dart';
-import 'package:egs/controllers/MenuAppController.dart';
+import 'package:egs/controllers/menu_app_controller.dart';
 import 'package:egs/main.dart';
 import 'package:egs/responsive.dart';
 import 'package:flutter/cupertino.dart';

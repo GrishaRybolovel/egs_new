@@ -1,7 +1,7 @@
 // import 'package:admin/models/RecentFile.dart';
 
 import 'package:egs/api/service.dart';
-import 'package:egs/controllers/MenuAppController.dart';
+import 'package:egs/controllers/menu_app_controller.dart';
 import 'package:egs/model/user.dart';
 import 'package:egs/responsive.dart';
 import 'package:egs/ui/const.dart';
@@ -49,8 +49,7 @@ class _MyTable extends State<MyTable> {
               future: users,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Expanded(
-                      child: Center(child: CircularProgressIndicator()));
+                  return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {

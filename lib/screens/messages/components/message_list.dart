@@ -70,15 +70,20 @@ class MessageListState extends State<MessageList> {
       future: messagesFuture,
       builder: (context, snapshot) {
         if (messagesFuture == null) {
-          return const Expanded(
-              child: Center(child: CircularProgressIndicator()));
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           // Error while fetching data, show an error message
           return Text('Error: ${snapshot.error}');
         } else {
           // Data has been fetched, build the ListView
           List<Message> originalMessages = snapshot.data ?? [];
-          List<Message> messages = List.from(originalMessages.reversed);
+          List<Message> taskMessages = [];
+          for (var message in originalMessages) {
+            if (message.task == widget.taskId) {
+              taskMessages.add(message);
+            }
+          }
+          List<Message> messages = List.from(taskMessages.reversed);
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -152,7 +157,7 @@ class MessageListState extends State<MessageList> {
                 child: Column(
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ElevatedButton(
                           onPressed: () async {
@@ -194,9 +199,7 @@ class MessageListState extends State<MessageList> {
                             size: 24.0,
                           ),
                         ),
-                        SizedBox(
-                          width: Responsive.screenWidth(context) -
-                              (Responsive.isDesktop(context) ? 420 : 192),
+                        Expanded(
                           child: TextFormField(
                             controller: _messageController,
                             decoration:

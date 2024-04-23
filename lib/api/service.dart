@@ -98,6 +98,7 @@ class ApiService {
       json.decode(utf8.decode(response.bodyBytes));
       return usersData.map((userJson) => User.fromJson(userJson)).toList();
     } else {
+      print(response.body);
       throw Exception('Не удалось загрузить пользователей');
     }
   }

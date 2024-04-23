@@ -202,17 +202,7 @@ class DocumentFormState extends State<DocumentForm> {
             TextFormField(
               controller: _name,
               decoration: const InputDecoration(labelText: 'Название'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Введите название';
-                }
-                return null;
-              },
-              onChanged: (value) {
-                setState(() {
-                  _name.text = value;
-                });
-              },
+              
             ),
             DropdownButtonFormField<String>(
               value: _status,
@@ -387,6 +377,7 @@ class DocumentFormState extends State<DocumentForm> {
                   ),
                   const SizedBox(height: defaultPadding),
                   DropdownButton<User>(
+                    isExpanded: true,
                     value: null,
                     items: allUsers?.map((user) {
                       return DropdownMenuItem<User>(
@@ -440,6 +431,7 @@ class DocumentFormState extends State<DocumentForm> {
                   ),
                   const SizedBox(height: defaultPadding),
                   DropdownButton<Project>(
+                    isExpanded: true,
                     value: null,
                     items: allProjects?.map((project) {
                       return DropdownMenuItem<Project>(

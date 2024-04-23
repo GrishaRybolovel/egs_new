@@ -39,8 +39,7 @@ class MessagesScreenState extends State<MessagesScreen> {
         future: userFuture,
         builder: (context, snapshot) {
           if (userFuture == null) {
-            return const Expanded(
-                child: Center(child: CircularProgressIndicator()));
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             // Error while fetching data, show an error message
             return Text('Error: ${snapshot.error}');

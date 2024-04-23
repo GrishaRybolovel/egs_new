@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:universal_html/html.dart' as html;
 import 'dart:io';
 
@@ -29,7 +31,6 @@ class TaskFormScreen extends StatefulWidget {
 }
 
 class TaskFormScreenState extends State<TaskFormScreen> {
-  // Basic task fields1
   late TextEditingController nameController = TextEditingController();
   late TextEditingController descriptionController = TextEditingController();
   late TextEditingController completionController = TextEditingController();
@@ -39,7 +40,8 @@ class TaskFormScreenState extends State<TaskFormScreen> {
   String? doc64;
   String? docName;
 
-  // Foreign keys task fields
+  final formKey = GlobalKey<FormState>();
+
   final ApiService usersApiService = ApiService();
   final ProjectsApiService papiService = ProjectsApiService();
 
@@ -77,7 +79,11 @@ class TaskFormScreenState extends State<TaskFormScreen> {
       final projects = await papiService.getProjects();
 
       setState(() {
+        users.sort(
+            (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
         allUsers = users;
+        projects.sort(
+            (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
         allProjects = projects;
 
         if (_users != null) {
@@ -166,6 +172,7 @@ class TaskFormScreenState extends State<TaskFormScreen> {
           _doc = File(result.files.single.path!);
           doc64 = base64Encode(Uint8List.fromList(_doc!.readAsBytesSync()));
           docName = basename(_doc!.path);
+          print(docName);
         });
       }
     }
@@ -189,74 +196,122 @@ class TaskFormScreenState extends State<TaskFormScreen> {
                 children: [
                   Text(
                     'Чат задачи',
+                    style: Theme.of(context).textTheme.displayMedium,
                   ),
                   const SizedBox(height: defaultPadding),
                   MessagesScreen(projectId: widget.initialTask?.id ?? 0),
                   const SizedBox(height: defaultPadding * 3),
-                  // Add more widgets as needed...
                 ],
               ),
             ),
-            Text(
-              widget.initialTask == null
-                  ? 'Добавить задачу'
-                  : 'Изменить задачу',
-              style: Theme.of(context).textTheme.labelLarge,
+            Padding(
+              padding: const EdgeInsets.all(defaultPadding),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        widget.initialTask == null
+                            ? 'Добавить задачу'
+                            : 'Изменить задачу',
+                        style: Theme.of(context).textTheme.displayMedium,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    child: Icon(Icons.close),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              ),
             ),
+
             const SizedBox(height: defaultPadding),
             Container(
               padding: const EdgeInsets.all(defaultPadding),
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextFormField(
-                      controller: nameController,
-                      decoration: const InputDecoration(labelText: 'Название*'),
-                    ),
-                    TextFormField(
-                      controller: descriptionController,
-                      decoration: const InputDecoration(labelText: 'Описание'),
-                    ),
-                    TextFormField(
-                      controller: completionController,
-                      decoration: const InputDecoration(
-                          labelText: 'Крайний срок выполнения'),
-                      onTap: () async {
-                        DateTime? date = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
-                        );
-                        if (date != null) {
-                          completionController.text =
-                              date.toLocal().toString().substring(0, 10);
-                        }
-                      },
-                    ),
-                    TextFormField(
-                      controller: doneController,
-                      decoration:
-                          const InputDecoration(labelText: 'Дата выполнения'),
-                      onTap: () async {
-                        DateTime? date = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
-                        );
-                        if (date != null) {
-                          doneController.text =
-                              date.toLocal().toString().substring(0, 10);
-                        }
-                      },
-                    ),
-                    const SizedBox(height: defaultPadding * 3),
-                    // File
-                    GestureDetector(
+              child: Form(
+                key: formKey,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        controller: nameController,
+                        decoration:
+                            const InputDecoration(labelText: 'Название'),
+                        // validator to check if name is not empty
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Название не может быть пустым';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: defaultPadding),
+                      TextFormField(
+                        controller: descriptionController,
+                        decoration:
+                            const InputDecoration(labelText: 'Описание'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Описание не может быть пустым';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: defaultPadding),
+
+                      TextFormField(
+                        controller: completionController,
+                        decoration: const InputDecoration(
+                            labelText: 'Крайний срок выполнения'),
+                        onTap: () async {
+                          DateTime? date = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          if (date != null) {
+                            completionController.text =
+                                date.toLocal().toString().substring(0, 10);
+                          }
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Крайний срок выполнения не может быть пустым';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: defaultPadding),
+
+                      TextFormField(
+                        controller: doneController,
+                        decoration:
+                            const InputDecoration(labelText: 'Дата выполнения'),
+                        onTap: () async {
+                          DateTime? date = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          if (date != null) {
+                            doneController.text =
+                                date.toLocal().toString().substring(0, 10);
+                          }
+                        },
+                      ),
+                      const SizedBox(height: defaultPadding * 3),
+                      // File
+                      GestureDetector(
                         onTap: () {
                           if (widget.initialTask != null) {
                             if (widget.initialTask?.docName != null) {
@@ -267,22 +322,24 @@ class TaskFormScreenState extends State<TaskFormScreen> {
                           }
                         },
                         child: Visibility(
-                            visible: docName != null,
-                            child: Row(
-                              children: [
-                                Text('Файл: ${docName ?? ''}'),
-                                const Icon(Icons.download),
-                              ],
-                            ))),
-                    ElevatedButton(
-                      onPressed: _pickFile,
-                      child: const Text('Прикрепить документ'),
-                    ),
-                  ]),
+                          visible: docName != null,
+                          child: Row(
+                            children: [
+                              Text('Файл: ${docName ?? ''}'),
+                              const Icon(Icons.download),
+                            ],
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: _pickFile,
+                        child: const Text('Прикрепить документ'),
+                      ),
+                    ]),
+              ),
             ),
             const SizedBox(height: defaultPadding),
 
-            // Projects
             Container(
               padding: const EdgeInsets.all(defaultPadding),
               decoration: const BoxDecoration(
@@ -293,9 +350,11 @@ class TaskFormScreenState extends State<TaskFormScreen> {
                 children: [
                   Text(
                     'Проекты',
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: defaultPadding),
                   DropdownButton<Project>(
+                    isExpanded: true,
                     value: null,
                     items: allProjects?.map((user) {
                       return DropdownMenuItem<Project>(
@@ -309,9 +368,6 @@ class TaskFormScreenState extends State<TaskFormScreen> {
                       }
                     },
                   ),
-
-                  // List of selected users with delete button
-
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount: (selectedProject == null) ? 0 : 1,
@@ -345,9 +401,11 @@ class TaskFormScreenState extends State<TaskFormScreen> {
                 children: [
                   Text(
                     'Пользователи',
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: defaultPadding),
                   DropdownButton<User>(
+                    isExpanded: true,
                     value: null,
                     items: allUsers.map((user) {
                       return DropdownMenuItem<User>(
@@ -370,7 +428,7 @@ class TaskFormScreenState extends State<TaskFormScreen> {
                     itemBuilder: (context, index) {
                       final user = selectedUsers?[index];
                       return ListTile(
-                        title: Text(user?.name ?? ''),
+                        title: Text(user.toString()),
                         trailing: IconButton(
                           icon: const Icon(Icons.delete),
                           onPressed: () {
@@ -400,6 +458,12 @@ class TaskFormScreenState extends State<TaskFormScreen> {
 
   void saveTask() async {
     try {
+      if (!formKey.currentState!.validate()) {
+        ScaffoldMessenger.of(this.context).showSnackBar(const SnackBar(
+          content: Text('Заполните все обязательные поля'),
+        ));
+      }
+
       User author = await ApiService().fetchUserData();
       final Task newTask = Task(
         name: nameController.text,
@@ -418,7 +482,7 @@ class TaskFormScreenState extends State<TaskFormScreen> {
 
       if (widget.initialTask == null) {
         String name = newTask.name;
-        Task createdTask = await TaskApi().createTask(newTask);
+        await TaskApi().createTask(newTask);
 
         ScaffoldMessenger.of(this.context).showSnackBar(
           SnackBar(

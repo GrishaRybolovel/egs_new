@@ -20,38 +20,41 @@ class _ProjectsScreen extends State<ProjectsScreen> {
     return Scaffold(
       appBar: const Header(),
       drawer: const SideMenu(),
-      body: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Мои объекты",
-              ),
-              ElevatedButton.icon(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: defaultPadding * 1.5,
-                    vertical:
-                    defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
-                  ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Мои объекты",
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AddEditProjectScreen(),
+                ElevatedButton.icon(
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: defaultPadding * 1.5,
+                      vertical:
+                      defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
                     ),
-                  );
-                },
-                icon: const Icon(Icons.add),
-                label: const Text("Создать"),
-              ),
-            ],
-          ),
-          const SizedBox(height: defaultPadding),
-          const MyTable(),
-        ],
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AddEditProjectScreen(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.add),
+                  label: const Text("Создать"),
+                ),
+              ],
+            ),
+            const SizedBox(height: defaultPadding),
+            const MyTable(),
+          ],
+        ),
       ),
     );
   }

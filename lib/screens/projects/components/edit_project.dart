@@ -43,7 +43,6 @@ class AddEditProjectScreenState extends State<AddEditProjectScreen> {
   @override
   void initState() {
     super.initState();
-
     _projTypeController =
         TextEditingController(text: widget.initialProject?.projType ?? '1');
     _nameController =
@@ -365,12 +364,15 @@ class AddEditProjectScreenState extends State<AddEditProjectScreen> {
         // Add other properties as needed
       );
 
+      print(project.status);
+
       final ProjectsApiService papiService = ProjectsApiService();
 
       if (widget.initialProject == null) {
         // Add logic to save the new project
         String name = project.name;
         var createdProject = await papiService.createProject(project);
+        setState(() {});
 
         if (createdProject != null) {
           ScaffoldMessenger.of(context).showSnackBar(
