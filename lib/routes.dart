@@ -10,6 +10,7 @@ import 'package:egs/screens/messages/messages.dart';
 import 'package:egs/screens/projects/projects.dart';
 import 'package:egs/screens/registration/register.dart';
 import 'package:egs/screens/employees/components/employee_form.dart';
+import 'package:egs/screens/mails/components/add_mail.dart';
 import 'package:flutter/material.dart';
 
 class RouteGenerator {
@@ -66,6 +67,11 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) =>
             EmployeeForm(user: settings.arguments as User?),
           settings: const RouteSettings(name: '/userForm'),
+        );
+      case '/mailAdd':
+        return MaterialPageRoute(builder: (context) =>
+            AddMail(),
+          settings: const RouteSettings(name: '/mailAdd'),
         );
       default:
         return _errorRoute();

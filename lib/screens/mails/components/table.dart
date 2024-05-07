@@ -43,13 +43,11 @@ class _MyTable extends State<MyTable> {
       padding: const EdgeInsets.all(defaultPadding),
       child: Column(
         children: [
-          SizedBox(
-            width: double.maxFinite,
-            child: FutureBuilder<List<Mail>?>(
+          FutureBuilder<List<Mail>?>(
               future: mails,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const  Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -67,40 +65,58 @@ class _MyTable extends State<MyTable> {
                   }).map((mail) {
                     return DataRow(
                       cells: [
-                        DataCell(ElevatedButton(
-                          onPressed: () {},
-                          style: TextButton.styleFrom(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: defaultPadding * 1.5,
-                              vertical: defaultPadding /
-                                  (Responsive.isMobile(context) ? 2 : 1),
-                            ),
-                          ),
-                          child: Text(mail.id.toString()),
-                        )),
-                        DataCell(Text(mail.name)),
+                        DataCell(Expanded(
+                            flex: 1,
+                            child: ElevatedButton(
+                              onPressed: () {},
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: defaultPadding * 1.5,
+                                  vertical: defaultPadding /
+                                      (Responsive.isMobile(context) ? 2 : 1),
+                                ),
+                              ),
+                              child: Text(mail.id.toString()),
+                            ))),
+                        DataCell(Expanded(flex: 2, child: Text(mail.name, maxLines: 3))),
                         DataCell(
-                            Text(mail.created.toString().substring(0, 10))),
-                        DataCell(ElevatedButton(
-                          onPressed: () async {},
-                          style: TextButton.styleFrom(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: defaultPadding * 1.5,
-                              vertical: defaultPadding /
-                                  (Responsive.isMobile(context) ? 2 : 1),
-                            ),
-                          ),
-                          child: const Icon(
-                            Icons.delete,
-                            size: 20.0,
-                          ),
-                        ))
-                        // Add more cells as needed
+                            Expanded(flex: 2, child: Text(mail.naming ?? ''))),
+                        DataCell(
+                            Expanded(flex: 2, child: Text(mail.numberout ?? ''))),
+                        DataCell(
+                            Expanded(flex: 2, child: Text(mail.completionout?.toString().substring(0, 10) ?? ''))),
+                        DataCell(
+                            Expanded(flex: 2, child: Text(mail.numberin ?? ''))),
+                        DataCell(
+                            Expanded(flex: 2, child: Text(mail.completionin?.toString().substring(0, 10) ?? ''))),
+                        DataCell(Expanded(
+                            flex: 2,
+                            child: Text(
+                                mail.created.toString().substring(0, 10)))),
+                        DataCell(Expanded(
+                            flex: 1,
+                            child: ElevatedButton(
+                              onPressed: () async {},
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: defaultPadding * 1.5,
+                                  vertical: defaultPadding /
+                                      (Responsive.isMobile(context) ? 2 : 1),
+                                ),
+                              ),
+                              child: const Icon(
+                                Icons.delete,
+                                size: 20.0,
+                              ),
+                            ))),
                       ],
                     );
                   }).toList();
 
-                  return DataTable(
+                  return SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal, child: DataTable(
                     columnSpacing: defaultPadding,
                     // minWidth: 600,
                     columns: const [
@@ -111,18 +127,47 @@ class _MyTable extends State<MyTable> {
                         label: Text("Название"),
                       ),
                       DataColumn(
-                        label: Text("Дата"),
+                        label: Text(
+                          "Наименование получ/отправ",
+                          maxLines: 2,
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          "Исходящий номер",
+                          maxLines: 2,
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          "Исходящая дата",
+                          maxLines: 2,
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          "Входящий номер",
+                          maxLines: 2,
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          "Входящая дата",
+                          maxLines: 2,
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text("Дата создания"),
                       ),
                       DataColumn(
                         label: Text("Управление"),
                       ),
                     ],
                     rows: rows,
-                  );
+                  )));
                 }
               },
             ),
-          ),
         ],
       ),
     );

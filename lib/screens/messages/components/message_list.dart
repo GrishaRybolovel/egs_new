@@ -19,9 +19,10 @@ import '../../../ui/const.dart';
 
 class MessageList extends StatefulWidget {
   final int userId;
-  final int taskId;
+  final int? taskId;
+  final int? mailId;
 
-  const MessageList({Key? key, required this.userId, required this.taskId})
+  const MessageList({Key? key, required this.userId, this.taskId, this.mailId})
       : super(key: key);
 
   @override
@@ -79,7 +80,7 @@ class MessageListState extends State<MessageList> {
           List<Message> originalMessages = snapshot.data ?? [];
           List<Message> taskMessages = [];
           for (var message in originalMessages) {
-            if (message.task == widget.taskId) {
+            if (message.task == widget.taskId || message.mail == widget.mailId) {
               taskMessages.add(message);
             }
           }
@@ -123,7 +124,6 @@ class MessageListState extends State<MessageList> {
                                     if (messages[index].docName != null) {
                                       final downloadUrl = constructDownloadUrl(
                                           messages[index].docName!);
-                                      // ignore: deprecated_member_use
                                       launch(downloadUrl);
                                     }
                                   },
@@ -220,6 +220,7 @@ class MessageListState extends State<MessageList> {
                                 message: _messageController.text,
                                 author: widget.userId,
                                 task: widget.taskId,
+                                mail: widget.mailId,
                                 doc: _selectedFile,
                                 docBase64: doc64,
                                 docName: docName,

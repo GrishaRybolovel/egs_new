@@ -6,9 +6,10 @@ import '../../ui/const.dart';
 import 'components/message_list.dart';
 
 class MessagesScreen extends StatefulWidget {
-  final int projectId;
+  final int? projectId;
+  final int? mailId;
 
-  const MessagesScreen({Key? key, required this.projectId}) : super(key: key);
+  const MessagesScreen({Key? key, this.projectId, this.mailId}) : super(key: key);
 
   @override
   MessagesScreenState createState() => MessagesScreenState();
@@ -51,6 +52,7 @@ class MessagesScreenState extends State<MessagesScreen> {
               child: MessageList(
                 userId: currentUser,
                 taskId: widget.projectId,
+                mailId: widget.mailId,
               ),
             );
           }

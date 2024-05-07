@@ -6,7 +6,8 @@ class Message {
   int? id;
   String? message;
   int author;
-  int task;
+  int? task;
+  int? mail;
   DateTime? created;
   File? doc;
   String? docName;
@@ -15,7 +16,8 @@ class Message {
   Message({
     this.message,
     required this.author,
-    required this.task,
+    this.task,
+    this.mail,
     this.created,
     this.doc,
     this.docName,
@@ -24,11 +26,11 @@ class Message {
 
   factory Message.fromJson(Map<String, dynamic> json) {
 
-
     return Message(
       message: json['message'],
       author: json['author'],
       task: json['task'],
+      mail: json['mail'],
       created: DateTime.parse(json['created']),
       docName: Uri.decodeComponent(json['doc_name'].toString()),
     );
@@ -40,6 +42,7 @@ class Message {
       'message': message,
       'author': author,
       'task': task,
+      'mail': mail,
       'created': created?.toIso8601String(),
       'doc': docBase64,
       'doc_name': docName,

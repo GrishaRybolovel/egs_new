@@ -34,7 +34,9 @@ class _MailsScreen extends State<MailsScreen> {
                         defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/mailAdd');
+                },
                 icon: const Icon(Icons.add),
                 label: const Text("Создать"),
               ),

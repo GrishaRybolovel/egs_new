@@ -24,6 +24,7 @@ class MailsApi {
       },
       body: jsonEncode(mail.toJson()),
     );
+    print('1');
     if (response.statusCode == 201) {
       return Mail.fromJson(jsonDecode(response.body));
     } else {
