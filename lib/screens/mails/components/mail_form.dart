@@ -24,35 +24,37 @@ import 'package:egs/screens/mails/mails.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:path/path.dart';
 
-class TaskFormScreen extends StatefulWidget {
-  final Task? initialMail;
+class MailFormScreen extends StatefulWidget {
+  final Mail? initialMail;
 
-  const TaskFormScreen({super.key, this.initialMail});
+  const MailFormScreen({super.key, this.initialMail});
 
   @override
-  TaskFormScreenState createState() => TaskFormScreenState();
+  MailFormScreenState createState() => MailFormScreenState();
 }
 
-class TaskFormScreenState extends State<TaskFormScreen> {
+class MailFormScreenState extends State<MailFormScreen> {
+  late TextEditingController nameController =
+      TextEditingController(); // Название
+  late TextEditingController descriptionController =
+      TextEditingController(); // Описание
+  late TextEditingController completionController =
+      TextEditingController(); // Срок выполнения
+  late TextEditingController namingController =
+      TextEditingController(); // Наименование отправителя
+  late TextEditingController numberoutController =
+      TextEditingController(); // Исходящий номер отпрвителя
+  late TextEditingController completionoutController =
+      TextEditingController(); // Исходящая дата отпр.
+  late TextEditingController numberinController =
+      TextEditingController(); // Входящий номер получателя
+  late TextEditingController completioninController =
+      TextEditingController(); // Входящая дата отпр.
+  late TextEditingController funcController =
+      TextEditingController(); // Функциональность письма
 
-
-  TextEditingController nameController = TextEditingController(); // Название
-  TextEditingController descriptionController =
-  TextEditingController(); // Описание
-  TextEditingController completionController =
-  TextEditingController(); // Срок выполнения
-  TextEditingController namingController =
-  TextEditingController(); // Наименование отправителя
-  TextEditingController numberoutController =
-  TextEditingController(); // Исходящий номер отпрвителя
-  TextEditingController completionoutController =
-  TextEditingController(); // Исходящая дата отпр.
-  TextEditingController numberinController =
-  TextEditingController(); // Входящий номер получателя
-  TextEditingController completioninController =
-  TextEditingController(); // Входящая дата отпр.
-  TextEditingController funcController =
-  TextEditingController(text: "1"); // Функциональность письма
+  late TextEditingController doneController =
+      TextEditingController(); // Функциональность письма
   // Привязать письмо к объекту
   // Пользователи
 
@@ -79,16 +81,28 @@ class TaskFormScreenState extends State<TaskFormScreen> {
     super.initState();
 
     nameController =
-        TextEditingController(text: widget.initialTask?.name ?? '');
+        TextEditingController(text: widget.initialMail?.name ?? '');
+    namingController =
+        TextEditingController(text: widget.initialMail?.naming ?? '');
+    numberoutController =
+        TextEditingController(text: widget.initialMail?.numberout ?? '');
+    numberinController =
+        TextEditingController(text: widget.initialMail?.numberin ?? '');
     descriptionController =
-        TextEditingController(text: widget.initialTask?.description ?? '');
+        TextEditingController(text: widget.initialMail?.description ?? '');
     completionController = TextEditingController(
-        text: widget.initialTask?.completion?.toLocal().toString());
+        text: widget.initialMail?.completion?.toLocal().toString());
+    completioninController = TextEditingController(
+        text: widget.initialMail?.completion?.toLocal().toString());
+    completionoutController = TextEditingController(
+        text: widget.initialMail?.completion?.toLocal().toString());
+    funcController =
+        TextEditingController(text: widget.initialMail?.func ?? '');
     doneController = TextEditingController(
-        text: widget.initialTask?.done?.toLocal().toString());
-    _doc = widget.initialTask?.doc;
-    docName = widget.initialTask?.docName;
-    _users = widget.initialTask?.taskToUserIds ?? [];
+        text: widget.initialMail?.done?.toLocal().toString());
+    _doc = widget.initialMail?.doc;
+    docName = widget.initialMail?.docName;
+    _users = widget.initialMail?.mailToUser ?? [];
 
     fetchInitialData();
   }
@@ -100,10 +114,10 @@ class TaskFormScreenState extends State<TaskFormScreen> {
 
       setState(() {
         users.sort(
-                (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+            (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
         allUsers = users;
         projects.sort(
-                (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+            (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
         allProjects = projects;
 
         if (_users != null) {
@@ -115,7 +129,7 @@ class TaskFormScreenState extends State<TaskFormScreen> {
         }
 
         for (var project in projects) {
-          if (project.id == widget.initialTask?.projectId) {
+          if (project.id == widget.initialMail?.mailToProject) {
             selectedProject = project;
             break;
           }
@@ -182,7 +196,7 @@ class TaskFormScreenState extends State<TaskFormScreen> {
       });
     } else {
       FilePickerResult? result =
-      await FilePicker.platform.pickFiles(type: FileType.any);
+          await FilePicker.platform.pickFiles(type: FileType.any);
 
       if (result != null) {
         // On mobile or desktop, use the path property to access the file path
@@ -199,354 +213,184 @@ class TaskFormScreenState extends State<TaskFormScreen> {
   }
 
   String constructDownloadUrl(String filePath) {
-    return '$baseUrl/task/tasks/download/$filePath';
+    return '$baseUrl/mail/mails/download/$filePath';
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const Header(),
-      drawer: const SideMenu(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Visibility(
-              visible: widget.initialTask != null,
+        appBar: const Header(),
+        drawer: const SideMenu(),
+        body: Row(children: [
+          Expanded(
+            flex: 2,
+            child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Text(
-                    'Чат задачи',
-                    style: Theme.of(context).textTheme.displayMedium,
-                  ),
-                  const SizedBox(height: defaultPadding),
-                  MessagesScreen(projectId: widget.initialTask?.id ?? 0),
-                  const SizedBox(height: defaultPadding * 3),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(defaultPadding),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        widget.initialTask == null
-                            ? 'Добавить задачу'
-                            : 'Изменить задачу',
-                        style: Theme.of(context).textTheme.displayMedium,
-                      ),
+                  Visibility(
+                    visible: widget.initialMail != null,
+                    child: Column(
+                      children: [
+                        Text(
+                          'Чат письма',
+                          style: Theme.of(context).textTheme.displayMedium,
+                        ),
+                        const SizedBox(height: defaultPadding),
+                        MessagesScreen(mailId: widget.initialMail?.id ?? 0),
+                        const SizedBox(height: defaultPadding * 3),
+                      ],
                     ),
                   ),
-                  ElevatedButton(
-                    child: Icon(Icons.close),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  )
                 ],
               ),
             ),
-
-            const SizedBox(height: defaultPadding),
-            Container(
-              padding: const EdgeInsets.all(defaultPadding),
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              child: Form(
-                key: formKey,
-                child: Column(
+          ),
+          const SizedBox(width: defaultPadding),
+          Expanded(
+              flex: 1,
+              child: SingleChildScrollView(
+                  child: Container(
+                      width: double.maxFinite,
+                      padding: const EdgeInsets.all(defaultPadding),
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: Colors.grey,
+                      ),
+                      child: Column(children: [
+                Container(
+                  padding: const EdgeInsets.all(defaultPadding),
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextFormField(
-                        controller: nameController,
-                        decoration:
-                        const InputDecoration(labelText: 'Название'),
-                        // validator to check if name is not empty
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Название не может быть пустым';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: defaultPadding),
-                      TextFormField(
-                        controller: descriptionController,
-                        decoration:
-                        const InputDecoration(labelText: 'Описание'),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Описание не может быть пустым';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: defaultPadding),
-
-                      TextFormField(
-                        controller: completionController,
-                        decoration: const InputDecoration(
-                            labelText: 'Крайний срок выполнения'),
-                        onTap: () async {
-                          DateTime? date = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                          );
-                          if (date != null) {
-                            completionController.text =
-                                date.toLocal().toString().substring(0, 10);
-                          }
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Крайний срок выполнения не может быть пустым';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: defaultPadding),
-
-                      TextFormField(
-                        controller: doneController,
-                        decoration:
-                        const InputDecoration(labelText: 'Дата выполнения'),
-                        onTap: () async {
-                          DateTime? date = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                          );
-                          if (date != null) {
-                            doneController.text =
-                                date.toLocal().toString().substring(0, 10);
-                          }
-                        },
-                      ),
-                      const SizedBox(height: defaultPadding * 3),
-                      // File
-                      GestureDetector(
-                        onTap: () {
-                          if (widget.initialTask != null) {
-                            if (widget.initialTask?.docName != null) {
-                              final downloadUrl = constructDownloadUrl(
-                                  widget.initialTask?.docName! ?? '');
-                              launch(downloadUrl);
-                            }
-                          }
-                        },
-                        child: Visibility(
-                          visible: docName != null,
-                          child: Row(
-                            children: [
-                              Text('Файл: ${docName ?? ''}'),
-                              const Icon(Icons.download),
-                            ],
-                          ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  widget.initialMail == null
+                                      ? 'Добавить задачу'
+                                      : 'Редактировать письмо',
+                                  style: Theme.of(context).textTheme.displayMedium,
+                                ),
+                              ),
+                            ),
+                            ElevatedButton(
+                              child: Icon(Icons.close),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            )
+                          ],
                         ),
+                      const SizedBox(height: defaultPadding),
+                      const SizedBox(height: defaultPadding),
+                      Text(
+                        'Проект',
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
+                      const SizedBox(height: defaultPadding),
+                      DropdownButton<Project>(
+                        isExpanded: true,
+                        value: null,
+                        items: allProjects?.map((user) {
+                          return DropdownMenuItem<Project>(
+                            value: user,
+                            child: Text(user.name),
+                          );
+                        }).toList(),
+                        onChanged: (user) {
+                          if (user != null) {
+                            addProject(user);
+                          }
+                        },
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: (selectedProject == null) ? 0 : 1,
+                        itemBuilder: (context, index) {
+                          final user = selectedProject;
+                          return ListTile(
+                            title: Text(user?.name ?? ''),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                if (user != null) {
+                                  deleteProject();
+                                }
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: defaultPadding),
+                // Users
+                Container(
+                  padding: const EdgeInsets.all(defaultPadding),
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Пользователи',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: defaultPadding),
+                      DropdownButton<User>(
+                        isExpanded: true,
+                        value: null,
+                        items: allUsers.map((user) {
+                          return DropdownMenuItem<User>(
+                            value: user,
+                            child: Text(user.toString()),
+                          );
+                        }).toList(),
+                        onChanged: (user) {
+                          if (user != null) {
+                            addUser(user);
+                          }
+                        },
+                      ),
+
+                      // List of selected users with delete button
+
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: selectedUsers?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          final user = selectedUsers?[index];
+                          return ListTile(
+                            title: Text(user.toString()),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                if (user != null) {
+                                  deleteUser(user);
+                                }
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: defaultPadding * 2),
                       ElevatedButton(
-                        onPressed: _pickFile,
-                        child: const Text('Прикрепить документ'),
+                        onPressed: () {},
+                        child: const Text('Сохранить'),
                       ),
-                    ]),
-              ),
-            ),
-            const SizedBox(height: defaultPadding),
-
-            Container(
-              padding: const EdgeInsets.all(defaultPadding),
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Проекты',
-                    style: Theme.of(context).textTheme.titleMedium,
+                    ],
                   ),
-                  const SizedBox(height: defaultPadding),
-                  DropdownButton<Project>(
-                    isExpanded: true,
-                    value: null,
-                    items: allProjects?.map((user) {
-                      return DropdownMenuItem<Project>(
-                        value: user,
-                        child: Text(user.name),
-                      );
-                    }).toList(),
-                    onChanged: (user) {
-                      if (user != null) {
-                        addProject(user);
-                      }
-                    },
-                  ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: (selectedProject == null) ? 0 : 1,
-                    itemBuilder: (context, index) {
-                      final user = selectedProject;
-                      return ListTile(
-                        title: Text(user?.name ?? ''),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            if (user != null) {
-                              deleteProject();
-                            }
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: defaultPadding),
-            // Users
-            Container(
-              padding: const EdgeInsets.all(defaultPadding),
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Пользователи',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: defaultPadding),
-                  DropdownButton<User>(
-                    isExpanded: true,
-                    value: null,
-                    items: allUsers.map((user) {
-                      return DropdownMenuItem<User>(
-                        value: user,
-                        child: Text(user.toString()),
-                      );
-                    }).toList(),
-                    onChanged: (user) {
-                      if (user != null) {
-                        addUser(user);
-                      }
-                    },
-                  ),
-
-                  // List of selected users with delete button
-
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: selectedUsers?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      final user = selectedUsers?[index];
-                      return ListTile(
-                        title: Text(user.toString()),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            if (user != null) {
-                              deleteUser(user);
-                            }
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: defaultPadding),
-            ElevatedButton(
-              onPressed: () {
-                saveTask();
-              },
-              child: const Text('Сохранить'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void saveTask() async {
-    try {
-      if (!formKey.currentState!.validate()) {
-        ScaffoldMessenger.of(this.context).showSnackBar(const SnackBar(
-          content: Text('Заполните все обязательные поля'),
-        ));
-      }
-
-      User author = await ApiService().fetchUserData();
-      final Task newTask = Task(
-        name: nameController.text,
-        description: descriptionController.text,
-        authorId: author.id ?? 0,
-        completion: completionController.text != null
-            ? DateTime.parse(completionController.text)
-            : null,
-        done: null,
-        doc: _doc,
-        docBase64: doc64,
-        docName: docName,
-        projectId: selectedProject?.id,
-        taskToUserIds: selectedUsers?.map((user) => user.id ?? 0).toList(),
-      );
-
-      if (widget.initialTask == null) {
-        String name = newTask.name;
-        await TaskApi().createTask(newTask);
-
-        ScaffoldMessenger.of(this.context).showSnackBar(
-          SnackBar(
-            content: Text('Задача $name успешно создана'),
-            duration: const Duration(seconds: 3),
-          ),
-        );
-        Navigator.push(
-          this.context,
-          MaterialPageRoute(
-            builder: (context) => DashboardScreen(),
-          ),
-        );
-      } else {
-        if (widget.initialTask?.id != null) {
-          int myId = widget.initialTask?.id ?? 0;
-
-          Task updatedTask = await TaskApi().updateTask(myId, newTask);
-
-          ScaffoldMessenger.of(this.context).showSnackBar(
-            const SnackBar(
-              content: Text('Информация о задаче успешно обновлена'),
-              duration: Duration(seconds: 3),
-            ),
-          );
-
-          Navigator.push(
-            this.context,
-            MaterialPageRoute(
-              builder: (context) => TaskFormScreen(
-                initialTask: updatedTask,
-              ),
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      String exception = e.toString().substring(10);
-      ScaffoldMessenger.of(this.context).showSnackBar(
-        SnackBar(
-          content: Text(exception),
-          duration: const Duration(seconds: 3),
-        ),
-      );
-    }
+                ),
+              ])))),
+          const SizedBox(width: defaultPadding),
+        ]));
   }
 }

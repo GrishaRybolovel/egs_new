@@ -102,6 +102,7 @@ class MessageListState extends State<MessageList> {
                             decoration: const BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)),
+                              color: Colors.grey,
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

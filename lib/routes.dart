@@ -1,5 +1,6 @@
 import 'package:egs/model/task.dart';
 import 'package:egs/model/user.dart';
+import 'package:egs/model/mail.dart';
 import 'package:egs/screens/dashboard/components/task_form.dart';
 import 'package:egs/screens/dashboard/dashboard_screen.dart';
 import 'package:egs/screens/documents/documents.dart';
@@ -11,6 +12,7 @@ import 'package:egs/screens/projects/projects.dart';
 import 'package:egs/screens/registration/register.dart';
 import 'package:egs/screens/employees/components/employee_form.dart';
 import 'package:egs/screens/mails/components/add_mail.dart';
+import 'package:egs/screens/mails/components/mail_form.dart';
 import 'package:flutter/material.dart';
 
 class RouteGenerator {
@@ -72,6 +74,12 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) =>
             AddMail(),
           settings: const RouteSettings(name: '/mailAdd'),
+        );
+      case '/mailForm':
+        return MaterialPageRoute(
+          builder: (context) =>
+              MailFormScreen(initialMail: settings.arguments as Mail?),
+          settings: const RouteSettings(name: '/mailForm'),
         );
       default:
         return _errorRoute();

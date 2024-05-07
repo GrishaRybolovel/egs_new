@@ -25,6 +25,8 @@ class Mail {
   List<int>? mailToUser;
   List<int>? mailToMessage;
   File? doc;
+  String? docName;
+  String? docBase64;
 
   Mail({
     this.id,
@@ -49,6 +51,8 @@ class Mail {
     this.mailToUser,
     this.mailToMessage,
     this.doc,
+    this.docBase64,
+    this.docName,
   });
 
   factory Mail.fromJson(Map<String, dynamic> json) {
@@ -73,6 +77,7 @@ class Mail {
       type: json['type'],
       mailToUser: json['mail_to_user'] != null ? List<int>.from(json['mail_to_user']) : null,
       mailToMessage: json['mail_to_message'] != null ? List<int>.from(json['mail_to_message']) : null,
+      docName: Uri.decodeComponent(json['doc_name'].toString()),
     );
   }
 
@@ -105,6 +110,7 @@ class Mail {
       'mail_to_user': mailToUser,
       'mail_to_message': mailToMessage,
       'doc': docBase64,
+      'doc_name': docName,
     };
 
     jsonMap.removeWhere((key, value) => (value == null || value.toString().isEmpty) && key != 'cost');

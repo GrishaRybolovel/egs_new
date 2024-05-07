@@ -1,5 +1,6 @@
 // import 'package:admin/models/RecentFile.dart';
 
+import 'package:egs/screens/mails/components/mail_form.dart';
 import 'package:egs/api/mail_api.dart';
 import 'package:egs/controllers/menu_app_controller.dart';
 import 'package:egs/model/mail.dart';
@@ -68,7 +69,16 @@ class _MyTable extends State<MyTable> {
                         DataCell(Expanded(
                             flex: 1,
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MailFormScreen(
+                                      initialMail: mail,
+                                    ),
+                                  ),
+                                );
+                              },
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: defaultPadding * 1.5,
