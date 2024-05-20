@@ -14,9 +14,9 @@ class LoginScreen extends StatefulWidget {
 
 class LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController =
-      TextEditingController();
+      TextEditingController(text: "test@test.ru");
   final TextEditingController passwordController =
-      TextEditingController();
+      TextEditingController(text: "test");
   final ApiService apiService = ApiService();
 
   @override
