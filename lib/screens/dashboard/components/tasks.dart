@@ -74,7 +74,7 @@ class TaskInfoGridView extends StatefulWidget {
 }
 
 class TaskInfoGridViewState extends State<TaskInfoGridView> {
-  final TaskApi tapiService = TaskApi();
+  final TaskApi apiService = TaskApi();
   String _selectedTypeParameter = '1';
   final _selectedTypeParameterName = [
     'Эксплуатация',
@@ -83,94 +83,111 @@ class TaskInfoGridViewState extends State<TaskInfoGridView> {
     'Производство',
     'Без типа',
   ];
+  List<Task> tasks = [];
+  List<Task> filteredTasks = [];
+
+  @override
+  void initState() {
+    super.initState();
+    apiService.fetchTasks().then((value) {
+      setState(() {
+        tasks = value;
+        filteredTasks = sortTasks();
+      });
+    });
+  }
+
+  List<Task> sortTasks() {
+    List<Task> newTasks = [];
+    for (var item in tasks) {
+      if (item.type == int.parse(_selectedTypeParameter)) {
+        newTasks.add(item);
+      }
+    }
+
+    List<Task> sortedTasks = newTasks.toList()
+      ..sort(
+        (a, b) {
+          return (a.completion?.compareTo(b.completion ?? DateTime.now()) ?? 0)
+              .compareTo(0);
+        },
+      );
+
+    return sortedTasks;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              DropdownButton<String>(
-                borderRadius: BorderRadius.circular(12),
-                value: _selectedTypeParameter,
-                onChanged: (String? newValue) {
-                  if (newValue != _selectedTypeParameter) {
-                    setState(() {
-                      _selectedTypeParameter = newValue!;
-                    });
-                  }
-                },
-                items: <String>['1', '2', '3', '4', '5']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      _selectedTypeParameterName[int.parse(value) - 1],
-                    ),
-                  );
-                }).toList(),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              FutureBuilder<List<Task>>(
-                future: tapiService.fetchTasks(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else if (snapshot.data == null || snapshot.data!.isEmpty) {
-                    return const Text('Нет заданий.');
-                  } else if (snapshot.hasError) {
-                    throw snapshot.error!;
-                  } else {
-                    var tasksBefore = snapshot.data!;
-                    List<dynamic> tasks = [];
-                    for (var item in tasksBefore) {
-                      if (item.type == int.parse(_selectedTypeParameter)) {
-                        tasks.add(item);
-                      }
+    if (tasks.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    } else {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                DropdownButton<String>(
+                  borderRadius: BorderRadius.circular(12),
+                  value: _selectedTypeParameter,
+                  onChanged: (String? newValue) {
+                    if (newValue != _selectedTypeParameter) {
+                      setState(() {
+                        _selectedTypeParameter = newValue!;
+                        filteredTasks = sortTasks();
+                      });
                     }
-
-                    tasks.sort(((a, b) {
-                      return a.completion.compareTo(b.completion);
-                    }));
-
-                    return GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: tasks.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: widget.crossAxisCount,
-                        crossAxisSpacing: defaultPadding,
-                        mainAxisSpacing: defaultPadding,
-                        childAspectRatio: widget.childAspectRatio,
-                      ),
-                      itemBuilder: (context, index) {
-                        final task = tasks[index];
-                        return InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(context, '/taskForm',
-                                arguments: task);
-                          },
-                          child: FileInfoCard(info: task),
+                  },
+                  items: <String>['1', '2', '3', '4', '5']
+                      .map<DropdownMenuItem<String>>(
+                    (String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          _selectedTypeParameterName[int.parse(value) - 1],
+                        ),
+                      );
+                    },
+                  ).toList(),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: filteredTasks.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: widget.crossAxisCount,
+                    crossAxisSpacing: defaultPadding,
+                    mainAxisSpacing: defaultPadding,
+                    childAspectRatio: widget.childAspectRatio,
+                  ),
+                  itemBuilder: (context, index) {
+                    final task = filteredTasks[index];
+                    return InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/taskForm',
+                          arguments: task,
                         );
                       },
+                      child: FileInfoCard(info: task),
                     );
-                  }
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
