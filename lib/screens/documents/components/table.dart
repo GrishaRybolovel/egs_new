@@ -188,6 +188,10 @@ class _MyTable extends State<MyTable> {
                   }).toList();
 
                   return DataTable(
+                    border: TableBorder.all(
+                            width: 3,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                     columnSpacing: defaultPadding,
                     // minWidth: 600,
                     columns: const [

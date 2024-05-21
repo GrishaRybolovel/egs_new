@@ -193,6 +193,10 @@ class _JournalScreenState extends State<JournalScreen> {
                     height: 300,
                     width: double.maxFinite,
                     child: DataTable(
+                      border: TableBorder.all(
+                            width: 3,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                       columnSpacing: defaultPadding,
                       // minWidth: 600,
                       columns: const [

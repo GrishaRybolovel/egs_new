@@ -55,8 +55,7 @@ class _MyTable extends State<MyTable> {
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-        child: Column(
-          children: [
+        child: Column(children: [
           DropdownButton<String>(
             borderRadius: BorderRadius.circular(12),
             value: _selectedTypeParameter,
@@ -91,7 +90,6 @@ class _MyTable extends State<MyTable> {
                       .search
                       .toLowerCase();
 
-
                   // Check if the project name contains the search text
                   return project.status == _selectedTypeParameter &&
                       projectName.contains(searchText);
@@ -113,12 +111,30 @@ class _MyTable extends State<MyTable> {
                           child: SelectableText(project.id.toString()),
                         ),
                       ),
-                      DataCell(SizedBox(width: 180, child: SelectableText(project.name, maxLines: 3,))),
-                      DataCell(SizedBox(width: 130, child: SelectableText(project.contract ?? '', maxLines: 3,))),
-                      DataCell(
-                          SelectableText(statuses[int.parse(project.status ?? '1') - 1])),
-                      DataCell(SelectableText(seasoning[int.parse(project.seasoning ?? '1') - 1], maxLines: 3,)),
-                      DataCell(SizedBox(width: 180, child: SelectableText(project.address ?? '', maxLines: 3,))),
+                      DataCell(SizedBox(
+                          width: 180,
+                          child: SelectableText(
+                            project.name,
+                            maxLines: 3,
+                          ))),
+                      DataCell(SizedBox(
+                          width: 130,
+                          child: SelectableText(
+                            project.contract ?? '',
+                            maxLines: 3,
+                          ))),
+                      DataCell(SelectableText(
+                          statuses[int.parse(project.status ?? '1') - 1])),
+                      DataCell(SelectableText(
+                        seasoning[int.parse(project.seasoning ?? '1') - 1],
+                        maxLines: 3,
+                      )),
+                      DataCell(SizedBox(
+                          width: 180,
+                          child: SelectableText(
+                            project.address ?? '',
+                            maxLines: 3,
+                          ))),
                       DataCell(SelectableText(
                           project.dateCreation.toString().substring(0, 10))),
                       DataCell(
@@ -166,6 +182,10 @@ class _MyTable extends State<MyTable> {
                     child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
+                          border: TableBorder.all(
+                            width: 3,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                           columnSpacing: defaultPadding,
                           columns: [
                             DataColumn(

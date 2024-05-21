@@ -194,6 +194,10 @@ class _MyTable extends State<MyTable> {
 
                   return Responsive.isDesktop(context)
                       ? DataTable(
+                          border: TableBorder.all(
+                            width: 3,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                           columnSpacing: defaultPadding,
                           // minWidth: 600,
                           columns: const [
@@ -216,6 +220,10 @@ class _MyTable extends State<MyTable> {
                           rows: rows,
                         )
                       : DataTable(
+                          border: TableBorder.all(
+                            width: 3,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                           columnSpacing: defaultPadding,
                           // minWidth: 600,
                           columns: const [
